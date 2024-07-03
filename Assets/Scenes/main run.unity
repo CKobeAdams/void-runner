@@ -382,7 +382,6 @@ GameObject:
   m_Component:
   - component: {fileID: 835664922}
   - component: {fileID: 835664923}
-  - component: {fileID: 835664925}
   - component: {fileID: 835664924}
   m_Layer: 0
   m_Name: Ground Detector
@@ -474,18 +473,6 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 0.5
---- !u!114 &835664925
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 835664921}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 56a73a764b0828c458b84a39d12994c2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1214171196
 GameObject:
   m_ObjectHideFlags: 0
@@ -531,7 +518,7 @@ Rigidbody2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1214171196}
-  m_BodyType: 1
+  m_BodyType: 0
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
@@ -542,7 +529,7 @@ Rigidbody2D:
   m_Material: {fileID: 0}
   m_Interpolate: 0
   m_SleepingMode: 1
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
   m_Constraints: 4
 --- !u!212 &1214171199
 SpriteRenderer:
@@ -669,6 +656,10 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: 8a862122-590f-4b30-90d7-2d4d1213e526
     m_ActionName: player/left and right movement[/Keyboard/a,/Keyboard/d]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 68239d0d-21a6-45a6-82b7-4a794a520fd0
+    m_ActionName: player/Jump[/Keyboard/space]
   m_NeverAutoSwitchControlSchemes: 1
   m_DefaultControlScheme: 
   m_DefaultActionMap: player

@@ -7,8 +7,17 @@
             "actions": [
                 {
                     "name": "left and right movement",
-                    "type": "Button",
+                    "type": "Value",
                     "id": "8a862122-590f-4b30-90d7-2d4d1213e526",
+                    "expectedControlType": "Integer",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
+                    "name": "Jump",
+                    "type": "Button",
+                    "id": "68239d0d-21a6-45a6-82b7-4a794a520fd0",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
@@ -48,6 +57,17 @@
                     "action": "left and right movement",
                     "isComposite": false,
                     "isPartOfComposite": true
+                },
+                {
+                    "name": "",
+                    "id": "2fc82187-687f-4cae-bd37-d4dedddb5630",
+                    "path": "<Keyboard>/space",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Jump",
+                    "isComposite": false,
+                    "isPartOfComposite": false
                 }
             ]
         }

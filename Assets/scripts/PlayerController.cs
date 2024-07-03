@@ -7,9 +7,11 @@ public class PlayerController : MonoBehaviour
 {
     private Rigidbody2D rigidbody;
 
-    public GameObject groundCheck;
-    float movementSpeed, acceleration, maxMovementSpeed, currentVelocity, moveDirection, jumpVelocity = 5f;
+    [SerializeField]
+    private GameObject groundCheck;
+    private float movementSpeed, acceleration, gravityAccel = 10f, maxMovementSpeed, currentVelocity, moveDirection, jumpVelocity = 5f;
     public bool isMoving, isGrounded, gravityAffected;
+    private Vector2 moveVector;
 
     // Start is called before the first frame update
     void Start()
@@ -20,6 +22,7 @@ public class PlayerController : MonoBehaviour
         currentVelocity = 0;
         rigidbody = GetComponent<Rigidbody2D>();
         isGrounded = false;
+        moveVector = new Vector2(0f,0f);
     }
 
     void Awake()
@@ -28,17 +31,34 @@ public class PlayerController : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
         if (gravityAffected && !isGrounded)
         {
-            rigidbody.velocity  = new Vector2(rigidbody.velocity.x, rigidbody.velocity.y-acceleration*Time.deltaTime);
+            //rigidbody.velocity  = new Vector2(rigidbody.velocity.x, rigidbody.velocity.y-gravityAccel*Time.deltaTime);
+            
         }
+
+        rigidbody.velocity = new Vector2(maxMovementSpeed * moveVector.x, rigidbody.velocity.y);
+
+
     }
 
     public void MovementPerformed(InputAction.CallbackContext context)
     {
-        rigidbody.velocity = new Vector2(maxMovementSpeed*context.ReadValue<float>(), rigidbody.velocity.y);
+        moveVector = new Vector2(context.ReadValue<float>(), moveVector.y);
 
+    }
+
+    public void GroundCheck()
+    {
+        if(isGrounded)
+        {
+
+        }
+        else
+        {
+            isGrounded = false;
+        }
     }
 }
