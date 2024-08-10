@@ -15,7 +15,7 @@ public class RoomManager : MonoBehaviour
     public List<GameObject> roomList;
 
     [SerializeField]
-    private GameObject baseRoom, startRoom, ascendingRoom, descendingRoom;
+    private GameObject baseRoom, startRoom, ascendingRoom, descendingRoom, risingRoom, randomRoom;
 
     [SerializeField]
     private GameObject currentRoom, oldRoom;
@@ -54,13 +54,21 @@ public class RoomManager : MonoBehaviour
         float roomChooser = Random.value;
         GameObject newRoom;
 
-        if(roomChooser < 0.5f)
+        if(roomChooser < 0.1f)
+        {
+            newRoom = Instantiate(randomRoom);
+        }
+        else if(roomChooser<0.25)
         {
             newRoom = Instantiate(baseRoom);
         }
-        else if(roomChooser>0.75f)
+        else if(roomChooser<0.5f)
         {
             newRoom = Instantiate(descendingRoom);
+        }
+        else if(roomChooser<0.75f)
+        {
+            newRoom = Instantiate(risingRoom);
         }
         else
         {

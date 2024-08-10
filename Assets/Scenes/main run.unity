@@ -206,7 +206,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 5
+  orthographic size: 8
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -462,6 +462,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   wallSpeed: 0
   wallAcceleration: 0
+  currentSpeed: 0
+  speedMarker: 0
 --- !u!61 &920879563
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -934,7 +936,9 @@ MonoBehaviour:
   baseRoom: {fileID: 6163012973348425067, guid: 7271fd9d67ffb05409d1c99dd82e1154, type: 3}
   startRoom: {fileID: 1823002805}
   ascendingRoom: {fileID: 8705274127253838628, guid: 8be09d1ba4d31b646bfb0e8100418e04, type: 3}
-  descendingRoom: {fileID: 7200766577653723932, guid: bad8a19b663c2a1489a9346cd04b21f7, type: 3}
+  descendingRoom: {fileID: 1266965778570859563, guid: d7aeaacd38ac45a4e9c4fe8ae1b3afd0, type: 3}
+  risingRoom: {fileID: 8087396165315499725, guid: 6104291b647a20c4fbfab54a569a5424, type: 3}
+  randomRoom: {fileID: 2059186192524722721, guid: 37ec7e0a847a3d64fb5fe2f70f2a5cab, type: 3}
   currentRoom: {fileID: 0}
   oldRoom: {fileID: 0}
 --- !u!114 &1369950006
