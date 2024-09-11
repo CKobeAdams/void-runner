@@ -16,9 +16,9 @@ public class PlayerController : MonoBehaviour
     private Camera MainCam;
 
     [SerializeField]
-    private float CameraFloorDistance = 4.5f, minimunCameraHeight = 0f, movementSpeed, acceleration, gravityAccel = 10f, maxMovementSpeed = 5f, currentVelocity = 0f, moveDirection, jumpVelocity = 5f, jumpCancelAcel = 5f;
+    private float CameraFloorDistance = 4.5f, minimunCameraHeight = 0f, movementSpeed, maxMovementSpeed = 5f, moveDirection, jumpVelocity = 5f, jumpCancelAcel = 5f;
     private bool isMoving, isGrounded, gravityAffected, jumpCancelled, isCrouching, isDead = false, cameraLockStatus = true, cameraLockSetting;
-    private int groundLayer = 7;
+   
     private Vector2 moveVector;
 
 
@@ -28,7 +28,7 @@ public class PlayerController : MonoBehaviour
     {
 
         instance = this;
-        acceleration = 100f;
+        
         gravityAffected = true;
         
         rigidbody = GetComponent<Rigidbody2D>();
@@ -119,7 +119,8 @@ public class PlayerController : MonoBehaviour
             return;
         }
         moveVector = new Vector2(context.ReadValue<float>(), moveVector.y);
-        
+
+    
 
     }
 
@@ -207,13 +208,28 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    //used for flipping out
+    public void FlipLeft(InputAction.CallbackContext context)
+    {
+            FlipOut(-1);
+    }
+
+    //used for flipping out
+    public void FlipRight(InputAction.CallbackContext context)
+    {
+            FlipOut(1);
+    }
+
     public void KillPlayer()
     {
         isDead = true;
         this.GetComponent<SpriteRenderer>().color = new Color(1f, 0.5f, 0.5f, 1f);
     }
 
-
+    public bool GetPlayerDeathState()
+    {
+        return isDead;
+    }
     //Getters and Setters
 
     public Vector3 GetPlayerPosition()
@@ -257,7 +273,15 @@ public class PlayerController : MonoBehaviour
         MainCam.transform.position = new Vector3(cameraHeight.x, cameraHeight.y, MainCam.transform.position.z);
     }
 
-    
+    public void FlipOut(float direction)
+    {
+        Debug.Log(direction);
+    }
+
+    public Transform GetPlayerTransform()
+    {
+        return this.transform;
+    }
 
 
 }

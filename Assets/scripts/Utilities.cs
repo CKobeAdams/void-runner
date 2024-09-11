@@ -21,4 +21,9 @@ public class Utilities : MonoBehaviour
     {
         return Mathf.Sqrt(Mathf.Pow(second.x - first.x, 2) + Mathf.Pow(second.y - first.y, 2));
     }
+
+    public Vector3 SlopeFormula(Vector3 first, Vector3 second)
+    {
+        return new Vector3(first.x-second.x,first.y-second.y,first.z-second.z);
+    }
 }
