@@ -11,6 +11,7 @@ public class PlayerController : MonoBehaviour
 
     [SerializeField]
     private GameObject groundCheck;
+    private GameObject flipHitBox;
 
     [SerializeField]
     private Camera MainCam;
@@ -34,6 +35,7 @@ public class PlayerController : MonoBehaviour
         rigidbody = GetComponent<Rigidbody2D>();
         isGrounded = true;
         moveVector = new Vector2(0f,0f);
+        flipHitBox.SetActive(false);
 
         cameraLockSetting = true;
         cameraLockStatus = true;
