@@ -10,16 +10,17 @@ public class PlayerController : MonoBehaviour
     private Rigidbody2D rigidbody;
 
     [SerializeField]
-    private GameObject groundCheck;
-    private GameObject flipHitBox;
+    private GameObject groundCheck, flipHitBox, stumbleBox;
 
     [SerializeField]
     private Camera MainCam;
 
     [SerializeField]
-    private float CameraFloorDistance = 4.5f, minimunCameraHeight = 0f, movementSpeed, maxMovementSpeed = 5f, moveDirection, jumpVelocity = 5f, jumpCancelAcel = 5f;
-    private bool isMoving, isGrounded, gravityAffected, jumpCancelled, isCrouching, isDead = false, cameraLockStatus = true, cameraLockSetting;
-   
+    private float CameraFloorDistance = 4.5f, minimunCameraHeight = 0f, movementSpeed, maxMovementSpeed = 5f, moveDirection, 
+        jumpVelocity = 5f, jumpCancelAcel = 5f, flipOutSpeed = 260f;
+    private bool isMoving, isGrounded, gravityAffected, jumpCancelled, isCrouching, isDead = false, cameraLockStatus = true, 
+        cameraLockSetting, isStumbled = false;
+    private int flipOutRevs=0, flipOutDirection;
     private Vector2 moveVector;
 
 
@@ -35,33 +36,43 @@ public class PlayerController : MonoBehaviour
         rigidbody = GetComponent<Rigidbody2D>();
         isGrounded = true;
         moveVector = new Vector2(0f,0f);
-        flipHitBox.SetActive(false);
+        
 
         cameraLockSetting = true;
         cameraLockStatus = true;
 
+        flipHitBox.SetActive(false);
 
     }
 
     void Awake()
     {
-
+       
     }
 
     // Update is called once per frame
     void FixedUpdate()
     {
-        if (gravityAffected && !isGrounded)
+        GroundCheck();
+
+        if(isGrounded && this.GetPlayerTransform().rotation != Quaternion.identity)
         {
-            //rigidbody.velocity  = new Vector2(rigidbody.velocity.x, rigidbody.velocity.y-gravityAccel*Time.deltaTime);
-            
+            this.transform.rotation = Quaternion.identity;
         }
 
-        rigidbody.velocity = new Vector2(maxMovementSpeed * moveVector.x, rigidbody.velocity.y);
+        if(!isStumbled)
+        {
+            rigidbody.velocity = new Vector2(maxMovementSpeed * moveVector.x, rigidbody.velocity.y);
+        }
+        
+
+        if(!isGrounded && !isStumbled)
+        {
+            FlipOut(flipOutDirection);
+        }
+        
 
         //changes the Camera lock and against the status
-       
-
         if (cameraLockSetting == cameraLockStatus)
         {
             if (cameraLockStatus)
@@ -172,6 +183,15 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    public void StumbleCheck()
+    {
+        if(stumbleBox.GetComponent<CapsuleCollider2D>().IsTouchingLayers(LayerMask.GetMask("Ground")))
+        {
+            //make that bitch stumble
+
+        }
+    }
+
     public void GroundCheck()
     {
        
@@ -213,13 +233,41 @@ public class PlayerController : MonoBehaviour
     //used for flipping out
     public void FlipLeft(InputAction.CallbackContext context)
     {
-            FlipOut(-1);
+        if (isDead) return;
+        if (context.started)
+        {
+            flipHitBox.SetActive(true);
+
+        }
+        if(context.performed)
+        {
+            flipOutDirection = -1;
+        }
+        if(context.canceled)
+        {
+           flipHitBox.SetActive(false);
+           flipOutDirection = 0;
+        }
     }
 
     //used for flipping out
     public void FlipRight(InputAction.CallbackContext context)
     {
-            FlipOut(1);
+        if (isDead) return;
+        if (context.started)
+        {
+            flipHitBox.SetActive(true);
+
+        }
+        if (context.performed)
+        {
+            flipOutDirection = 1;
+        }
+        if (context.canceled)
+        {
+            flipHitBox.SetActive(false);
+            flipOutDirection = 0;
+        }
     }
 
     public void KillPlayer()
@@ -277,7 +325,8 @@ public class PlayerController : MonoBehaviour
 
     public void FlipOut(float direction)
     {
-        Debug.Log(direction);
+        Quaternion q = Quaternion.AngleAxis(flipOutSpeed*direction, Vector3.forward);
+        this.transform.rotation *= q;
     }
 
     public Transform GetPlayerTransform()
