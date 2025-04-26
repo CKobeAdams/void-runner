@@ -1,4 +1,4 @@
-using System.Collections;
+ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -54,13 +54,14 @@ public class PlayerController : MonoBehaviour
     void FixedUpdate()
     {
         GroundCheck();
+        StumbleCheck();
 
-        if(isGrounded && this.GetPlayerTransform().rotation != Quaternion.identity)
+        if(isGrounded && this.GetPlayerTransform().rotation != Quaternion.identity && !isCrouching)
         {
             this.transform.rotation = Quaternion.identity;
         }
 
-        if(!isStumbled)
+        if(!isStumbled) //Change this to check for a stumb
         {
             rigidbody.velocity = new Vector2(maxMovementSpeed * moveVector.x, rigidbody.velocity.y);
         }
@@ -156,10 +157,12 @@ public class PlayerController : MonoBehaviour
             if(moveDirection != 0)
             {
                 this.transform.rotation *= Quaternion.AngleAxis(moveDirection * 90f, Vector3.forward);
+                
             }
             else
             {
                 this.transform.rotation *= Quaternion.AngleAxis(90f, Vector3.forward);
+                
             }
 
             
@@ -174,10 +177,12 @@ public class PlayerController : MonoBehaviour
             if (moveDirection != 0)
             {
                 this.transform.rotation *= Quaternion.AngleAxis(-1*moveDirection * 90f, Vector3.forward);
+                
             }
             else
             {
                 this.transform.rotation *= Quaternion.AngleAxis(-90f, Vector3.forward);
+                
             }
             isCrouching = false;
         }
@@ -188,7 +193,7 @@ public class PlayerController : MonoBehaviour
         if(stumbleBox.GetComponent<CapsuleCollider2D>().IsTouchingLayers(LayerMask.GetMask("Ground")))
         {
             //make that bitch stumble
-
+            Debug.Log("Stumbled");
         }
     }
 
@@ -233,9 +238,10 @@ public class PlayerController : MonoBehaviour
     //used for flipping out
     public void FlipLeft(InputAction.CallbackContext context)
     {
-        if (isDead) return;
+        if (isDead || isCrouching) return;
         if (context.started)
         {
+            FlipOutHitbox.instance.ResetBox();
             flipHitBox.SetActive(true);
 
         }
@@ -253,9 +259,10 @@ public class PlayerController : MonoBehaviour
     //used for flipping out
     public void FlipRight(InputAction.CallbackContext context)
     {
-        if (isDead) return;
+        if (isDead || isCrouching) return;
         if (context.started)
         {
+            FlipOutHitbox.instance.ResetBox();
             flipHitBox.SetActive(true);
 
         }

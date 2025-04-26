@@ -22,7 +22,7 @@ public class RandomRoomFloorGenerator : MonoBehaviour
             Vector3 platformPlacement = new Vector3(Random.value*60 -30,Random.value*13-3,0);
             if(platformPlacement.x > -2f && platformPlacement.x < 2f)
             {
-                Debug.Log("displacing");
+                //Debug.Log("displacing");
                 platformPlacement.x = -3f;
             }
 

@@ -2,9 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyParent : MonoBehaviour
+public class MobsterSpawnerScript : MonoBehaviour
 {
-    protected float health = 3, movementSpeed;
+    [SerializeField]
+    protected GameObject spawningObject;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -17,8 +19,9 @@ public class EnemyParent : MonoBehaviour
         
     }
 
-    protected void TakeDamage(float damageTaken)
+    protected void SpawnObject()
     {
-        health = health - damageTaken;
+        
+     
     }
 }

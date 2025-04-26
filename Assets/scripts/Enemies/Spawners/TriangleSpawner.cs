@@ -2,9 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyParent : MonoBehaviour
+public class TriangleSpawner : MobsterSpawnerScript
 {
-    protected float health = 3, movementSpeed;
     // Start is called before the first frame update
     void Start()
     {
@@ -17,8 +16,10 @@ public class EnemyParent : MonoBehaviour
         
     }
 
-    protected void TakeDamage(float damageTaken)
-    {
-        health = health - damageTaken;
-    }
+    //public override void SpawnObject()
+   // {
+
+   // }
+
+    //create a monster spawner that spawns triangles, adds them to the enemy list, then check which enemy got hit and get them to take damage.
 }

@@ -34,6 +34,8 @@ public class EnemyTriangleScript : EnemyParent
         movementSpeed = 4f;
         
         rigidBody = GetComponent<Rigidbody2D>();
+
+        
             
     }
 
