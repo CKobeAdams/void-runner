@@ -21,14 +21,7 @@ public class RoomManager : MonoBehaviour
     private GameObject currentRoom, oldRoom;
 
     // Start is called before the first frame update
-    void awake()
-    {
-        
-
-        
-    }
-    
-    void Start()
+    void Awake()
     {
         instance = this;
 
@@ -36,6 +29,10 @@ public class RoomManager : MonoBehaviour
         roomList.Add(startRoom);
 
         currentRoom = startRoom;
+    }
+
+    void Start()
+    {
         
     }
 

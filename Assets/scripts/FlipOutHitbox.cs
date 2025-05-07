@@ -68,7 +68,7 @@ public class FlipOutHitbox : MonoBehaviour
 
         if(this.GetComponent<BoxCollider2D>().IsTouchingLayers(LayerMask.GetMask("Enemy")))
         {
-            Debug.Log("Dealing Damage");
+            EnemyManager.instance.EntityHurtSearch();
         }
 
     }
@@ -81,5 +81,10 @@ public class FlipOutHitbox : MonoBehaviour
         ssB = startShade.b;
         CurrentDamage = startDamage;
 
+    }
+
+    public BoxCollider2D GetCollider()
+    {
+        return this.GetComponent<BoxCollider2D>();
     }
 }

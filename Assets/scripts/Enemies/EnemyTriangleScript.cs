@@ -31,6 +31,7 @@ public class EnemyTriangleScript : EnemyParent
         idleDirection = 1;
         isDiving = false;
         health = 1f;
+        isDead = false;
         movementSpeed = 4f;
         
         rigidBody = GetComponent<Rigidbody2D>();
@@ -42,6 +43,11 @@ public class EnemyTriangleScript : EnemyParent
     // Update is called once per frame
     void Update()
     {
+        if(isDead)
+        {
+            EnemyManager.instance.RemoveEnemy(this.GetComponent<EnemyParent>());
+        }
+
 
         //if else statements to determine the distance
         // switch state based on distance
@@ -96,7 +102,7 @@ public class EnemyTriangleScript : EnemyParent
             }
         }
 
-
+        
         
     }
 
@@ -204,4 +210,19 @@ public class EnemyTriangleScript : EnemyParent
 
     //private void MovementFunction
     //Attack Function
+
+    public override void TakeDamage(float damageTaken)
+    {
+        health -= damageTaken;
+        Debug.Log(health);
+        if(health<=0)
+        {
+            isDead = true;
+            EnemyManager.instance.RemoveEnemy(this.GetComponent<EnemyParent>());
+            
+        }
+
+       
+       
+    }
 }

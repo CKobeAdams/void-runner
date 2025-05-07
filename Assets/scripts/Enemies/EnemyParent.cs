@@ -5,6 +5,7 @@ using UnityEngine;
 public class EnemyParent : MonoBehaviour
 {
     protected float health = 3, movementSpeed;
+    protected bool isDead = false;
     // Start is called before the first frame update
     void Start()
     {
@@ -17,8 +18,13 @@ public class EnemyParent : MonoBehaviour
         
     }
 
-    protected void TakeDamage(float damageTaken)
+    public virtual void TakeDamage(float damageTaken)
     {
         health = health - damageTaken;
+    }
+
+    public PolygonCollider2D GetCollider()
+    {
+        return this.GetComponent<PolygonCollider2D>();
     }
 }

@@ -6,14 +6,22 @@ public class EnemyManager : MonoBehaviour
 {
     public static EnemyManager instance { get; private set; }
 
-    List<GameObject> enemyList;
+    [SerializeField]
+    public List<EnemyParent> enemyList;
 
     // Start is called before the first frame update
     void Start()
     {
+        
+
+        
+    }
+
+    void Awake()
+    {
         instance = this;
 
-        enemyList = new List<GameObject>();
+        enemyList = new List<EnemyParent>();
     }
 
     // Update is called once per frame
@@ -24,6 +32,26 @@ public class EnemyManager : MonoBehaviour
 
     public void EntityHurtSearch()
     {
-        //Searches through the enemy list for an entity that collides with a hit box the player made
+        BoxCollider2D flipBox = FlipOutHitbox.instance.GetCollider();
+
+        foreach(EnemyParent enem in enemyList)
+        {
+            if(flipBox.IsTouching(enem.GetCollider()))
+            {
+                enem.TakeDamage(6);
+                break;
+            }
+        }
+    }
+
+    public void AddEnemy(EnemyParent enem)
+    {
+        enemyList.Add(enem);
+    }
+
+    public void RemoveEnemy(EnemyParent enem)
+    {
+        enemyList.Remove(enem);
+        Destroy(enem.gameObject);
     }
 }
