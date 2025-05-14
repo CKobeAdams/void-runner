@@ -48,6 +48,8 @@ public class RoomManager : MonoBehaviour
     {
         //GameObject newRoom = Instantiate(baseRoom, GetListEndNode().transform);
         //makes the new room and gets starting node
+
+        //Change to Random.Value
         float roomChooser = Random.value;
         GameObject newRoom;
 
@@ -71,6 +73,8 @@ public class RoomManager : MonoBehaviour
         {
             newRoom = Instantiate(ascendingRoom);
         }
+
+        
         
         Transform newRoomStartNode = newRoom.transform.GetChild(0);
 

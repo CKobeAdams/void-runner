@@ -42,7 +42,7 @@ public class DeathWall : MonoBehaviour
             }*/
             
 
-            if (Utilities.instance.DistanceFormula(this.transform.position, PlayerController.instance.GetPlayerPosition()) >= 15f
+            if (Utilities.instance.DistanceFormula(this.transform.position, PlayerController.instance.GetPlayerPosition()) >= 20f
                 && currentSpeed < PlayerController.instance.GetPlayerSpeed())
             {
                 rigidBody.velocity = new Vector2(PlayerController.instance.GetPlayerSpeed(), 0f);

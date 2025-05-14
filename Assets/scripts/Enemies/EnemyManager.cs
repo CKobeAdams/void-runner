@@ -38,6 +38,7 @@ public class EnemyManager : MonoBehaviour
         {
             if(flipBox.IsTouching(enem.GetCollider()))
             {
+                //This magic number will need to be changed 
                 enem.TakeDamage(6);
                 break;
             }

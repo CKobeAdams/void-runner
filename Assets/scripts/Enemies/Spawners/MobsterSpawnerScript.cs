@@ -21,8 +21,14 @@ public class MobsterSpawnerScript : MonoBehaviour
 
     protected void SpawnObject()
     {
-        GameObject spawn = Instantiate(spawningObject);
+        Transform parentTrans = this.GetComponent<Transform>();
+
+        GameObject spawn = Instantiate(spawningObject, parentTrans.position, parentTrans.rotation);
         EnemyManager.instance.AddEnemy(spawn.GetComponent<EnemyParent>());
+
+
+
+       
      
     }
 }
