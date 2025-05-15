@@ -1,7 +1,8 @@
- using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour
 {
@@ -17,7 +18,7 @@ public class PlayerController : MonoBehaviour
 
     [SerializeField]
     private float CameraFloorDistance = 4.5f, minimunCameraHeight = 0f, movementSpeed, maxMovementSpeed = 5f, moveDirection, 
-        jumpVelocity = 5f, jumpCancelAcel = 5f, flipOutSpeed = 260f;
+        jumpVelocity = 5f, jumpCancelAcel = 5f, flipOutSpeed = 260f, ragdollTimer = 0;
     private bool isMoving, isGrounded, gravityAffected, jumpCancelled, isCrouching, isDead = false, cameraLockStatus = true, 
         cameraLockSetting, isStumbled = false;
     private int flipOutRevs=0, flipOutDirection;
@@ -122,6 +123,15 @@ public class PlayerController : MonoBehaviour
         }
         
 
+        if(isDead)
+        {
+            ragdollTimer += Time.deltaTime;
+            if(ragdollTimer>1 && ragdollTimer<2)
+            {
+                SceneManager.LoadScene("Gameover", LoadSceneMode.Additive);
+                ragdollTimer += 1;
+            }
+        }
     }
 
 
