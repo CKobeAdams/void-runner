@@ -21,7 +21,7 @@ public class CameraLockingTrigger : MonoBehaviour
                 activated = true;
 
 
-                PlayerController.instance.SetCameraLock(true);
+                CameraManager.instance.SetLockSetting(true);
             }
         }
     }

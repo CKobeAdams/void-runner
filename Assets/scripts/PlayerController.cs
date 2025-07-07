@@ -44,6 +44,7 @@ public class PlayerController : MonoBehaviour
 
         flipHitBox.SetActive(false);
 
+
     }
 
     void Awake()
@@ -74,41 +75,7 @@ public class PlayerController : MonoBehaviour
         }
         
 
-        //changes the Camera lock and against the status
-        if (cameraLockSetting == cameraLockStatus)
-        {
-            if (cameraLockStatus)
-            {
-                MoveCamera(cameraLockStatus);
-            }
-            else
-            {
-                MoveCamera(cameraLockStatus);
-            }
-        }
-        else
-        {
-            if(cameraLockSetting)
-            {
-                GroundCheck();
-                if (isGrounded)
-                {
-                    
-                    cameraLockStatus = true;
-                    MoveCamera(cameraLockStatus);
-                }
-                else
-                {
-                    MoveCamera(cameraLockStatus);
-                }
-            }
-            else
-            {
-                
-                cameraLockStatus = false;
-                MoveCamera(cameraLockStatus);
-            }
-        }
+       
         
         //isGrounded = Physics.CheckSphere(groundCheck.transform.position,.2f,lay)
 
@@ -203,7 +170,7 @@ public class PlayerController : MonoBehaviour
         if(stumbleBox.GetComponent<CapsuleCollider2D>().IsTouchingLayers(LayerMask.GetMask("Ground")))
         {
             //make that bitch stumble
-            Debug.Log("Stumbled");
+            //isStumbled = true;
         }
     }
 
@@ -289,8 +256,8 @@ public class PlayerController : MonoBehaviour
 
     public void KillPlayer()
     {
-        isDead = true;
-        this.GetComponent<SpriteRenderer>().color = new Color(1f, 0.5f, 0.5f, 1f);
+       // isDead = true;
+      //  this.GetComponent<SpriteRenderer>().color = new Color(1f, 0.5f, 0.5f, 1f);
     }
 
     public bool GetPlayerDeathState()
@@ -309,37 +276,6 @@ public class PlayerController : MonoBehaviour
         return maxMovementSpeed;
     }
 
-    public void SetCameraLock(bool setting)
-    {
-        cameraLockSetting = setting;
-    }
-
-    public void SetMinimumCameraHeight(float floorHeight)
-    {
-        minimunCameraHeight = floorHeight+CameraFloorDistance;
-    }
-
-    private void MoveCamera(bool isLocked)
-    {
-        Vector2 cameraHeight = new Vector2(this.transform.position.x, 0);
-        
-        if (isLocked)
-        {
-            cameraHeight.y = MainCam.transform.position.y;
-        }
-        else
-        {
-            cameraHeight.y = this.transform.position.y;
-        }
-
-        if (cameraHeight.y < minimunCameraHeight)
-        {
-            cameraHeight.y = minimunCameraHeight;
-        }
-
-        MainCam.transform.position = new Vector3(cameraHeight.x, cameraHeight.y, MainCam.transform.position.z);
-    }
-
     public void FlipOut(float direction)
     {
         Quaternion q = Quaternion.AngleAxis(flipOutSpeed*direction, Vector3.forward);
@@ -351,5 +287,14 @@ public class PlayerController : MonoBehaviour
         return this.transform;
     }
 
+    public bool GetIsGrounded()
+    {
+        return isGrounded;
+    }
+
+    public Vector2 GetMoveVector()
+    {
+        return moveVector;
+    }
 
 }

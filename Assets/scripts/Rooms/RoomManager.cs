@@ -41,7 +41,7 @@ public class RoomManager : MonoBehaviour
     {
         CheckCurrentRoom();
         Vector3 floorPos = currentRoom.transform.GetChild(1).position;
-        PlayerController.instance.SetMinimumCameraHeight(floorPos.y);
+        CameraManager.instance.SetMinimumCameraHeight(floorPos.y);
     }
 
     public void GenerateRoom()
