@@ -9,11 +9,14 @@ public class CameraManager : MonoBehaviour
 
     public static CameraManager instance { get; private set; }
 
-    private bool CameraLockSetting, CameraLockStatus;
+    private bool CameraLockSetting, CameraLockStatus, isLingering = false;
 
-    private float minimumCameraHeight = 0f, cameraFloorDistance = 10f, cameraSpeed = 6f, cameraRaiseLower;
+    private float minimumCameraHeight = 0f, cameraFloorDistance = 10f, cameraSpeed = 6f, cameraRaiseLower, cameraLingerTimer = 0f;
 
-    private Vector2 playerMoveVector, cameraDisplacement;
+    //this constant determines how long the camera lingers for
+    private const float cameraLingerLimit = 2.5f;
+
+    private Vector2 playerMoveVector, cameraDisplacement, previousMoveVector;
     
 
     // Start is called before the first frame update
@@ -77,6 +80,7 @@ public class CameraManager : MonoBehaviour
                 MoveCamera();
             }
         }
+        previousMoveVector = playerMoveVector;
     }
 
     public void MoveCamera()
@@ -102,27 +106,55 @@ public class CameraManager : MonoBehaviour
             cameraHeight.y = minimumCameraHeight;
         }
 
-        Vector3 targetPosition = new Vector3(cameraHeight.x+(cameraDisplacement.x*playerMoveVector.x),
-            cameraHeight.y + (cameraDisplacement.y * playerMoveVector.y),
-            MainCam.transform.position.z);
+        float cameraLingerVector = 0;
 
-        
+        if(playerMoveVector.x == 1)
+        {
+            cameraLingerVector = 1;
+            isLingering = true;
+            cameraLingerTimer = 0f;
+
+        }
+        else
+        {
+            if(isLingering)
+            {
+                cameraLingerTimer += Time.deltaTime;
+                cameraLingerVector = 1;
+                if(cameraLingerTimer > cameraLingerLimit)
+                {
+                    isLingering = false;
+                }
+            }
+            else
+            {
+                cameraLingerVector = playerMoveVector.x;
+            }
+        }
+
+        Vector3 targetPosition = new Vector3(cameraHeight.x + (cameraDisplacement.x * cameraLingerVector),
+                cameraHeight.y + (cameraDisplacement.y * playerMoveVector.y),
+                MainCam.transform.position.z);
+
+
         /*MainCam.transform.position = new Vector3(
             Mathf.Clamp(cameraHeight.x, playerTrans.x-50f, playerTrans.x+50f), 
             Mathf.Clamp(cameraHeight.y, playerTrans.y-50f, playerTrans.y+50f), 
             MainCam.transform.position.z);*/
-        if(playerMoveVector.x == 1)
+
+
+        if (playerMoveVector.x == 1)
         {
             step = 25f*Time.deltaTime;
         }
         else
         {
-            step = 5f*Time.deltaTime;
+            step = 15f*Time.deltaTime;
         }
 
         MainCam.transform.position = Vector3.MoveTowards(MainCam.transform.position, targetPosition, step);
 
-        Debug.Log(MainCam.transform.position);
+ 
     }
 
     public bool GetLockSetting()
