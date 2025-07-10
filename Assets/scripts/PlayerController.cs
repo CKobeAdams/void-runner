@@ -11,17 +11,18 @@ public class PlayerController : MonoBehaviour
     private Rigidbody2D rigidbody;
 
     [SerializeField]
-    private GameObject groundCheck, flipHitBox, stumbleBox;
+    private GameObject groundCheck, flipHitBox, wallCheck, stumbleBox;
 
     [SerializeField]
     private Camera MainCam;
 
     [SerializeField]
     private float CameraFloorDistance = 4.5f, minimunCameraHeight = 0f, movementSpeed, maxMovementSpeed = 5f, moveDirection, 
-        jumpVelocity = 5f, jumpCancelAcel = 5f, flipOutSpeed = 260f, ragdollTimer = 0;
+        jumpVelocity = 5f, jumpCancelAcel = 5f, flipOutSpeed = 260f, ragdollTimer = 0, wallCheckOffset = 0.5f;
     private bool isMoving, isGrounded, gravityAffected, jumpCancelled, isCrouching, isDead = false, cameraLockStatus = true, 
-        cameraLockSetting, isStumbled = false;
-    private int flipOutRevs=0, flipOutDirection;
+        cameraLockSetting, isStumbled = false, isWalled;
+    private int flipOutRevs = 0, flipOutDirection, unstumbleCount = 0;
+    private const int stumblePressNeeded = 3;
     private Vector2 moveVector;
 
 
@@ -52,11 +53,23 @@ public class PlayerController : MonoBehaviour
        
     }
 
+    void Update()
+    {
+        Vector3 CheckerPos = GetPlayerTransform().position;
+        CheckerPos.y += wallCheckOffset;
+
+        wallCheck.transform.position = CheckerPos;
+
+        WallCheck();
+        GroundCheck();
+        StumbleCheck();
+    }
+
     // Update is called once per frame
     void FixedUpdate()
     {
-        GroundCheck();
-        StumbleCheck();
+        
+        
 
         if(isGrounded && this.GetPlayerTransform().rotation != Quaternion.identity && !isCrouching)
         {
@@ -99,6 +112,10 @@ public class PlayerController : MonoBehaviour
                 ragdollTimer += 1;
             }
         }
+
+        
+
+        
     }
 
 
@@ -170,7 +187,20 @@ public class PlayerController : MonoBehaviour
         if(stumbleBox.GetComponent<CapsuleCollider2D>().IsTouchingLayers(LayerMask.GetMask("Ground")))
         {
             //make that bitch stumble
-            //isStumbled = true;
+            if(!isWalled && !isCrouching)
+            {
+                if(!isStumbled)
+                {
+                    unstumbleCount = 0;
+                }
+                isStumbled = true;
+                
+            }
+            
+        }
+        else
+        {
+            isStumbled = false;
         }
     }
 
@@ -189,6 +219,18 @@ public class PlayerController : MonoBehaviour
 
     }
 
+    public void WallCheck()
+    {
+        if(wallCheck.GetComponent<BoxCollider2D>().IsTouchingLayers(LayerMask.GetMask("Ground")))
+        {
+            isWalled = true;
+        }
+        else
+        {
+            isWalled = false;
+        }
+    }
+
     public void Jump(InputAction.CallbackContext context) 
     {
         if(isDead) return;
@@ -203,6 +245,17 @@ public class PlayerController : MonoBehaviour
             if(isGrounded)
             {
                 rigidbody.velocity = new Vector2(rigidbody.velocity.x, jumpVelocity);
+            }
+            if(isStumbled)
+            {
+                unstumbleCount++;
+                if(unstumbleCount>=stumblePressNeeded)
+                {
+                    this.transform.rotation = Quaternion.identity;
+                    isStumbled = false;
+                    
+                }
+                
             }
         }
 

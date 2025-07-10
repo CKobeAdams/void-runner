@@ -17,7 +17,6 @@ public class FlipOutHitbox : MonoBehaviour
 
     void Start()
     {
-        Debug.Log(this); 
         sRender = this.GetComponent<SpriteRenderer>();
 
         instance = this;
@@ -75,7 +74,7 @@ public class FlipOutHitbox : MonoBehaviour
 
     public void ResetBox()
     {
-        Debug.Log("Box Reset");
+        
         ssR = startShade.r;
         ssG = startShade.g;
         ssB = startShade.b;
