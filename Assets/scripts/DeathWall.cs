@@ -4,8 +4,10 @@ using UnityEngine;
 
 public class DeathWall : MonoBehaviour
 {
+    public static DeathWall instance { get; private set; }
+
     [SerializeField]
-    private float wallSpeed = 3f, wallAcceleration = 0.25f, currentSpeed = 0, speedMarker, wallDistance = 30f;
+    private float wallSpeed = 3f, wallAcceleration = 0.25f, currentSpeed = 0, speedMarker, wallDistance = 30f, wallTimerCount = 0f;
 
     private bool playerKilled = false, onScreen;
     private Rigidbody2D rigidBody;
@@ -17,13 +19,14 @@ public class DeathWall : MonoBehaviour
         rigidBody = this.GetComponent<Rigidbody2D>();
         wallSpeed = 1f;
         wallAcceleration = 0.01f;
+        wallTimerCount = 0f;
     }
 
     // Update is called once per frame
     void Update()
     {
-
-        currentSpeed = wallSpeed + Time.time* wallAcceleration;
+        wallTimerCount += Time.deltaTime;
+        currentSpeed = wallSpeed + wallTimerCount* wallAcceleration;
     }
 
     void FixedUpdate()
@@ -63,5 +66,10 @@ public class DeathWall : MonoBehaviour
         }
         
         
+    }
+
+    public void ResetWallTimerCount()
+    {
+        wallTimerCount = 0;
     }
 }

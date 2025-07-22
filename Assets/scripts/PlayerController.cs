@@ -11,18 +11,19 @@ public class PlayerController : MonoBehaviour
     private Rigidbody2D rigidbody;
 
     [SerializeField]
-    private GameObject groundCheck, flipHitBox, wallCheck, stumbleBox;
+    private GameObject groundCheck, flipHitBox, wallCheck, wallHeadCheck, stumbleBox;
 
     [SerializeField]
     private Camera MainCam;
 
     [SerializeField]
     private float CameraFloorDistance = 4.5f, minimunCameraHeight = 0f, movementSpeed, maxMovementSpeed = 5f, moveDirection, 
-        jumpVelocity = 5f, jumpCancelAcel = 5f, flipOutSpeed = 260f, ragdollTimer = 0, wallCheckOffset = 0.5f;
+        jumpVelocity = 5f, jumpCancelAcel = 5f, flipOutSpeed = 260f, ragdollTimer = 0;
     private bool isMoving, isGrounded, gravityAffected, jumpCancelled, isCrouching, isDead = false, cameraLockStatus = true, 
-        cameraLockSetting, isStumbled = false, isWalled;
+        cameraLockSetting, isStumbled = false, isWalled, isStuckOnWall;
     private int flipOutRevs = 0, flipOutDirection, unstumbleCount = 0;
     private const int stumblePressNeeded = 3;
+    private const float wallCheckOffset = 0.1f;
     private Vector2 moveVector;
 
 
@@ -58,11 +59,14 @@ public class PlayerController : MonoBehaviour
         Vector3 CheckerPos = GetPlayerTransform().position;
         CheckerPos.y += wallCheckOffset;
 
+
         wallCheck.transform.position = CheckerPos;
 
         WallCheck();
         GroundCheck();
         StumbleCheck();
+
+
     }
 
     // Update is called once per frame
@@ -76,9 +80,18 @@ public class PlayerController : MonoBehaviour
             this.transform.rotation = Quaternion.identity;
         }
 
-        if(!isStumbled) //Change this to check for a stumb
+        if (!isCrouching && !isStuckOnWall)
         {
-            rigidbody.velocity = new Vector2(maxMovementSpeed * moveVector.x, rigidbody.velocity.y);
+            moveDirection = moveVector.x;
+        }
+        else if(!isCrouching && isStuckOnWall)
+        {
+            moveDirection = 0;
+        }
+
+        if (!isStumbled) //Change this to check for a stumb
+        {
+            rigidbody.velocity = new Vector2(maxMovementSpeed * moveDirection, rigidbody.velocity.y);
         }
         
 
@@ -97,13 +110,11 @@ public class PlayerController : MonoBehaviour
             rigidbody.velocity += Vector2.up * Physics.gravity.y * Time.fixedDeltaTime * jumpCancelAcel;
         }
 
-        if (!isCrouching)
-        {
-            moveDirection = moveVector.x;
-        }
+        
         
 
-        if(isDead)
+
+        if (isDead)
         {
             ragdollTimer += Time.deltaTime;
             if(ragdollTimer>1 && ragdollTimer<2)
@@ -127,7 +138,7 @@ public class PlayerController : MonoBehaviour
             return;
         }
         moveVector = new Vector2(context.ReadValue<float>(), moveVector.y);
-
+        
     
 
     }
@@ -229,6 +240,17 @@ public class PlayerController : MonoBehaviour
         {
             isWalled = false;
         }
+
+        if (!isCrouching && !isGrounded && isWalled && stumbleBox.GetComponent<CapsuleCollider2D>().IsTouchingLayers(LayerMask.GetMask("Ground")))
+        {
+
+            isStuckOnWall = true;
+        }
+        else
+        {
+            isStuckOnWall = false;
+        }
+
     }
 
     public void Jump(InputAction.CallbackContext context) 
@@ -309,8 +331,9 @@ public class PlayerController : MonoBehaviour
 
     public void KillPlayer()
     {
-       // isDead = true;
-      //  this.GetComponent<SpriteRenderer>().color = new Color(1f, 0.5f, 0.5f, 1f);
+        //isDead = true;
+        //this.GetComponent<SpriteRenderer>().color = new Color(1f, 0.5f, 0.5f, 1f);
+       
     }
 
     public bool GetPlayerDeathState()
