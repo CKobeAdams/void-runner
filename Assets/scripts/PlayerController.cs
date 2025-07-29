@@ -331,8 +331,8 @@ public class PlayerController : MonoBehaviour
 
     public void KillPlayer()
     {
-        //isDead = true;
-        //this.GetComponent<SpriteRenderer>().color = new Color(1f, 0.5f, 0.5f, 1f);
+        isDead = true;
+        this.GetComponent<SpriteRenderer>().color = new Color(1f, 0.5f, 0.5f, 1f);
        
     }
 

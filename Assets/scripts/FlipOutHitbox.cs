@@ -62,12 +62,12 @@ public class FlipOutHitbox : MonoBehaviour
             flipShade = new Color(ssR, ssG, ssB, 1f);
         }
 
-        CurrentDamage = CurrentDamage + 0.01f;
+        CurrentDamage = CurrentDamage + 3f;
         sRender.color = flipShade;
 
         if(this.GetComponent<BoxCollider2D>().IsTouchingLayers(LayerMask.GetMask("Enemy")))
         {
-            EnemyManager.instance.EntityHurtSearch();
+            EnemyManager.instance.EntityHurtSearch(this.GetComponent<BoxCollider2D>(), CurrentDamage);
         }
 
     }

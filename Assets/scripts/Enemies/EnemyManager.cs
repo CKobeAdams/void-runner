@@ -30,16 +30,16 @@ public class EnemyManager : MonoBehaviour
         
     }
 
-    public void EntityHurtSearch()
+    public void EntityHurtSearch(BoxCollider2D searchBox, float damage)
     {
-        BoxCollider2D flipBox = FlipOutHitbox.instance.GetCollider();
+        //BoxCollider2D flipBox = FlipOutHitbox.instance.GetCollider();
 
         foreach(EnemyParent enem in enemyList)
         {
-            if(flipBox.IsTouching(enem.GetCollider()))
+            if(searchBox.IsTouching(enem.GetCollider()))
             {
                 //This magic number will need to be changed 
-                enem.TakeDamage(6);
+                enem.TakeDamage(damage);
                 break;
             }
         }

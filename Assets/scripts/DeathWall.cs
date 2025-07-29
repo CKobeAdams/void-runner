@@ -7,7 +7,9 @@ public class DeathWall : MonoBehaviour
     public static DeathWall instance { get; private set; }
 
     [SerializeField]
-    private float wallSpeed = 3f, wallAcceleration = 0.25f, currentSpeed = 0, speedMarker, wallDistance = 30f, wallTimerCount = 0f;
+    private float wallSpeed = 3f, wallAcceleration = 0.25f, currentSpeed = 0, speedMarker, wallDistance = 30f, wallTimerCount = 0f,
+           wallDamage = 10000f;
+
 
     private bool playerKilled = false, onScreen;
     private Rigidbody2D rigidBody;
@@ -63,6 +65,11 @@ public class DeathWall : MonoBehaviour
             }
             float playerY = PlayerController.instance.GetPlayerPosition().y;
             this.transform.position = new Vector3(this.transform.position.x, playerY, this.transform.position.z);
+        }
+
+        if(this.GetComponent<BoxCollider2D>().IsTouchingLayers(LayerMask.GetMask("Enemy")))
+        {
+            EnemyManager.instance.EntityHurtSearch(this.GetComponent<BoxCollider2D>(), wallDamage);
         }
         
         
