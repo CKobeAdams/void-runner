@@ -947,6 +947,8 @@ MonoBehaviour:
   currentSpeed: 0
   speedMarker: 0
   wallDistance: 30
+  wallTimerCount: 0
+  wallDamage: 10000
 --- !u!61 &920879563
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -1244,13 +1246,19 @@ MonoBehaviour:
   MainCam: {fileID: 724600128}
   CameraFloorDistance: 4.5
   minimunCameraHeight: 0
-  movementSpeed: 0
-  maxMovementSpeed: 8
+  movementVelocity: 0
+  maxMovementSpeed: 20
   moveDirection: 0
   jumpVelocity: 20
   jumpCancelAcel: 5
   flipOutSpeed: 13
   ragdollTimer: 0
+  moveAccel: 10
+  decceleration: 40
+  startUpSpeed: 2.5
+  startUpAcceleration: 50
+  turningAcceleration: 100
+  crouchingDecceleration: 10
 --- !u!114 &1214171202
 MonoBehaviour:
   m_ObjectHideFlags: 0

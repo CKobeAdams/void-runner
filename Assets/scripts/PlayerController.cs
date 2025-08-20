@@ -17,8 +17,9 @@ public class PlayerController : MonoBehaviour
     private Camera MainCam;
 
     [SerializeField]
-    private float CameraFloorDistance = 4.5f, minimunCameraHeight = 0f, movementSpeed, maxMovementSpeed = 5f, moveDirection, 
-        jumpVelocity = 5f, jumpCancelAcel = 5f, flipOutSpeed = 260f, ragdollTimer = 0;
+    private float CameraFloorDistance = 4.5f, minimunCameraHeight = 0f, movementVelocity = 0, maxMovementSpeed = 20f, moveDirection,
+        jumpVelocity = 5f, jumpCancelAcel = 5f, flipOutSpeed = 260f, ragdollTimer = 0, moveAccel = 10f, decceleration = -0.01f, 
+        startUpSpeed = 2.5f, startUpAcceleration = 50f, turningAcceleration = 15f, crouchingDecceleration = 0;
     private bool isMoving, isGrounded, gravityAffected, jumpCancelled, isCrouching, isDead = false, cameraLockStatus = true, 
         cameraLockSetting, isStumbled = false, isWalled, isStuckOnWall;
     private int flipOutRevs = 0, flipOutDirection, unstumbleCount = 0;
@@ -26,11 +27,23 @@ public class PlayerController : MonoBehaviour
     private const float wallCheckOffset = 0.1f;
     private Vector2 moveVector;
 
+    private enum runningState
+    {
+        idle,
+        startUp,
+        accelerating,
+        topSpeed,
+        turning,
+        deccelerating
+    }
 
+    private runningState runState;
 
     // Start is called before the first frame update
     void Start()
     {
+        runState = runningState.idle;
+        
 
         instance = this;
         
@@ -66,6 +79,34 @@ public class PlayerController : MonoBehaviour
         GroundCheck();
         StumbleCheck();
 
+        if (!isStumbled) //Change this to check for a stumb
+        {
+            //THIS IS WHERE WE ACTUALLY MOVE THE CHARACTER
+            if (isStuckOnWall)
+            {
+                moveDirection = 0;
+                ManageMovementInput();
+            }
+            else
+            {
+                ManageMovementInput();
+            }
+
+
+        }
+
+        if (movementVelocity < 0)
+        {
+            moveDirection = -1;
+        }
+        else if (movementVelocity > 0)
+        {
+            moveDirection = 1;
+        }
+        else
+        {
+            moveDirection = 0;
+        }
 
     }
 
@@ -80,19 +121,23 @@ public class PlayerController : MonoBehaviour
             this.transform.rotation = Quaternion.identity;
         }
 
-        if (!isCrouching && !isStuckOnWall)
-        {
-            moveDirection = moveVector.x;
-        }
-        else if(!isCrouching && isStuckOnWall)
-        {
-            moveDirection = 0;
-        }
+        
 
-        if (!isStumbled) //Change this to check for a stumb
+        /*if (!isStumbled) //Change this to check for a stumb
         {
-            rigidbody.velocity = new Vector2(maxMovementSpeed * moveDirection, rigidbody.velocity.y);
-        }
+            //THIS IS WHERE WE ACTUALLY MOVE THE CHARACTER
+            if (!isCrouching && !isStuckOnWall)
+            {
+                ManageMovementInput();
+            }
+            else if (!isCrouching && isStuckOnWall)
+            {
+                moveDirection = 0;
+                ManageMovementInput();
+            }
+
+
+        }*/
         
 
         if(!isGrounded && !isStumbled)
@@ -129,6 +174,188 @@ public class PlayerController : MonoBehaviour
         
     }
 
+    private void ManageMovementInput()
+    { //this is where we change acceleration
+        //change the color of the object in the sprite renderer for the different stages
+            //start up
+            //accelerating
+            //maxspeed
+        //bouncing off of weird invisible "wall" when moving backwards
+        if(isGrounded||isCrouching)
+        {
+            /*if (moveDirection == 0)
+            {
+                movementVelocity = startUpSpeed * moveVector.x + moveAccel * Time.deltaTime * moveVector.x;
+            }
+            if (moveDirection != moveVector.x)
+            {
+
+                movementVelocity = movementVelocity + decceleration * Time.deltaTime * moveDirection;
+                if (moveVector.x == 0 && Mathf.Abs(movementVelocity) < 0.1f)
+                {
+                    movementVelocity = 0;
+                    moveDirection = 0;
+                    return;
+                }
+            }
+            else
+            {
+                movementVelocity = movementVelocity + moveAccel * Time.deltaTime * moveVector.x;
+            }
+
+            if (Mathf.Abs(movementVelocity) > maxMovementSpeed)
+            {
+                movementVelocity = maxMovementSpeed;
+            }*/
+
+            //Maybe try using move towards for the velocity
+
+            //Debug.Log(movementVelocity);
+
+            switch (runState)
+            {
+                //when the player is standing still
+                case runningState.idle:
+                    this.GetComponent<SpriteRenderer>().color = new Color(1f, 1f, 1f, 1f);
+
+                    if (moveVector.x != 0 && !isCrouching)
+                    {
+                        moveDirection = moveVector.x;
+                        runState = runningState.startUp;
+                        movementVelocity = 0.001f *moveVector.x;
+                    }
+                    break;
+
+                //rapid acceleration up to the speed, i.e. smooth movement from not moving to moving
+                case runningState.startUp:
+                    movementVelocity = movementVelocity + startUpAcceleration * Time.deltaTime * moveVector.x;
+                    this.GetComponent<SpriteRenderer>().color = new Color(180f/255f, 66f/255f, 1f, 1f);
+                    //0 within the this if statement 
+                    if (moveVector.x != moveDirection && moveVector.x != 0)
+                    {
+                        runState = runningState.turning;
+                    }
+                    else if(Mathf.Abs(movementVelocity) >= startUpSpeed)
+                    {
+                        runState = runningState.accelerating;
+                    }
+
+                    break;
+
+                //move but gaining speed to top speed
+                case runningState.accelerating:
+                    movementVelocity = movementVelocity + moveAccel * Time.deltaTime * moveDirection;
+                    this.GetComponent<SpriteRenderer>().color = new Color(0f, 0f, 1f, 1f);
+
+                    if (Mathf.Abs(movementVelocity) >= maxMovementSpeed)
+                    {
+                        runState = runningState.topSpeed;
+                        movementVelocity = maxMovementSpeed*moveVector.x;
+                    }
+
+                    if(moveVector.x != 0 && moveVector.x != moveDirection)
+                    {
+                        runState = runningState.turning;
+                    }
+                    else if(moveVector.x == 0)
+                    {
+                        runState = runningState.deccelerating;
+                    }
+
+
+                    break;
+
+                //top speed, moving and can only slow down
+                case runningState.topSpeed:
+                    movementVelocity = maxMovementSpeed*moveDirection;
+                    this.GetComponent<SpriteRenderer>().color = new Color(0.5f, 1.0f, 0.5f, 1f);
+
+                    if (moveVector.x != 0 && moveVector.x != moveDirection)
+                    {
+                        runState = runningState.turning;
+                    }
+                    else if(moveVector.x == 0)
+                    {
+                        runState = runningState.deccelerating;
+                    }
+
+                    break;
+
+                //Moving but there is no player input
+                case runningState.deccelerating:
+
+
+                    
+                    if(isCrouching)
+                    {
+                        movementVelocity = movementVelocity + crouchingDecceleration * Time.deltaTime * -moveDirection;
+
+                    }
+                    else
+                    {
+                        movementVelocity = movementVelocity + decceleration * Time.deltaTime * -moveDirection;
+                    }
+                    
+                    //movementVelocity = movementVelocity + moveAccel * Time.deltaTime * moveDirection;
+                    
+
+                    
+                    this.GetComponent<SpriteRenderer>().color = new Color(0.8f, 0f, 0f, 1f);
+
+                    //if(moveDirection == moveVector.x && moveVector.x == 0)
+                    if(movementVelocity <= 1f && movementVelocity >= -1f)
+                    {
+                        movementVelocity = 0;
+                        runState = runningState.idle;
+                    }
+
+                    if(!isCrouching)
+                    {
+                        if (moveVector.x == moveDirection && movementVelocity != 0)
+                        {
+                            runState = runningState.accelerating;
+                        }
+                        else if (moveVector.x != moveDirection && moveVector.x != 0)
+                        {
+                            runState = runningState.turning;
+                        }
+                    }
+
+                    break;
+
+                //moving but player input is the opposite direction of the movement
+                case runningState.turning:
+                    movementVelocity = movementVelocity + turningAcceleration * Time.deltaTime * (-moveDirection);
+                    this.GetComponent<SpriteRenderer>().color = new Color(1f, 148f/255f, 66f/255f, 1f);
+
+                    if (movementVelocity <= 0.1f && movementVelocity >= -0.1f)
+                    {
+                        runState = runningState.startUp;
+                        movementVelocity = 0.1f*moveVector.x;
+                        
+                    }
+
+                    if(moveVector.x == moveDirection)
+                    {
+                        runState = runningState.startUp;
+                        movementVelocity = 0.1f * moveVector.x;
+                    }
+                    else if (moveVector.x == 0)
+                    {
+                        runState = runningState.deccelerating;
+                    }
+
+
+                    break;
+            }
+
+
+            rigidbody.velocity = new Vector2(movementVelocity, rigidbody.velocity.y);
+
+            
+        }
+        
+    }
 
     public void MovementPerformed(InputAction.CallbackContext context)
     {
@@ -149,7 +376,7 @@ public class PlayerController : MonoBehaviour
         if(context.started)
         {
             GroundCheck();
-            
+            runState = runningState.deccelerating;
             
         }
         if(context.performed && isGrounded)
@@ -159,6 +386,7 @@ public class PlayerController : MonoBehaviour
             //quarternions are required for rotations
             
             isCrouching = true;
+            
             if(moveDirection != 0)
             {
                 this.transform.rotation *= Quaternion.AngleAxis(moveDirection * 90f, Vector3.forward);
