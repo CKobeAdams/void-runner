@@ -18,7 +18,7 @@ public class EnemyParent : MonoBehaviour
         
     }
 
-    public virtual void TakeDamage(float damageTaken)
+    public virtual void TakeDamage(float damageTaken, bool adjustScore)
     {
         health = health - damageTaken;
     }

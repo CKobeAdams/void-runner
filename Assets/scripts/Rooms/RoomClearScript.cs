@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class RoomChecker : MonoBehaviour
+public class RoomClearScript : MonoBehaviour
 {
 
     private bool activated = false;
@@ -15,16 +15,13 @@ public class RoomChecker : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (!activated)
+        if(!activated)
         {
-            if(this.GetComponent<BoxCollider2D>().IsTouchingLayers(LayerMask.GetMask("Player")))
+            if (this.GetComponent<BoxCollider2D>().IsTouchingLayers(LayerMask.GetMask("Player")))
             {
                 activated = true;
-                
 
-                RoomManager.instance.GenerateRoom();
-                RoomManager.instance.DestroyRooms();
-       
+                UIManager.instance.RoomCleared();
             }
         }
     }

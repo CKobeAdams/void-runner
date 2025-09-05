@@ -12,14 +12,13 @@ public class FlipOutHitbox : MonoBehaviour
     [SerializeField]
     float CurrentDamage, startDamage;
     SpriteRenderer sRender;
+    const int sourceCode = 0;
 
     float ssR, ssG, ssB;
 
     void Start()
     {
-        sRender = this.GetComponent<SpriteRenderer>();
-
-        instance = this;
+        
 
         startShade = new Color(1.0f / 255f, 185f / 255f, 255f / 255f, 1f);
         flipShade = startShade;
@@ -32,14 +31,16 @@ public class FlipOutHitbox : MonoBehaviour
 
     }
 
-    void awake()
+    void Awake()
     {
-       
 
-        
+        sRender = this.GetComponent<SpriteRenderer>();
 
-        
-        
+        instance = this;
+
+
+
+
 
     }
 
@@ -67,7 +68,8 @@ public class FlipOutHitbox : MonoBehaviour
 
         if(this.GetComponent<BoxCollider2D>().IsTouchingLayers(LayerMask.GetMask("Enemy")))
         {
-            EnemyManager.instance.EntityHurtSearch(this.GetComponent<BoxCollider2D>(), CurrentDamage);
+            EnemyManager.instance.EntityHurtSearch(this.GetComponent<BoxCollider2D>(), CurrentDamage, sourceCode);
+           
         }
 
     }

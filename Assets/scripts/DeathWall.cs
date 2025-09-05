@@ -13,6 +13,7 @@ public class DeathWall : MonoBehaviour
 
     private bool playerKilled = false, onScreen;
     private Rigidbody2D rigidBody;
+    private const int sourceCode = 1;
     
 
     // Start is called before the first frame update
@@ -69,7 +70,7 @@ public class DeathWall : MonoBehaviour
 
         if(this.GetComponent<BoxCollider2D>().IsTouchingLayers(LayerMask.GetMask("Enemy")))
         {
-            EnemyManager.instance.EntityHurtSearch(this.GetComponent<BoxCollider2D>(), wallDamage);
+            EnemyManager.instance.EntityHurtSearch(this.GetComponent<BoxCollider2D>(), wallDamage, sourceCode);
         }
         
         

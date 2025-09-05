@@ -18,12 +18,13 @@ public class PlayerController : MonoBehaviour
 
     [SerializeField]
     private float CameraFloorDistance = 4.5f, minimunCameraHeight = 0f, movementVelocity = 0, maxMovementSpeed = 20f, moveDirection,
-        jumpVelocity = 5f, jumpCancelAcel = 5f, flipOutSpeed = 260f, ragdollTimer = 0, moveAccel = 10f, decceleration = -0.01f, 
-        startUpSpeed = 2.5f, startUpAcceleration = 50f, turningAcceleration = 15f, crouchingDecceleration = 0;
+        jumpVelocity = 6f, jumpCancelAcel = 5f, flipOutSpeed = 260f, ragdollTimer = 0, moveAccel = 10f, decceleration = -0.01f, 
+        startUpSpeed = 2.5f, startUpAcceleration = 50f, turningAcceleration = 15f, crouchingDecceleration = 0, invincibleTimer = 2.5f, 
+        invincibleCounter = 0f, airMoveAcceleration = 5f, airMoveVelocity = 0f, airMoveDifferentialCap = 2f;
     private bool isMoving, isGrounded, gravityAffected, jumpCancelled, isCrouching, isDead = false, cameraLockStatus = true, 
-        cameraLockSetting, isStumbled = false, isWalled, isStuckOnWall;
-    private int flipOutRevs = 0, flipOutDirection, unstumbleCount = 0;
-    private const int stumblePressNeeded = 3;
+        cameraLockSetting, isStumbled = false, isWalled, isStuckOnWall, tookDamage;
+    private int flipOutRevs = 0, flipOutDirection, unstumbleCount = 0, playerHealth = 3;
+    private const int stumblePressNeeded = 3, playerMaxHealth = 3;
     private const float wallCheckOffset = 0.1f;
     private Vector2 moveVector;
 
@@ -37,6 +38,14 @@ public class PlayerController : MonoBehaviour
         deccelerating
     }
 
+    /*private enum airMoveState
+    {
+        moveRight,
+        moveLeft,
+        none,
+    }
+
+    private airMoveState airState;*/
     private runningState runState;
 
     // Start is called before the first frame update
@@ -45,26 +54,29 @@ public class PlayerController : MonoBehaviour
         runState = runningState.idle;
         
 
-        instance = this;
+        
         
         gravityAffected = true;
         
         rigidbody = GetComponent<Rigidbody2D>();
-        isGrounded = true;
-        moveVector = new Vector2(0f,0f);
         
-
-        cameraLockSetting = true;
-        cameraLockStatus = true;
-
-        flipHitBox.SetActive(false);
+        
 
 
     }
 
     void Awake()
     {
-       
+        instance = this;
+        playerHealth = playerMaxHealth;
+        isGrounded = true;
+        moveVector = new Vector2(0f, 0f);
+
+
+        cameraLockSetting = true;
+        cameraLockStatus = true;
+
+        flipHitBox.SetActive(false);
     }
 
     void Update()
@@ -106,6 +118,31 @@ public class PlayerController : MonoBehaviour
         else
         {
             moveDirection = 0;
+        }
+
+        if(tookDamage)
+        {
+            invincibleCounter += Time.deltaTime;
+            Debug.Log(invincibleCounter);
+
+
+            if((invincibleCounter*1000)%2==0)
+            {
+                this.GetComponent<SpriteRenderer>().color = new Color(1f, 1f, 1f, 1f);
+            }
+            else
+            {
+                this.GetComponent<SpriteRenderer>().color = new Color(1f, 1f, 1f, 0f);
+            }
+
+            if(invincibleCounter>=invincibleTimer)
+            {
+                this.GetComponent<SpriteRenderer>().color = new Color(1f, 1f, 1f, 1f);
+                invincibleCounter = 0f;
+                tookDamage = false;
+                Debug.Log("turning off the invincible timer");
+            }
+
         }
 
     }
@@ -164,6 +201,7 @@ public class PlayerController : MonoBehaviour
             ragdollTimer += Time.deltaTime;
             if(ragdollTimer>1 && ragdollTimer<2)
             {
+                UIManager.instance.PauseTimer();
                 SceneManager.LoadScene("Gameover", LoadSceneMode.Additive);
                 ragdollTimer += 1;
             }
@@ -181,6 +219,49 @@ public class PlayerController : MonoBehaviour
             //accelerating
             //maxspeed
         //bouncing off of weird invisible "wall" when moving backwards
+
+        if(!isGrounded)
+        {
+            //carry movement speed if its fast enough
+            //jumping forward carries movement
+            //resets when the player touches the ground again
+            
+
+            if(moveVector.x==1f)
+            {
+                airMoveVelocity += airMoveAcceleration * Time.deltaTime;
+                /*if(Mathf.Abs(airMoveVelocity) > airMoveDifferentialCap)
+                {
+                    airMoveVelocity = airMoveDifferentialCap;
+                }*/
+                if(Mathf.Abs(airMoveVelocity) < airMoveDifferentialCap)
+                {
+                    
+                    rigidbody.velocity = new Vector2(movementVelocity+ airMoveVelocity, rigidbody.velocity.y);
+                }
+                else
+                {
+                    airMoveVelocity = airMoveDifferentialCap;
+                }
+                
+            }
+            if(moveVector.x==-1f)
+            {
+                airMoveVelocity -= airMoveAcceleration * Time.deltaTime;
+                if(Mathf.Abs(airMoveVelocity)<airMoveDifferentialCap)
+                {
+                    
+                    rigidbody.velocity = new Vector2(movementVelocity + airMoveVelocity, rigidbody.velocity.y);
+                }
+                else
+                {
+                    airMoveVelocity = -airMoveDifferentialCap;
+                }
+                
+            }
+
+        }
+
         if(isGrounded||isCrouching)
         {
             /*if (moveDirection == 0)
@@ -365,6 +446,8 @@ public class PlayerController : MonoBehaviour
             return;
         }
         moveVector = new Vector2(context.ReadValue<float>(), moveVector.y);
+
+
         
     
 
@@ -400,7 +483,6 @@ public class PlayerController : MonoBehaviour
 
             
         }
-
         if(context.canceled&&isCrouching)
         {
             //stand up
@@ -449,6 +531,7 @@ public class PlayerController : MonoBehaviour
         
         if(groundCheck.GetComponent<CircleCollider2D>().IsTouchingLayers(LayerMask.GetMask("Ground")))
         {
+            airMoveVelocity = 0;
             isGrounded = true; 
         }
         else
@@ -557,6 +640,28 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    public void TakeDamage(int damage)
+    {
+        if(!tookDamage)
+        {
+            playerHealth = playerHealth - damage;
+            healthManager.instance.UpdateHealthDisplay(playerHealth);
+            tookDamage = true;
+           
+            Debug.Log("character is invincible");
+
+        }
+        
+
+       
+        //touch the canvas
+
+        if(playerHealth <= 0)
+        {
+            isDead = true;
+        }
+    }
+
     public void KillPlayer()
     {
         isDead = true;
@@ -599,6 +704,16 @@ public class PlayerController : MonoBehaviour
     public Vector2 GetMoveVector()
     {
         return moveVector;
+    }
+
+    public int GetCurrentHealth()
+    {
+        return playerHealth;
+    }
+
+    public int GetMaxHealth()
+    {
+        return playerMaxHealth;
     }
 
 }

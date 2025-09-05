@@ -113,6 +113,7 @@ public class RoomManager : MonoBehaviour
             GameObject targetRoom = roomList[0];
             roomList.RemoveAt(0);
             Destroy(targetRoom);
+            UIManager.instance.RoomCleared();
         }
     }
 

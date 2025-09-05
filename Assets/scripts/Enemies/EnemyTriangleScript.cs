@@ -21,6 +21,7 @@ public class EnemyTriangleScript : EnemyParent
     private const float diveSpeed = 15f , diveTime = 0.25f, diveCoolDown = 0.5f, diveStartUp = 0.25f, idleDirectionTimer = 0.5f, rotationSpeed = 40, rotationModifier = 90;
     private bool isDiving, onCoolDown, isLockedOn;
     private int idleDirection;
+    private const int attackingDamage = 1, scoreValue = 300;
     private Rigidbody2D rigidBody;
     // Start is called before the first frame update
     void Start()
@@ -98,7 +99,7 @@ public class EnemyTriangleScript : EnemyParent
         {
             if (this.GetComponent<PolygonCollider2D>().IsTouchingLayers(LayerMask.GetMask("Player")))
             {
-                PlayerController.instance.KillPlayer();
+                PlayerController.instance.TakeDamage(attackingDamage);
             }
         }
 
@@ -211,14 +212,19 @@ public class EnemyTriangleScript : EnemyParent
     //private void MovementFunction
     //Attack Function
 
-    public override void TakeDamage(float damageTaken)
+    public override void TakeDamage(float damageTaken, bool adjustScore)
     {
         health -= damageTaken;
-        Debug.Log(health);
+        
         if(health<=0)
         {
             isDead = true;
             EnemyManager.instance.RemoveEnemy(this.GetComponent<EnemyParent>());
+            if(adjustScore)
+            {
+                UIManager.instance.AdjustScore(scoreValue);
+            }
+            
             
         }
 

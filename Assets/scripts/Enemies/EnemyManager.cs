@@ -6,8 +6,15 @@ public class EnemyManager : MonoBehaviour
 {
     public static EnemyManager instance { get; private set; }
 
+    private enum DamageSources
+    {
+        player,
+        deathWall,
+    }
+    
     [SerializeField]
     public List<EnemyParent> enemyList;
+
 
     // Start is called before the first frame update
     void Start()
@@ -30,7 +37,7 @@ public class EnemyManager : MonoBehaviour
         
     }
 
-    public void EntityHurtSearch(BoxCollider2D searchBox, float damage)
+    public void EntityHurtSearch(BoxCollider2D searchBox, float damage, int source)
     {
         //BoxCollider2D flipBox = FlipOutHitbox.instance.GetCollider();
 
@@ -38,8 +45,19 @@ public class EnemyManager : MonoBehaviour
         {
             if(searchBox.IsTouching(enem.GetCollider()))
             {
-                //This magic number will need to be changed 
-                enem.TakeDamage(damage);
+                
+                
+                if(source == (int)DamageSources.player)
+                {
+                    enem.TakeDamage(damage, true);
+
+                }
+                else
+                {
+                    enem.TakeDamage(damage, false);
+                }
+
+
                 break;
             }
         }
