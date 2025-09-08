@@ -145,7 +145,7 @@ public class CameraManager : MonoBehaviour
 
         if (playerMoveVector.x == 1)
         {
-            step = 25f*Time.deltaTime;
+            step = 35f*Time.deltaTime;
         }
         else
         {

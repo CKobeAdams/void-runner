@@ -6,7 +6,7 @@ public class RandomRoomFloorGenerator : MonoBehaviour
 {
     [SerializeField]
     private GameObject basePlatform;
-    private int platformCount = 20;
+    private int platformCount = 10;
     // Start is called before the first frame update
     void Start()
     {

@@ -123,7 +123,7 @@ public class PlayerController : MonoBehaviour
         if(tookDamage)
         {
             invincibleCounter += Time.deltaTime;
-            Debug.Log(invincibleCounter);
+            
 
 
             if((invincibleCounter*1000)%2==0)
@@ -140,7 +140,7 @@ public class PlayerController : MonoBehaviour
                 this.GetComponent<SpriteRenderer>().color = new Color(1f, 1f, 1f, 1f);
                 invincibleCounter = 0f;
                 tookDamage = false;
-                Debug.Log("turning off the invincible timer");
+                
             }
 
         }
@@ -202,6 +202,7 @@ public class PlayerController : MonoBehaviour
             if(ragdollTimer>1 && ragdollTimer<2)
             {
                 UIManager.instance.PauseTimer();
+                UIManager.instance.PassValuesToRunData();
                 SceneManager.LoadScene("Gameover", LoadSceneMode.Additive);
                 ragdollTimer += 1;
             }
@@ -648,7 +649,7 @@ public class PlayerController : MonoBehaviour
             healthManager.instance.UpdateHealthDisplay(playerHealth);
             tookDamage = true;
            
-            Debug.Log("character is invincible");
+           
 
         }
         

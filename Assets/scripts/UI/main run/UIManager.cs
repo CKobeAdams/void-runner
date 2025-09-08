@@ -19,11 +19,15 @@ public class UIManager : MonoBehaviour
     [SerializeField]
     GameObject healthBarObject;
 
+    [SerializeField]
+    private RunDataSO runDataValues;
+
 
     private float stopwatchCounter, scoreCounter;
     private int roomCounter;
     private bool timerPaused;
     private Vector2 renderingDisplaySize;
+    private int minutes, seconds, milliseconds;
 
 
     // Later set up the UI to 
@@ -55,9 +59,9 @@ public class UIManager : MonoBehaviour
     private void UpdateStopwatch()
     {
         stopwatchCounter += Time.deltaTime;
-        int minutes = (int)Mathf.Floor(stopwatchCounter / 60);
-        int seconds = (int)Mathf.Floor(stopwatchCounter % 60);
-        int milliseconds = (int)Mathf.Floor((stopwatchCounter * 1000%1000)/10);
+        minutes = (int)Mathf.Floor(stopwatchCounter / 60);
+        seconds = (int)Mathf.Floor(stopwatchCounter % 60);
+        milliseconds = (int)Mathf.Floor((stopwatchCounter * 1000%1000)/10);
         string text = minutes.ToString("D2") + ":"+seconds.ToString("D2")+":"+milliseconds.ToString("D2");
 
         stopwatchObject.text = text;
@@ -93,5 +97,17 @@ public class UIManager : MonoBehaviour
         string text = "Rooms Cleared: " + roomCounter;
 
         roomCounterObject.text = text;
+
+        
+    }
+
+    public void PassValuesToRunData()
+    {
+        //roomsCleared, score, timeMinutes, timeSeconds, timeMillis;
+        runDataValues.roomsCleared = roomCounter;
+        runDataValues.score = (int)scoreCounter;
+        runDataValues.timeMinutes = minutes;
+        runDataValues.timeSeconds = seconds;
+        runDataValues.timeMillis = milliseconds;
     }
 }

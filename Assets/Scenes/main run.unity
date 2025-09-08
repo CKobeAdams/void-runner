@@ -484,7 +484,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 25, y: 0, z: -4.9500732, w: 0}
+  m_margin: {x: 25, y: 0, z: -42.453766, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
@@ -1475,7 +1475,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 25, y: 0, z: 74.2511, w: 0}
+  m_margin: {x: 25, y: 0, z: 0.9484558, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
@@ -2408,6 +2408,7 @@ GameObject:
   - component: {fileID: 2067289635}
   - component: {fileID: 2067289634}
   - component: {fileID: 2067289638}
+  - component: {fileID: 2067289639}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -2518,6 +2519,20 @@ MonoBehaviour:
   scoreText: {fileID: 352100804}
   canvasObject: {fileID: 2067289636}
   healthBarObject: {fileID: 673115453}
+  runDataValues: {fileID: 11400000, guid: f66e7461c3ca8e04182af70382f74c5b, type: 2}
+--- !u!114 &2067289639
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2067289633}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8f3684925ef3cec44bc7aa72e5e1ab6e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  runDataValues: {fileID: 11400000, guid: f66e7461c3ca8e04182af70382f74c5b, type: 2}
 --- !u!1 &2111579434
 GameObject:
   m_ObjectHideFlags: 0

@@ -56,22 +56,27 @@ public class RoomManager : MonoBehaviour
 
         if(roomChooser < 0.1f)
         {
+            //Random Room
             newRoom = Instantiate(randomRoom);
         }
         else if(roomChooser<0.25)
         {
+            //base Room
             newRoom = Instantiate(baseRoom);
         }
         else if(roomChooser<0.5f)
         {
+            //descending Room
             newRoom = Instantiate(descendingRoom);
         }
         else if(roomChooser<0.75f)
         {
+            //rising room
             newRoom = Instantiate(risingRoom);
         }
         else
         {
+            //ascending rtoom
             newRoom = Instantiate(ascendingRoom);
         }
 
@@ -85,7 +90,7 @@ public class RoomManager : MonoBehaviour
 
         //places the starting node in the correct position
         Vector3 nodePosition = GetListEndNodePosition();
-        Debug.Log(newRoomStartNode.position);
+       
         newRoom.transform.position = new Vector3(nodePosition.x-newRoomOffset.x, nodePosition.y-newRoomOffset.y, nodePosition.z);
 
         //adds the starting room to a new room
@@ -113,7 +118,6 @@ public class RoomManager : MonoBehaviour
             GameObject targetRoom = roomList[0];
             roomList.RemoveAt(0);
             Destroy(targetRoom);
-            UIManager.instance.RoomCleared();
         }
     }
 
