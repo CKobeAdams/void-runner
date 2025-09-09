@@ -7,3 +7,6 @@ To download and play the latest version of the game:
 3. download it and extract files
 4. open builds
 5. extract the latest build and run the executable file
+
+CC BY-NC-SA 4.0
+https://creativecommons.org/licenses/by-nc-sa/4.0/
