@@ -11,7 +11,7 @@ public class CameraManager : MonoBehaviour
 
     private bool CameraLockSetting, CameraLockStatus, isLingering = false;
 
-    private float minimumCameraHeight = 0f, cameraFloorDistance = 10f, cameraSpeed = 6f, cameraRaiseLower, cameraLingerTimer = 0f;
+    private float minimumCameraHeight = 0f, cameraFloorDistance = 5f, cameraSpeed = 6f, cameraRaiseLower, cameraLingerTimer = 0f;
 
     //this constant determines how long the camera lingers for
     private const float cameraLingerLimit = 2.5f;
