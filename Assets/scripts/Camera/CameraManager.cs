@@ -14,9 +14,9 @@ public class CameraManager : MonoBehaviour
     private float minimumCameraHeight = 0f, cameraFloorDistance = 5f, cameraSpeed = 6f, cameraRaiseLower, cameraLingerTimer = 0f;
 
     //this constant determines how long the camera lingers for
-    private const float cameraLingerLimit = 2.5f;
+    private const float cameraLingerLimit = 0f;
 
-    private Vector2 playerMoveVector, cameraDisplacement, previousMoveVector;
+    private Vector2 playerMoveVector, cameraBaseDisplacement, previousMoveVector, cameraMoveOffset;
     
 
     // Start is called before the first frame update
@@ -27,7 +27,8 @@ public class CameraManager : MonoBehaviour
         CameraLockSetting = true;
         CameraLockStatus = true;
 
-        cameraDisplacement = new Vector2(10f, 3f);
+        cameraBaseDisplacement = new Vector2(10f, 3f);
+        cameraMoveOffset = new Vector2(1f, 0);
     }
 
     void Start()
@@ -87,7 +88,7 @@ public class CameraManager : MonoBehaviour
     {
         Vector3 playerTrans = PlayerController.instance.GetPlayerTransform().position;
        
-        Vector3 cameraHeight = new Vector3(playerTrans.x, 0f, -10f);
+        Vector3 cameraHeight = new Vector3(playerTrans.x + cameraBaseDisplacement.x, 0f, -10f);
         
 
         float step = cameraSpeed * Time.deltaTime;
@@ -132,8 +133,8 @@ public class CameraManager : MonoBehaviour
             }
         }
 
-        Vector3 targetPosition = new Vector3(cameraHeight.x + (cameraDisplacement.x * cameraLingerVector),
-                cameraHeight.y + (cameraDisplacement.y * playerMoveVector.y),
+        Vector3 targetPosition = new Vector3(cameraHeight.x + (cameraMoveOffset.x * cameraLingerVector),
+                cameraHeight.y + (cameraMoveOffset.y * playerMoveVector.y),
                 MainCam.transform.position.z);
 
 
