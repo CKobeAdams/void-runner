@@ -100,6 +100,7 @@ public class EnemyTriangleScript : EnemyParent
             if (this.GetComponent<PolygonCollider2D>().IsTouchingLayers(LayerMask.GetMask("Player")))
             {
                 PlayerController.instance.TakeDamage(attackingDamage);
+                TakeDamage(health, false);
             }
         }
 
