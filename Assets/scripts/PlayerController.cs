@@ -11,7 +11,7 @@ public class PlayerController : MonoBehaviour
     private Rigidbody2D rigidbody;
 
     [SerializeField]
-    private GameObject groundCheck, flipHitBox, wallCheck, wallHeadCheck, stumbleBox;
+    private GameObject groundCheck, flipHitBox, wallCheckerMain, wallCheckLeft, wallCheckRight, wallHeadCheck, stumbleBox;
 
     [SerializeField]
     private Camera MainCam;
@@ -20,13 +20,14 @@ public class PlayerController : MonoBehaviour
     private float CameraFloorDistance = 4.5f, minimunCameraHeight = 0f, movementVelocity = 0, maxMovementSpeed = 20f, moveDirection,
         jumpVelocity = 6f, jumpCancelAcel = 5f, flipOutSpeed = 260f, ragdollTimer = 0, moveAccel = 10f, decceleration = -0.01f, 
         startUpSpeed = 2.5f, startUpAcceleration = 50f, turningAcceleration = 15f, crouchingDecceleration = 0, invincibleTimer = 2.5f, 
-        invincibleCounter = 0f, airMoveAcceleration = 5f, airMoveVelocity = 0f, airMoveDifferentialCap = 2f;
+        invincibleCounter = 0f, airMoveAcceleration = 5f, airMoveVelocity = 0f, airMoveDifferentialCap = 2f, wallSlidingMultiplier = 0.85f;
     private bool isMoving, isGrounded, gravityAffected, jumpCancelled, isCrouching, isDead = false, cameraLockStatus = true, 
-        cameraLockSetting, isStumbled = false, isWalled, isStuckOnWall, tookDamage;
+        cameraLockSetting, isStumbled = false, isWalled, isStuckOnWall, tookDamage, leftWallCollision, rightWallCollision, isWallSliding;
     private int flipOutRevs = 0, flipOutDirection, unstumbleCount = 0, playerHealth = 3;
     private const int stumblePressNeeded = 3, playerMaxHealth = 3;
-    private const float wallCheckOffset = 0.1f;
-    private Vector2 moveVector;
+    private const float wallCheckOffset = 0.1f, LRoffset = 0.4f;
+    private Vector2 moveVector, LRcheckerOffset;
+    private Vector3 leftCheckerPos, rightCheckerPos;
 
     private enum runningState
     {
@@ -71,7 +72,9 @@ public class PlayerController : MonoBehaviour
         playerHealth = playerMaxHealth;
         isGrounded = true;
         moveVector = new Vector2(0f, 0f);
-
+        LRcheckerOffset = new Vector2(0f, 0f);
+        leftCheckerPos = wallCheckLeft.transform.position;
+        rightCheckerPos = wallCheckRight.transform.position;
 
         cameraLockSetting = true;
         cameraLockStatus = true;
@@ -85,8 +88,12 @@ public class PlayerController : MonoBehaviour
         CheckerPos.y += wallCheckOffset;
 
 
-        wallCheck.transform.position = CheckerPos;
+        wallCheckerMain.transform.position = CheckerPos;
 
+        leftCheckerPos = new Vector3(CheckerPos.x + LRoffset, CheckerPos.y, CheckerPos.z);
+        rightCheckerPos = new Vector3(CheckerPos.x - LRoffset, CheckerPos.y, CheckerPos.z);
+
+        
         WallCheck();
         GroundCheck();
         StumbleCheck();
@@ -94,15 +101,7 @@ public class PlayerController : MonoBehaviour
         if (!isStumbled) //Change this to check for a stumb
         {
             //THIS IS WHERE WE ACTUALLY MOVE THE CHARACTER
-            if (isStuckOnWall)
-            {
-                moveDirection = 0;
-                ManageMovementInput();
-            }
-            else
-            {
-                ManageMovementInput();
-            }
+            ManageMovementInput();
 
 
         }
@@ -144,6 +143,8 @@ public class PlayerController : MonoBehaviour
             }
 
         }
+
+        
 
     }
 
@@ -235,29 +236,23 @@ public class PlayerController : MonoBehaviour
                 {
                     airMoveVelocity = airMoveDifferentialCap;
                 }*/
-                if(Mathf.Abs(airMoveVelocity) < airMoveDifferentialCap)
+                if(Mathf.Abs(airMoveVelocity) > airMoveDifferentialCap)
                 {
-                    
-                    rigidbody.velocity = new Vector2(movementVelocity+ airMoveVelocity, rigidbody.velocity.y);
-                }
-                else
-                {
+
                     airMoveVelocity = airMoveDifferentialCap;
                 }
+
                 
             }
             if(moveVector.x==-1f)
             {
                 airMoveVelocity -= airMoveAcceleration * Time.deltaTime;
-                if(Mathf.Abs(airMoveVelocity)<airMoveDifferentialCap)
+                if(Mathf.Abs(airMoveVelocity)>airMoveDifferentialCap)
                 {
-                    
-                    rigidbody.velocity = new Vector2(movementVelocity + airMoveVelocity, rigidbody.velocity.y);
-                }
-                else
-                {
+
                     airMoveVelocity = -airMoveDifferentialCap;
                 }
+              
                 
             }
 
@@ -432,11 +427,34 @@ public class PlayerController : MonoBehaviour
             }
 
 
-            rigidbody.velocity = new Vector2(movementVelocity, rigidbody.velocity.y);
+            
 
             
         }
-        
+
+        float rigidY = rigidbody.velocity.y;
+
+        if (isWalled)
+        {
+            if (leftWallCollision && moveVector.x < 0)
+            {
+                movementVelocity = 0;
+                airMoveVelocity = 0;
+                isWallSliding = true;
+                rigidY = rigidbody.velocity.y * wallSlidingMultiplier;
+
+            }
+
+            if (rightWallCollision && moveVector.x > 0)
+            {
+                movementVelocity = 0;
+                airMoveVelocity = 0;
+                isWallSliding = true;
+                rigidY = rigidbody.velocity.y * wallSlidingMultiplier;
+            }
+        }
+
+        rigidbody.velocity = new Vector2(movementVelocity + airMoveVelocity, rigidY);
     }
 
     public void MovementPerformed(InputAction.CallbackContext context)
@@ -506,18 +524,16 @@ public class PlayerController : MonoBehaviour
 
     public void StumbleCheck()
     {
-        if(stumbleBox.GetComponent<CapsuleCollider2D>().IsTouchingLayers(LayerMask.GetMask("Ground")))
+        if(stumbleBox.GetComponent<CapsuleCollider2D>().IsTouchingLayers(LayerMask.GetMask("Ground"))&&!isWalled && !isCrouching && !isGrounded)
         {
-            //make that bitch stumble
-            if(!isWalled && !isCrouching)
-            {
+
                 if(!isStumbled)
                 {
                     unstumbleCount = 0;
                 }
                 isStumbled = true;
                 
-            }
+
             
         }
         else
@@ -533,27 +549,53 @@ public class PlayerController : MonoBehaviour
         if(groundCheck.GetComponent<CircleCollider2D>().IsTouchingLayers(LayerMask.GetMask("Ground")))
         {
             airMoveVelocity = 0;
-            isGrounded = true; 
+            isGrounded = true;
+            //reset the offset to the wall checkers
+            resetTwinWallCheckers();
         }
         else
         {
             isGrounded = false;
+            
         }
 
     }
 
+    //Check left check right, set the a couple of variations and turn of directional input for that direction
     public void WallCheck()
     {
-        if(wallCheck.GetComponent<BoxCollider2D>().IsTouchingLayers(LayerMask.GetMask("Ground")))
+
+
+        wallCheckLeft.transform.position = new Vector3(leftCheckerPos.x - LRcheckerOffset.x, leftCheckerPos.y + LRcheckerOffset.y, leftCheckerPos.z);
+
+
+        wallCheckRight.transform.position = new Vector3(rightCheckerPos.x + LRcheckerOffset.x, rightCheckerPos.y - LRcheckerOffset.y, rightCheckerPos.z);
+        
+        isWalled = false;
+        if(wallCheckLeft.GetComponent<CircleCollider2D>().IsTouchingLayers(LayerMask.GetMask("Ground")))
         {
+            leftWallCollision = true;
             isWalled = true;
         }
         else
         {
-            isWalled = false;
+            leftWallCollision = false;
+            
         }
 
-        if (!isCrouching && !isGrounded && isWalled && stumbleBox.GetComponent<CapsuleCollider2D>().IsTouchingLayers(LayerMask.GetMask("Ground")))
+        if(wallCheckRight.GetComponent<CircleCollider2D>().IsTouchingLayers(LayerMask.GetMask("Ground")))
+        {
+            rightWallCollision = true;
+            isWalled = true;
+        }
+        else
+        {
+            leftWallCollision = false;
+        }
+
+    
+        
+        /*if (!isCrouching && !isGrounded && isWalled && stumbleBox.GetComponent<CapsuleCollider2D>().IsTouchingLayers(LayerMask.GetMask("Ground")))
         {
 
             isStuckOnWall = true;
@@ -561,7 +603,7 @@ public class PlayerController : MonoBehaviour
         else
         {
             isStuckOnWall = false;
-        }
+        }*/
 
     }
 
@@ -587,7 +629,8 @@ public class PlayerController : MonoBehaviour
                 {
                     this.transform.rotation = Quaternion.identity;
                     isStumbled = false;
-                    
+
+                    resetTwinWallCheckers();
                 }
                 
             }
@@ -686,10 +729,26 @@ public class PlayerController : MonoBehaviour
         return maxMovementSpeed;
     }
 
+    private void resetTwinWallCheckers()
+    {
+        LRcheckerOffset = new Vector2(-0.4f, 0f);
+        Vector3 CheckerPos = wallCheckerMain.transform.position;
+        leftCheckerPos = new Vector3(CheckerPos.x + LRoffset, CheckerPos.y, CheckerPos.z);
+        rightCheckerPos = new Vector3(CheckerPos.x - LRoffset, CheckerPos.y, CheckerPos.z);
+    }
+
     public void FlipOut(float direction)
     {
         Quaternion q = Quaternion.AngleAxis(flipOutSpeed*direction, Vector3.forward);
         this.transform.rotation *= q;
+
+        float zRotation = this.transform.rotation.z;
+        float halfHeight = this.GetComponent<CapsuleCollider2D>().bounds.size.x;
+
+        LRcheckerOffset.x = Mathf.Cos(zRotation) * halfHeight;
+        //LRcheckerOffset.y = Mathf.Sin(zRotation) * halfHeight;
+
+        
     }
 
     public Transform GetPlayerTransform()
