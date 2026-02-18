@@ -12,10 +12,11 @@ public class RoomManager : MonoBehaviour
 
 
 
-    public List<GameObject> roomList;
+    public List<GameObject> roomList, specialRooms, normalRooms;
 
     [SerializeField]
-    private GameObject baseRoom, startRoom, ascendingRoom, descendingRoom, risingRoom, randomRoom;
+    private GameObject baseRoom, startRoom, ascendingRoom, descendingRoom, risingRoom, randomRoom, oneHopRoom, doubleHopRoom,
+        oneSlideJumpRoom, doubleSlideJumpRoom, oneJumpRoom, dropFloorRoom;
 
     [SerializeField]
     private GameObject currentRoom, oldRoom;
@@ -29,6 +30,23 @@ public class RoomManager : MonoBehaviour
         roomList.Add(startRoom);
 
         currentRoom = startRoom;
+
+        specialRooms = new List<GameObject>();
+        specialRooms.Add(ascendingRoom);
+        specialRooms.Add(descendingRoom);
+        specialRooms.Add(risingRoom);
+        specialRooms.Add(randomRoom);
+
+
+        normalRooms = new List<GameObject>();
+        normalRooms.Add(baseRoom);
+        normalRooms.Add(oneHopRoom);
+        normalRooms.Add(doubleHopRoom);
+        normalRooms.Add(oneSlideJumpRoom);
+        normalRooms.Add(doubleSlideJumpRoom);
+        normalRooms.Add(oneJumpRoom);
+        normalRooms.Add(dropFloorRoom);
+
     }
 
     void Start()
@@ -57,28 +75,13 @@ public class RoomManager : MonoBehaviour
         if(roomChooser < 0.1f)
         {
             //Random Room
-            newRoom = Instantiate(randomRoom);
-        }
-        else if(roomChooser<0.25)
-        {
-            //base Room
-            newRoom = Instantiate(baseRoom);
-        }
-        else if(roomChooser<0.5f)
-        {
-            //descending Room
-            newRoom = Instantiate(descendingRoom);
-        }
-        else if(roomChooser<0.75f)
-        {
-            //rising room
-            newRoom = Instantiate(risingRoom);
+            newRoom = Instantiate(GenerateSpecialRoom());
         }
         else
         {
-            //ascending rtoom
-            newRoom = Instantiate(ascendingRoom);
+            newRoom = Instantiate(GenerateNormalRoom());
         }
+        
 
         
         
@@ -140,6 +143,19 @@ public class RoomManager : MonoBehaviour
         }
     }
 
+    //This method selects a room randomly from the special room list
+    private GameObject GenerateSpecialRoom()
+    {
+
+        return specialRooms[(int)Mathf.Floor(Random.Range(0,specialRooms.Count))];
+    }
+
+
+    //selects a room randomly from the normal room list
+    private GameObject GenerateNormalRoom()
+    {
+        return normalRooms[(int)Mathf.Floor(Random.Range(0, normalRooms.Count))];
+    }
    
     
     //Us the general manager to determine when to spawn another room

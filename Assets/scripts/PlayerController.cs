@@ -299,6 +299,7 @@ public class PlayerController : MonoBehaviour
                     {
                         moveDirection = moveVector.x;
                         runState = runningState.startUp;
+                        AnimatorManager.instance.StartUpTurnOn();
                         movementVelocity = 0.001f *moveVector.x;
                     }
                     break;
@@ -310,10 +311,12 @@ public class PlayerController : MonoBehaviour
                     //0 within the this if statement 
                     if (moveVector.x != moveDirection && moveVector.x != 0)
                     {
+                        AnimatorManager.instance.StartUpTurnOff();
                         runState = runningState.turning;
                     }
                     else if(Mathf.Abs(movementVelocity) >= startUpSpeed)
                     {
+                        AnimatorManager.instance.StartUpTurnOff();
                         runState = runningState.accelerating;
                     }
 
