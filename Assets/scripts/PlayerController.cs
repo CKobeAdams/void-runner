@@ -475,6 +475,14 @@ public class PlayerController : MonoBehaviour
 
     }
 
+    public void TrickInput(InputAction.CallbackContext context)
+    {
+        if (context.performed)
+        {
+            Debug.Log("trick button hit Trick button Hit");
+        }
+    }
+
     public void Crouch(InputAction.CallbackContext context)
     {
         if(isDead) return;
