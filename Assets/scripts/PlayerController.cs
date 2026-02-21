@@ -22,7 +22,8 @@ public class PlayerController : MonoBehaviour
         startUpSpeed = 2.5f, startUpAcceleration = 50f, turningAcceleration = 15f, crouchingDecceleration = 0, invincibleTimer = 2.5f, 
         invincibleCounter = 0f, airMoveAcceleration = 5f, airMoveVelocity = 0f, airMoveDifferentialCap = 2f, wallSlidingMultiplier = 0.85f;
     private bool isMoving, isGrounded, gravityAffected, jumpCancelled, isCrouching, isDead = false, cameraLockStatus = true, 
-        cameraLockSetting, isStumbled = false, isWalled, isStuckOnWall, tookDamage, leftWallCollision, rightWallCollision, isWallSliding;
+        cameraLockSetting, isStumbled = false, isWalled, isStuckOnWall, tookDamage, leftWallCollision, rightWallCollision, isWallSliding,
+        hasTricked = false, isTrickable;
     private int flipOutRevs = 0, flipOutDirection, unstumbleCount = 0, playerHealth = 3;
     private const int stumblePressNeeded = 3, playerMaxHealth = 3;
     private const float wallCheckOffset = 0.1f, LRoffset = 0.4f;
@@ -479,7 +480,12 @@ public class PlayerController : MonoBehaviour
     {
         if (context.performed)
         {
-            Debug.Log("trick button hit Trick button Hit");
+            if(isTrickable&&!hasTricked)
+            {
+                Debug.Log("trick button hit Trick button Hit");
+                hasTricked = true;
+                isTrickable = false;
+            }
         }
     }
 
@@ -722,6 +728,21 @@ public class PlayerController : MonoBehaviour
         isDead = true;
         this.GetComponent<SpriteRenderer>().color = new Color(1f, 0.5f, 0.5f, 1f);
        
+    }
+
+    public void SetIsTrickable(bool setter)
+    {
+        isTrickable = setter;
+    }
+
+    public bool GetIsTrickable()
+    {
+        return isTrickable;
+    }
+
+    public bool GetHasTricked()
+    {
+        return hasTricked;
     }
 
     public bool GetPlayerDeathState()
