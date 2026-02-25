@@ -73,7 +73,7 @@ public class RoomManager : MonoBehaviour
         GameObject newRoom;
 
         //Reset back to 0.1f after testing
-        if(roomChooser < 1f)
+        if(roomChooser < 0.1f)
         {
             //Random Special rooms
             newRoom = Instantiate(GenerateSpecialRoom());
@@ -148,9 +148,9 @@ public class RoomManager : MonoBehaviour
     private GameObject GenerateSpecialRoom()
     {
         //uncomment line below after testing
-        //return specialRooms[(int)Mathf.Floor(Random.Range(0,specialRooms.Count))];
+        return specialRooms[(int)Mathf.Floor(Random.Range(0,specialRooms.Count))];
 
-        return specialRooms[0];
+        
     }
 
 
