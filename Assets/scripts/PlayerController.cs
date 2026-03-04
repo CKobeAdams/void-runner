@@ -315,7 +315,9 @@ public class PlayerController : MonoBehaviour
                     //0 within the this if statement 
                     if (moveVector.x != moveDirection && moveVector.x != 0)
                     {
+
                         AnimatorManager.instance.ResetAnimatorTriggers();
+                        AnimatorManager.instance.TurningTurnOn();
                         runState = runningState.turning;
                     }
                     else if(Mathf.Abs(movementVelocity) >= startUpSpeed)
@@ -336,15 +338,22 @@ public class PlayerController : MonoBehaviour
                     {
                         runState = runningState.topSpeed;
                         movementVelocity = maxMovementSpeed*moveVector.x;
+
+                        AnimatorManager.instance.ResetAnimatorTriggers();
+                        AnimatorManager.instance.TopSpeedTurnOn();
                     }
 
                     if(moveVector.x != 0 && moveVector.x != moveDirection)
                     {
                         runState = runningState.turning;
+                        AnimatorManager.instance.ResetAnimatorTriggers();
+                        AnimatorManager.instance.TurningTurnOn();
                     }
                     else if(moveVector.x == 0)
                     {
                         runState = runningState.deccelerating;
+                        AnimatorManager.instance.ResetAnimatorTriggers();
+                        AnimatorManager.instance.DecceleratingTurnOn();
                     }
 
 
@@ -358,10 +367,14 @@ public class PlayerController : MonoBehaviour
                     if (moveVector.x != 0 && moveVector.x != moveDirection)
                     {
                         runState = runningState.turning;
+                        AnimatorManager.instance.ResetAnimatorTriggers();
+                        AnimatorManager.instance.TurningTurnOn();
                     }
                     else if(moveVector.x == 0)
                     {
                         runState = runningState.deccelerating;
+                        AnimatorManager.instance.ResetAnimatorTriggers();
+                        AnimatorManager.instance.DecceleratingTurnOn();
                     }
 
                     break;
@@ -392,6 +405,8 @@ public class PlayerController : MonoBehaviour
                     {
                         movementVelocity = 0;
                         runState = runningState.idle;
+                        AnimatorManager.instance.ResetAnimatorTriggers();
+                        AnimatorManager.instance.IdlingTurnOn();
                     }
 
                     if(!isCrouching)
@@ -399,10 +414,14 @@ public class PlayerController : MonoBehaviour
                         if (moveVector.x == moveDirection && movementVelocity != 0)
                         {
                             runState = runningState.accelerating;
+                            AnimatorManager.instance.ResetAnimatorTriggers();
+                            AnimatorManager.instance.AcceleratingTurnOn();
                         }
                         else if (moveVector.x != moveDirection && moveVector.x != 0)
                         {
                             runState = runningState.turning;
+                            AnimatorManager.instance.ResetAnimatorTriggers();
+                            AnimatorManager.instance.TurningTurnOn();
                         }
                     }
 
@@ -417,17 +436,23 @@ public class PlayerController : MonoBehaviour
                     {
                         runState = runningState.startUp;
                         movementVelocity = 0.1f*moveVector.x;
-                        
+                        AnimatorManager.instance.ResetAnimatorTriggers();
+                        AnimatorManager.instance.StartUpTurnOn();
+
                     }
 
                     if(moveVector.x == moveDirection)
                     {
                         runState = runningState.startUp;
                         movementVelocity = 0.1f * moveVector.x;
+                        AnimatorManager.instance.ResetAnimatorTriggers();
+                        AnimatorManager.instance.StartUpTurnOn();
                     }
                     else if (moveVector.x == 0)
                     {
                         runState = runningState.deccelerating;
+                        AnimatorManager.instance.ResetAnimatorTriggers();
+                        AnimatorManager.instance.DecceleratingTurnOn();
                     }
 
 
@@ -500,7 +525,9 @@ public class PlayerController : MonoBehaviour
         {
             GroundCheck();
             runState = runningState.deccelerating;
-            
+            AnimatorManager.instance.ResetAnimatorTriggers();
+            AnimatorManager.instance.DecceleratingTurnOn();
+
         }
         if(context.performed && isGrounded)
         {

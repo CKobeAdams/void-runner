@@ -33,16 +33,15 @@ public class AnimatorManager : MonoBehaviour
         
     }
 
+    public void IdlingTurnOn()
+    {
+        animator.SetBool("Idling", true);
+    }
+
     public void StartUpTurnOn()
     {
         startUpState = true;
-        animator.SetBool("StartUp", startUpState);
-    }
-
-    public void StartUpTurnOff()
-    {
-        startUpState = false;
-        animator.SetBool("StartUp", startUpState);
+        animator.SetBool("StartUp", true);
     }
 
     public void AcceleratingTurnOn()
@@ -50,10 +49,30 @@ public class AnimatorManager : MonoBehaviour
         animator.SetBool("Accelerating", true);
     }
 
+    public void DecceleratingTurnOn()
+    {
+        animator.SetBool("Deccelerating", true);
+    }
+
+    public void TopSpeedTurnOn()
+    {
+        animator.SetBool("TopSpeed", true);
+    }
+
+    public void TurningTurnOn()
+    {
+        animator.SetBool("Turning", true);
+    }
+
     public void ResetAnimatorTriggers()
     {
-        animator.SetBool("startUp", false);
+        animator.SetBool("StartUp", false);
         animator.SetBool("Accelerating", false);
+        animator.SetBool("Deccelerating", false);
+        animator.SetBool("Turning", false);
+        animator.SetBool("TopSpeed", false);
+        animator.SetBool("Idling", false);
+
     }
 
 
