@@ -300,6 +300,7 @@ public class PlayerController : MonoBehaviour
                     {
                         moveDirection = moveVector.x;
                         runState = runningState.startUp;
+                        AnimatorManager.instance.ResetAnimatorTriggers();
                         AnimatorManager.instance.StartUpTurnOn();
                         movementVelocity = 0.001f *moveVector.x;
                     }
@@ -309,15 +310,18 @@ public class PlayerController : MonoBehaviour
                 case runningState.startUp:
                     movementVelocity = movementVelocity + startUpAcceleration * Time.deltaTime * moveVector.x;
                     this.GetComponent<SpriteRenderer>().color = new Color(180f/255f, 66f/255f, 1f, 1f);
+
+
                     //0 within the this if statement 
                     if (moveVector.x != moveDirection && moveVector.x != 0)
                     {
-                        AnimatorManager.instance.StartUpTurnOff();
+                        AnimatorManager.instance.ResetAnimatorTriggers();
                         runState = runningState.turning;
                     }
                     else if(Mathf.Abs(movementVelocity) >= startUpSpeed)
                     {
-                        AnimatorManager.instance.StartUpTurnOff();
+                        AnimatorManager.instance.ResetAnimatorTriggers();
+                        AnimatorManager.instance.AcceleratingTurnOn();
                         runState = runningState.accelerating;
                     }
 

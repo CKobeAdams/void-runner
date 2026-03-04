@@ -36,12 +36,25 @@ public class AnimatorManager : MonoBehaviour
     public void StartUpTurnOn()
     {
         startUpState = true;
-        animator.SetBool("startUp", startUpState);
+        animator.SetBool("StartUp", startUpState);
     }
 
     public void StartUpTurnOff()
     {
         startUpState = false;
-        animator.SetBool("startUp", startUpState);
+        animator.SetBool("StartUp", startUpState);
     }
+
+    public void AcceleratingTurnOn()
+    {
+        animator.SetBool("Accelerating", true);
+    }
+
+    public void ResetAnimatorTriggers()
+    {
+        animator.SetBool("startUp", false);
+        animator.SetBool("Accelerating", false);
+    }
+
+
 }

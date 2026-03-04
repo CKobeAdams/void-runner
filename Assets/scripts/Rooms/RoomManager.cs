@@ -35,7 +35,7 @@ public class RoomManager : MonoBehaviour
         specialRooms.Add(ascendingRoom);
         specialRooms.Add(descendingRoom);
         specialRooms.Add(risingRoom);
-        specialRooms.Add(randomRoom);
+        //specialRooms.Add(randomRoom);
 
 
         normalRooms = new List<GameObject>();
@@ -51,7 +51,10 @@ public class RoomManager : MonoBehaviour
 
     void Start()
     {
-        
+        for(int i=0; i<2; i++)
+        {
+            GenerateRoom();
+        }
     }
 
     // Update is called once per frame
@@ -73,7 +76,7 @@ public class RoomManager : MonoBehaviour
         GameObject newRoom;
 
         //Reset back to 0.1f after testing
-        if(roomChooser < 1f)
+        if(roomChooser < 0.5f)
         {
             //Random Special rooms
             newRoom = Instantiate(GenerateSpecialRoom());
