@@ -38,6 +38,7 @@ public class ParallaxingBackground : MonoBehaviour
 
         spriteBounds = new Vector2(backgroundSprite.GetComponent<SpriteRenderer>().bounds.extents.x,backgroundSprite.GetComponent<SpriteRenderer>().bounds.extents.y);
 
+        //these transform to the right of the original
         spareBackground = Instantiate(backgroundSprite, backgroundParent.transform);
         spareBackground.transform.position = new Vector3(spareBackground.transform.position.x + spriteBounds.x*2, 
             spareBackground.transform.position.y, spareBackground.transform.position.z);
@@ -50,7 +51,32 @@ public class ParallaxingBackground : MonoBehaviour
         spareForeground.transform.position = new Vector3(spareForeground.transform.position.x + spriteBounds.x * 2,
             spareForeground.transform.position.y, spareForeground.transform.position.z);
 
-        //spriteBounds = spriteBounds.x * 2;
+        //these transform above the original
+
+        spareBackground = Instantiate(backgroundSprite, backgroundParent.transform);
+        spareBackground.transform.position = new Vector3(spareBackground.transform.position.x,
+            spareBackground.transform.position.y + spriteBounds.y * 2, spareBackground.transform.position.z);
+
+        spareMidground = Instantiate(midgroundSprite, backgroundParent.transform);
+        spareMidground.transform.position = new Vector3(spareMidground.transform.position.x,
+            spareMidground.transform.position.y + spriteBounds.y * 2, spareMidground.transform.position.z);
+
+        spareForeground = Instantiate(foregroundSprite, backgroundParent.transform);
+        spareForeground.transform.position = new Vector3(spareForeground.transform.position.x,
+            spareForeground.transform.position.y + spriteBounds.y * 2, spareForeground.transform.position.z);
+
+        //these transform above and to the right of the original
+        spareBackground = Instantiate(backgroundSprite, backgroundParent.transform);
+        spareBackground.transform.position = new Vector3(spareBackground.transform.position.x + spriteBounds.x * 2,
+            spareBackground.transform.position.y + spriteBounds.y * 2, spareBackground.transform.position.z);
+
+        spareMidground = Instantiate(midgroundSprite, backgroundParent.transform);
+        spareMidground.transform.position = new Vector3(spareMidground.transform.position.x + spriteBounds.x * 2,
+            spareMidground.transform.position.y + spriteBounds.y * 2, spareMidground.transform.position.z);
+
+        spareForeground = Instantiate(foregroundSprite, backgroundParent.transform);
+        spareForeground.transform.position = new Vector3(spareForeground.transform.position.x + spriteBounds.x * 2,
+            spareForeground.transform.position.y + spriteBounds.y * 2, spareForeground.transform.position.z);
     }
 
     // Update is called once per frame
@@ -60,6 +86,7 @@ public class ParallaxingBackground : MonoBehaviour
         playerPosition = PlayerController.instance.GetPlayerPosition();
         backgroundParent.transform.position = new Vector3(playerPosition.x + pivotDisplacement.x, backgroundParent.transform.position.y, backgroundParent.transform.position.z);
 
+        //add a second dimension for the parrallaxing background
         foreach(Transform child in backgroundParent.transform)
         {
             //check object tag for how fast the object should be moving
