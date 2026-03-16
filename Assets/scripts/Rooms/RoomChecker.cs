@@ -9,6 +9,11 @@ public class RoomChecker : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        this.GetComponent<SpriteRenderer>().color = new Color(1f, 1f, 1f, 0f);
+    }
+
+    void awake()
+    {
         
     }
 

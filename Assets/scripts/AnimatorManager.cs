@@ -25,6 +25,7 @@ public class AnimatorManager : MonoBehaviour
         
         startUpState = false;
         animator = playerSprite.GetComponent<Animator>();
+        IdlingTurnOn();
     }
 
     // Update is called once per frame
@@ -36,17 +37,20 @@ public class AnimatorManager : MonoBehaviour
     public void IdlingTurnOn()
     {
         animator.SetBool("Idling", true);
+        
     }
 
     public void StartUpTurnOn()
     {
-        startUpState = true;
+        //startUpState = true;
         animator.SetBool("StartUp", true);
+    
     }
 
     public void AcceleratingTurnOn()
     {
         animator.SetBool("Accelerating", true);
+     
     }
 
     public void DecceleratingTurnOn()
@@ -72,7 +76,6 @@ public class AnimatorManager : MonoBehaviour
         animator.SetBool("Turning", false);
         animator.SetBool("TopSpeed", false);
         animator.SetBool("Idling", false);
-
     }
 
 

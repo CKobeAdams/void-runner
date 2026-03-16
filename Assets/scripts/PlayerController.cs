@@ -217,45 +217,46 @@ public class PlayerController : MonoBehaviour
 
     private void ManageMovementInput()
     { //this is where we change acceleration
-        //change the color of the object in the sprite renderer for the different stages
-            //start up
-            //accelerating
-            //maxspeed
-        //bouncing off of weird invisible "wall" when moving backwards
+      //change the color of the object in the sprite renderer for the different stages
+      //start up
+      //accelerating
+      //maxspeed
+      //bouncing off of weird invisible "wall" when moving backwards
 
-        if(!isGrounded)
+        if (!isGrounded)
         {
             //carry movement speed if its fast enough
             //jumping forward carries movement
             //resets when the player touches the ground again
-            
 
-            if(moveVector.x==1f)
+
+            if (moveVector.x == 1f)
             {
                 airMoveVelocity += airMoveAcceleration * Time.deltaTime;
                 /*if(Mathf.Abs(airMoveVelocity) > airMoveDifferentialCap)
                 {
                     airMoveVelocity = airMoveDifferentialCap;
                 }*/
-                if(Mathf.Abs(airMoveVelocity) > airMoveDifferentialCap)
+                if (Mathf.Abs(airMoveVelocity) > airMoveDifferentialCap)
                 {
 
                     airMoveVelocity = airMoveDifferentialCap;
                 }
 
-                
+
             }
-            if(moveVector.x==-1f)
+            if (moveVector.x == -1f)
             {
                 airMoveVelocity -= airMoveAcceleration * Time.deltaTime;
-                if(Mathf.Abs(airMoveVelocity)>airMoveDifferentialCap)
+                if (Mathf.Abs(airMoveVelocity) > airMoveDifferentialCap)
                 {
 
                     airMoveVelocity = -airMoveDifferentialCap;
                 }
-              
-                
+
+
             }
+            
 
         }
 
@@ -338,7 +339,7 @@ public class PlayerController : MonoBehaviour
                     {
                         runState = runningState.topSpeed;
                         movementVelocity = maxMovementSpeed*moveVector.x;
-
+                        
                         AnimatorManager.instance.ResetAnimatorTriggers();
                         AnimatorManager.instance.TopSpeedTurnOn();
                     }
@@ -431,6 +432,8 @@ public class PlayerController : MonoBehaviour
                 case runningState.turning:
                     movementVelocity = movementVelocity + turningAcceleration * Time.deltaTime * (-moveDirection);
                     this.GetComponent<SpriteRenderer>().color = new Color(1f, 148f/255f, 66f/255f, 1f);
+                   
+
 
                     if (movementVelocity <= 0.1f && movementVelocity >= -0.1f)
                     {
@@ -438,15 +441,15 @@ public class PlayerController : MonoBehaviour
                         movementVelocity = 0.1f*moveVector.x;
                         AnimatorManager.instance.ResetAnimatorTriggers();
                         AnimatorManager.instance.StartUpTurnOn();
-
+                     
                     }
-
-                    if(moveVector.x == moveDirection)
+                    else if(moveVector.x == moveDirection)
                     {
                         runState = runningState.startUp;
                         movementVelocity = 0.1f * moveVector.x;
                         AnimatorManager.instance.ResetAnimatorTriggers();
                         AnimatorManager.instance.StartUpTurnOn();
+                        
                     }
                     else if (moveVector.x == 0)
                     {
@@ -474,7 +477,8 @@ public class PlayerController : MonoBehaviour
                 movementVelocity = 0;
                 airMoveVelocity = 0;
                 isWallSliding = true;
-                rigidY = rigidbody.velocity.y * wallSlidingMultiplier;
+                
+                rigidY = rigidbody.velocity.y < 0 ? rigidbody.velocity.y * wallSlidingMultiplier : rigidbody.velocity.y;
 
             }
 
@@ -483,12 +487,14 @@ public class PlayerController : MonoBehaviour
                 movementVelocity = 0;
                 airMoveVelocity = 0;
                 isWallSliding = true;
-                rigidY = rigidbody.velocity.y * wallSlidingMultiplier;
+                rigidY = rigidbody.velocity.y < 0 ? rigidbody.velocity.y * wallSlidingMultiplier : rigidbody.velocity.y;
             }
         }
-
+        
         rigidbody.velocity = new Vector2(movementVelocity + airMoveVelocity, rigidY);
+      
     }
+
 
     public void MovementPerformed(InputAction.CallbackContext context)
     {
@@ -511,7 +517,7 @@ public class PlayerController : MonoBehaviour
         {
             if(isTrickable&&!hasTricked)
             {
-                Debug.Log("trick button hit Trick button Hit");
+                
                 hasTricked = true;
                 isTrickable = false;
             }
@@ -596,7 +602,23 @@ public class PlayerController : MonoBehaviour
         
         if(groundCheck.GetComponent<CircleCollider2D>().IsTouchingLayers(LayerMask.GetMask("Ground")))
         {
-            airMoveVelocity = 0;
+            //airMoveVelocity = 0;
+            if (airMoveVelocity == 0) {  }
+            else if (Mathf.Abs(airMoveVelocity) <= 0.01f)
+            {
+       
+                airMoveVelocity = 0f;
+            }
+            else if (airMoveVelocity != 0)
+            {
+                //gradually moves airMovevelocity towards 0
+                airMoveVelocity = Mathf.Lerp(airMoveVelocity, 0f, 0.05f);
+               
+            }
+
+
+            
+            //airMoveVelocity = 0;
             isGrounded = true;
             //reset the offset to the wall checkers
             resetTwinWallCheckers();
@@ -614,16 +636,18 @@ public class PlayerController : MonoBehaviour
     {
 
 
-        wallCheckLeft.transform.position = new Vector3(leftCheckerPos.x - LRcheckerOffset.x, leftCheckerPos.y + LRcheckerOffset.y, leftCheckerPos.z);
+        /*wallCheckLeft.transform.position = new Vector3(leftCheckerPos.x - LRcheckerOffset.x, leftCheckerPos.y + LRcheckerOffset.y, leftCheckerPos.z);
 
 
-        wallCheckRight.transform.position = new Vector3(rightCheckerPos.x + LRcheckerOffset.x, rightCheckerPos.y - LRcheckerOffset.y, rightCheckerPos.z);
+        wallCheckRight.transform.position = new Vector3(rightCheckerPos.x + LRcheckerOffset.x, rightCheckerPos.y - LRcheckerOffset.y, rightCheckerPos.z);*/
         
         isWalled = false;
         if(wallCheckLeft.GetComponent<CircleCollider2D>().IsTouchingLayers(LayerMask.GetMask("Ground")))
         {
             leftWallCollision = true;
             isWalled = true;
+
+          
         }
         else
         {
@@ -635,10 +659,11 @@ public class PlayerController : MonoBehaviour
         {
             rightWallCollision = true;
             isWalled = true;
+            
         }
         else
         {
-            leftWallCollision = false;
+            rightWallCollision = false;
         }
 
     
@@ -794,10 +819,10 @@ public class PlayerController : MonoBehaviour
 
     private void resetTwinWallCheckers()
     {
-        LRcheckerOffset = new Vector2(-0.4f, 0f);
+        LRcheckerOffset = new Vector2(LRoffset, 0f);
         Vector3 CheckerPos = wallCheckerMain.transform.position;
-        leftCheckerPos = new Vector3(CheckerPos.x + LRoffset, CheckerPos.y, CheckerPos.z);
-        rightCheckerPos = new Vector3(CheckerPos.x - LRoffset, CheckerPos.y, CheckerPos.z);
+        rightCheckerPos = new Vector3(CheckerPos.x + LRoffset, CheckerPos.y, CheckerPos.z);
+        leftCheckerPos = new Vector3(CheckerPos.x - LRoffset, CheckerPos.y, CheckerPos.z);
     }
 
     public void FlipOut(float direction)
@@ -837,6 +862,11 @@ public class PlayerController : MonoBehaviour
     public int GetMaxHealth()
     {
         return playerMaxHealth;
+    }
+
+    public Vector2 GetPlayerVelocity()
+    {
+        return rigidbody.velocity;
     }
 
 }

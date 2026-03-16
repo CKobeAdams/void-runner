@@ -76,7 +76,7 @@ public class RoomManager : MonoBehaviour
         GameObject newRoom;
 
         //Reset back to 0.1f after testing
-        if(roomChooser < 0.5f)
+        if(roomChooser < 0.1f)
         {
             //Random Special rooms
             newRoom = Instantiate(GenerateSpecialRoom());

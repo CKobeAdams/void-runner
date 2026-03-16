@@ -650,8 +650,9 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: " - WASD to moved!\n - CTRL to Crouch and slide!\n - Mouse 1 to spin left
-    (Left click)\n - Mouse 2 to spin right (Right click)"
+  m_text: " - WASD to moved!\n - CTRL to Crouch and slide!\n - Space to jump!\n -
+    Mouse 1/Left Arrow to spin left (Left click)\n - Mouse 2/Right Arrow to spin
+    right (Right click)\n - Shift to do a Trick!"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}

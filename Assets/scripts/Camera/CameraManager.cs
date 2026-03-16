@@ -188,6 +188,31 @@ public class CameraManager : MonoBehaviour
         cameraRaiseLower = difference;
     }
 
+    public float GetCameraPixelHeight()
+    {
+        return MainCam.pixelHeight;
+    }
+
+    public float GetCameraPixelWidth()
+    {
+        return MainCam.pixelWidth;
+    }
+
+    public float GetCameraSize()
+    {
+        return MainCam.orthographicSize*2;
+    }
+
+    public Vector3 GetCameraPosition()
+    {
+        return MainCam.transform.position;
+    }
+
+    public Vector2 GetCameraBaseDisplacement()
+    {
+        return cameraBaseDisplacement;
+    }
+
 
 
    
