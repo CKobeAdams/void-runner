@@ -154,7 +154,7 @@ public class CameraManager : MonoBehaviour
             step = 15f*Time.deltaTime;
         }
 
-        cameraMovingStep = MainCam.transform.position - Vector3.MoveTowards(MainCam.transform.position, targetPosition, step);
+        cameraMovingStep = Vector3.MoveTowards(MainCam.transform.position, targetPosition, step) - MainCam.transform.position;
         MainCam.transform.position = Vector3.MoveTowards(MainCam.transform.position, targetPosition, step);
 
  

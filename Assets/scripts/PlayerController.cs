@@ -20,13 +20,13 @@ public class PlayerController : MonoBehaviour
     private float CameraFloorDistance = 4.5f, minimunCameraHeight = 0f, movementVelocity = 0, maxMovementSpeed = 20f, moveDirection,
         jumpVelocity = 6f, jumpCancelAcel = 5f, flipOutSpeed = 260f, ragdollTimer = 0, moveAccel = 10f, decceleration = -0.01f, 
         startUpSpeed = 2.5f, startUpAcceleration = 50f, turningAcceleration = 15f, crouchingDecceleration = 0, invincibleTimer = 2.5f, 
-        invincibleCounter = 0f, airMoveAcceleration = 5f, airMoveVelocity = 0f, airMoveDifferentialCap = 2f, wallSlidingMultiplier = 0.85f;
+        invincibleCounter = 0f, airMoveAcceleration = 5f, airMoveVelocity = 0f, airMoveDifferentialCap = 2f, wallSlidingMultiplier = 0.85f, coyoteTimingCounter;
     private bool isMoving, isGrounded, gravityAffected, jumpCancelled, isCrouching, isDead = false, cameraLockStatus = true, 
         cameraLockSetting, isStumbled = false, isWalled, isStuckOnWall, tookDamage, leftWallCollision, rightWallCollision, isWallSliding,
-        hasTricked = false, isTrickable;
+        hasTricked = false, isTrickable, onCoyoteTime, coyoteAvailable;
     private int flipOutRevs = 0, flipOutDirection, unstumbleCount = 0, playerHealth = 3;
     private const int stumblePressNeeded = 3, playerMaxHealth = 3;
-    private const float wallCheckOffset = 0.1f, LRoffset = 0.4f;
+    private const float wallCheckOffset = 0.1f, LRoffset = 0.4f, coyoteTimer = 0.1f;
     private Vector2 moveVector, LRcheckerOffset;
     private Vector3 leftCheckerPos, rightCheckerPos;
 
@@ -87,7 +87,7 @@ public class PlayerController : MonoBehaviour
     {
         Vector3 CheckerPos = GetPlayerTransform().position;
         CheckerPos.y += wallCheckOffset;
-
+        
 
         wallCheckerMain.transform.position = CheckerPos;
 
@@ -98,6 +98,10 @@ public class PlayerController : MonoBehaviour
         WallCheck();
         GroundCheck();
         StumbleCheck();
+        if(onCoyoteTime)
+        {
+            CoyoteTimeCheck();
+        }
 
         if (!isStumbled) //Change this to check for a stumb
         {
@@ -576,6 +580,18 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    public void CoyoteTimeCheck()
+    {
+        coyoteTimingCounter += Time.deltaTime;
+        if(coyoteTimingCounter >= coyoteTimer)
+        {
+            onCoyoteTime = false;
+            coyoteAvailable = false;
+            coyoteTimingCounter = 0f;
+
+        }
+    }
+
     public void StumbleCheck()
     {
         if(stumbleBox.GetComponent<CapsuleCollider2D>().IsTouchingLayers(LayerMask.GetMask("Ground"))&&!isWalled && !isCrouching && !isGrounded)
@@ -620,12 +636,19 @@ public class PlayerController : MonoBehaviour
             
             //airMoveVelocity = 0;
             isGrounded = true;
+            coyoteAvailable = true;
             //reset the offset to the wall checkers
             resetTwinWallCheckers();
+
         }
         else
         {
             isGrounded = false;
+            if(coyoteAvailable)
+            {
+                onCoyoteTime = true;
+            }
+            
             
         }
 
@@ -686,14 +709,17 @@ public class PlayerController : MonoBehaviour
         if(context.started)
         {
             jumpCancelled = false;
+            
         }
 
         if(context.performed)
         {
             GroundCheck();
-            if(isGrounded)
+            if(isGrounded || onCoyoteTime)
             {
                 rigidbody.velocity = new Vector2(rigidbody.velocity.x, jumpVelocity);
+                onCoyoteTime = false;
+                coyoteAvailable = false;
             }
             if(isStumbled)
             {
