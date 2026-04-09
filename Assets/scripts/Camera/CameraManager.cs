@@ -17,7 +17,7 @@ public class CameraManager : MonoBehaviour
     private const float cameraLingerLimit = 0f;
 
     private Vector2 playerMoveVector, cameraBaseDisplacement, previousMoveVector, cameraMoveOffset;
-    private Vector3 cameraMovingStep;
+    private Vector3 cameraMovingStep, previousPosition;
 
 
     // Start is called before the first frame update
@@ -40,7 +40,9 @@ public class CameraManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+
+        cameraMovingStep = MainCam.transform.position - previousPosition;
+        previousPosition = MainCam.transform.position;
     }
 
     void FixedUpdate()
@@ -154,7 +156,7 @@ public class CameraManager : MonoBehaviour
             step = 15f*Time.deltaTime;
         }
 
-        cameraMovingStep = Vector3.MoveTowards(MainCam.transform.position, targetPosition, step) - MainCam.transform.position;
+        
         MainCam.transform.position = Vector3.MoveTowards(MainCam.transform.position, targetPosition, step);
 
  

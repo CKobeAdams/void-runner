@@ -77,6 +77,8 @@ public class ParallaxingBackground : MonoBehaviour
         spareForeground = Instantiate(foregroundSprite, backgroundParent.transform);
         spareForeground.transform.position = new Vector3(spareForeground.transform.position.x + spriteBounds.x * 2,
             spareForeground.transform.position.y + spriteBounds.y * 2, spareForeground.transform.position.z);
+
+        Debug.Log(backgroundParent.transform.tag);
     }
 
     // Update is called once per frame
@@ -86,11 +88,11 @@ public class ParallaxingBackground : MonoBehaviour
         playerPosition = PlayerController.instance.GetPlayerPosition();
         cameraPosition = CameraManager.instance.GetCameraPosition();
         cameraDisplacement = CameraManager.instance.GetCameraMovingDisplacement();
-        Debug.Log(cameraDisplacement.y);
+     
         
 
         backgroundParent.transform.position = new Vector3(playerPosition.x + pivotDisplacement.x, 
-            cameraDisplacement.y+ backgroundParent.transform.position.y, backgroundParent.transform.position.z);
+           cameraPosition.y, backgroundParent.transform.position.z);
         //backgroundParent.transform.position = new Vector3(playerPosition.x + pivotDisplacement.x, backgroundParent.transform.position.y, backgroundParent.transform.position.z);
 
         //add a second dimension for the parrallaxing background
@@ -105,18 +107,23 @@ public class ParallaxingBackground : MonoBehaviour
                 case "foreground":
                     //move the object
                     child.position = new Vector3(-playerVelocity.x * Time.deltaTime * foregroundVelocityRatio + child.position.x, 
-                        child.position.y - cameraDisplacement.y, child.position.z);
+                        child.position.y - cameraDisplacement.y*foregroundVelocityRatio, child.position.z);
                     break;
                 case "midground":
                     child.position = new Vector3(-playerVelocity.x * Time.deltaTime * midgroundVelocityRatio + child.position.x, 
-                        child.position.y - cameraDisplacement.y, child.position.z);
+                        child.position.y - cameraDisplacement.y*midgroundVelocityRatio, child.position.z);
                     break;
                 case "background":
                     child.position = new Vector3(-playerVelocity.x * Time.deltaTime * backgroundVelocityRatio + child.position.x, 
-                        child.position.y - cameraDisplacement.y, child.position.z);
+                        child.position.y - cameraDisplacement.y*backgroundVelocityRatio, child.position.z);
                     break;
+                case "Untagged":
+                    Debug.Log("This is the parent background being called");
+                    break;
+          
             }
-
+            //Debug.Log(spriteBounds.y * 2 + " pos: " + backgroundParent.transform.position.y);
+            Debug.Log(child.localPosition.y);
             //Debug.Log(child.localPosition.x);
 
             if (Mathf.Abs(child.localPosition.x) > spriteBounds.x * 2)
@@ -128,12 +135,12 @@ public class ParallaxingBackground : MonoBehaviour
 
             if(Mathf.Abs(child.localPosition.y) > spriteBounds.y*2)
             {
-                //Debug.Log(spriteBounds.y * 2 + " pos: " + child.position.y);
+                
                 child.position = new Vector3(child.position.x, 
                     child.position.y - child.localPosition.y / Mathf.Abs(child.localPosition.y) * (spriteBounds.y * 4), child.position.z);
             }
 
-
+            
 
 
 

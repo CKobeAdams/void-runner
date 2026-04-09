@@ -76,7 +76,7 @@ public class RoomManager : MonoBehaviour
         GameObject newRoom;
 
         //Reset back to 0.1f after testing
-        if(roomChooser < 1.1f)
+        if(roomChooser < 0.1f)
         {
             //Random Special rooms
             newRoom = Instantiate(GenerateSpecialRoom());
@@ -150,9 +150,10 @@ public class RoomManager : MonoBehaviour
     //This method selects a room randomly from the special room list
     private GameObject GenerateSpecialRoom()
     {
-        //uncomment line below after testing
-        //return specialRooms[(int)Mathf.Floor(Random.Range(0,specialRooms.Count))];
-        return specialRooms[1];
+        
+        return specialRooms[(int)Mathf.Floor(Random.Range(0,specialRooms.Count))];
+        //Line below should be commented and the line above should be uncommented after testing
+        //return specialRooms[1];
 
         
     }

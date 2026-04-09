@@ -2221,6 +2221,7 @@ MonoBehaviour:
   airMoveVelocity: 0
   airMoveDifferentialCap: 5
   wallSlidingMultiplier: 0.5
+  coyoteTimingCounter: 0
 --- !u!114 &1214171202
 MonoBehaviour:
   m_ObjectHideFlags: 0
