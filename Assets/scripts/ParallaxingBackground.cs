@@ -123,7 +123,7 @@ public class ParallaxingBackground : MonoBehaviour
           
             }
             //Debug.Log(spriteBounds.y * 2 + " pos: " + backgroundParent.transform.position.y);
-            Debug.Log(child.localPosition.y);
+            //Debug.Log(child.localPosition.y);
             //Debug.Log(child.localPosition.x);
 
             if (Mathf.Abs(child.localPosition.x) > spriteBounds.x * 2)

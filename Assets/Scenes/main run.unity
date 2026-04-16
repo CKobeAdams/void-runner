@@ -2215,13 +2215,14 @@ MonoBehaviour:
   startUpAcceleration: 50
   turningAcceleration: 100
   crouchingDecceleration: 10
-  invincibleTimer: 1
+  invincibleTimer: 1.5
   invincibleCounter: 0
   airMoveAcceleration: 20
   airMoveVelocity: 0
   airMoveDifferentialCap: 5
   wallSlidingMultiplier: 0.5
   coyoteTimingCounter: 0
+  crawlingSpeed: 5
 --- !u!114 &1214171202
 MonoBehaviour:
   m_ObjectHideFlags: 0

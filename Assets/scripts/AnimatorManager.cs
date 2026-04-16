@@ -68,6 +68,16 @@ public class AnimatorManager : MonoBehaviour
         animator.SetBool("Turning", true);
     }
 
+    public void SlidingTurnOn()
+    {
+        animator.SetTrigger("Sliding");
+    }
+
+    public void CrawlingTurnOn()
+    {
+        animator.SetTrigger("Crawling");
+    }
+
     public void ResetAnimatorTriggers()
     {
         animator.SetBool("StartUp", false);
@@ -76,6 +86,13 @@ public class AnimatorManager : MonoBehaviour
         animator.SetBool("Turning", false);
         animator.SetBool("TopSpeed", false);
         animator.SetBool("Idling", false);
+        animator.ResetTrigger("Sliding");
+        animator.ResetTrigger("Crawling");
+    }
+
+    public void ResetSlidingTrigger()
+    {
+        animator.ResetTrigger("Sliding");
     }
 
 

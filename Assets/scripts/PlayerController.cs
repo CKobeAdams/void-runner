@@ -19,12 +19,13 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     private float CameraFloorDistance = 4.5f, minimunCameraHeight = 0f, movementVelocity = 0, maxMovementSpeed = 20f, moveDirection,
         jumpVelocity = 6f, jumpCancelAcel = 5f, flipOutSpeed = 260f, ragdollTimer = 0, moveAccel = 10f, decceleration = -0.01f, 
-        startUpSpeed = 2.5f, startUpAcceleration = 50f, turningAcceleration = 15f, crouchingDecceleration = 0, invincibleTimer = 2.5f, 
-        invincibleCounter = 0f, airMoveAcceleration = 5f, airMoveVelocity = 0f, airMoveDifferentialCap = 2f, wallSlidingMultiplier = 0.85f, coyoteTimingCounter;
+        startUpSpeed = 2.5f, startUpAcceleration = 100f, turningAcceleration = 15f, crouchingDecceleration = 0, invincibleTimer = 2.5f, 
+        invincibleCounter = 0f, airMoveAcceleration = 5f, airMoveVelocity = 0f, airMoveDifferentialCap = 2f, wallSlidingMultiplier = 0.85f, coyoteTimingCounter,
+        crawlingSpeed;
     private bool isMoving, isGrounded, gravityAffected, jumpCancelled, isCrouching, isDead = false, cameraLockStatus = true, 
         cameraLockSetting, isStumbled = false, isWalled, isStuckOnWall, tookDamage, leftWallCollision, rightWallCollision, isWallSliding,
-        hasTricked = false, isTrickable, onCoyoteTime, coyoteAvailable;
-    private int flipOutRevs = 0, flipOutDirection, unstumbleCount = 0, playerHealth = 3;
+        hasTricked = false, isTrickable, onCoyoteTime, coyoteAvailable, damageFlickerOn;
+    private int flipOutRevs = 0, flipOutDirection, unstumbleCount = 0, playerHealth = 3, flickerCounter;
     private const int stumblePressNeeded = 3, playerMaxHealth = 3;
     private const float wallCheckOffset = 0.1f, LRoffset = 0.4f, coyoteTimer = 0.1f;
     private Vector2 moveVector, LRcheckerOffset;
@@ -37,7 +38,9 @@ public class PlayerController : MonoBehaviour
         accelerating,
         topSpeed,
         turning,
-        deccelerating
+        deccelerating,
+        sliding,
+        crawling
     }
 
     /*private enum airMoveState
@@ -129,27 +132,41 @@ public class PlayerController : MonoBehaviour
             invincibleCounter += Time.deltaTime;
             
 
-
-            if((invincibleCounter*1000)%2==0)
+            if(invincibleCounter*10 >= flickerCounter)
             {
-                this.GetComponent<SpriteRenderer>().color = new Color(1f, 1f, 1f, 1f);
+                damageFlickerOn = !damageFlickerOn;
+                flickerCounter++;
+            }
+            
+            
+
+
+            if(damageFlickerOn)
+            {
+                this.transform.GetChild(0).gameObject.GetComponent<SpriteRenderer>().color = new Color(1f, 0f, 0f, 1f);
             }
             else
             {
-                this.GetComponent<SpriteRenderer>().color = new Color(1f, 1f, 1f, 0f);
+                this.transform.GetChild(0).gameObject.GetComponent<SpriteRenderer>().color = new Color(1f, 1f, 1f, 1f);
             }
+            
+            
+            
 
             if(invincibleCounter>=invincibleTimer)
             {
-                this.GetComponent<SpriteRenderer>().color = new Color(1f, 1f, 1f, 1f);
+                this.transform.GetChild(0).gameObject.GetComponent<SpriteRenderer>().color = new Color(1f, 1f, 1f, 1f);
                 invincibleCounter = 0f;
+                flickerCounter = 0;
                 tookDamage = false;
                 
             }
 
         }
 
-        
+
+
+
 
     }
 
@@ -227,11 +244,16 @@ public class PlayerController : MonoBehaviour
       //maxspeed
       //bouncing off of weird invisible "wall" when moving backwards
 
-        if (!isGrounded)
+        if (!isGrounded&&!isCrouching)
         {
             //carry movement speed if its fast enough
             //jumping forward carries movement
             //resets when the player touches the ground again
+
+            if(isCrouching)
+            {
+
+            }
 
 
             if (moveVector.x == 1f)
@@ -367,7 +389,7 @@ public class PlayerController : MonoBehaviour
                 //top speed, moving and can only slow down
                 case runningState.topSpeed:
                     movementVelocity = maxMovementSpeed*moveDirection;
-                    this.GetComponent<SpriteRenderer>().color = new Color(0.5f, 1.0f, 0.5f, 1f);
+                    //this.GetComponent<SpriteRenderer>().color = new Color(0.5f, 1.0f, 0.5f, 1f);
 
                     if (moveVector.x != 0 && moveVector.x != moveDirection)
                     {
@@ -388,48 +410,68 @@ public class PlayerController : MonoBehaviour
                 case runningState.deccelerating:
 
 
-                    
-                    if(isCrouching)
-                    {
-                        movementVelocity = movementVelocity + crouchingDecceleration * Time.deltaTime * -moveDirection;
+                 
+                        
+                        
 
-                    }
-                    else
-                    {
+                  
                         movementVelocity = movementVelocity + decceleration * Time.deltaTime * -moveDirection;
-                    }
+                    
                     
                     //movementVelocity = movementVelocity + moveAccel * Time.deltaTime * moveDirection;
                     
 
                     
-                    this.GetComponent<SpriteRenderer>().color = new Color(0.8f, 0f, 0f, 1f);
+                    //this.GetComponent<SpriteRenderer>().color = new Color(0.8f, 0f, 0f, 1f);
 
                     //if(moveDirection == moveVector.x && moveVector.x == 0)
                     if(movementVelocity <= 1f && movementVelocity >= -1f)
                     {
-                        movementVelocity = 0;
-                        runState = runningState.idle;
-                        AnimatorManager.instance.ResetAnimatorTriggers();
-                        AnimatorManager.instance.IdlingTurnOn();
+                     
+                            movementVelocity = 0;
+                            runState = runningState.idle;
+                            AnimatorManager.instance.ResetAnimatorTriggers();
+                            AnimatorManager.instance.IdlingTurnOn();
+                        
+                       
+                        
                     }
 
-                    if(!isCrouching)
+                    
+
+
+                
+                    if (moveVector.x == moveDirection && movementVelocity != 0)
                     {
-                        if (moveVector.x == moveDirection && movementVelocity != 0)
-                        {
-                            runState = runningState.accelerating;
-                            AnimatorManager.instance.ResetAnimatorTriggers();
-                            AnimatorManager.instance.AcceleratingTurnOn();
-                        }
-                        else if (moveVector.x != moveDirection && moveVector.x != 0)
-                        {
-                            runState = runningState.turning;
-                            AnimatorManager.instance.ResetAnimatorTriggers();
-                            AnimatorManager.instance.TurningTurnOn();
-                        }
+                        runState = runningState.accelerating;
+                        AnimatorManager.instance.ResetAnimatorTriggers();
+                        AnimatorManager.instance.AcceleratingTurnOn();
                     }
+                    else if (moveVector.x != moveDirection && moveVector.x != 0)
+                    {
+                        runState = runningState.turning;
+                        AnimatorManager.instance.ResetAnimatorTriggers();
+                        AnimatorManager.instance.TurningTurnOn();
+                    }
+                    
 
+                    
+
+                    break;
+                    //move the sliding and srawling state into their own states.
+                case runningState.sliding:
+                    movementVelocity = movementVelocity + crouchingDecceleration * Time.deltaTime * -moveDirection;
+
+                    if (Mathf.Abs(movementVelocity) < 0.5f)
+                    {
+                        runState = runningState.crawling;
+                        AnimatorManager.instance.ResetAnimatorTriggers();
+                        AnimatorManager.instance.CrawlingTurnOn();
+                    }
+                    break;
+                case runningState.crawling:
+                    
+                    movementVelocity = crawlingSpeed * moveVector.x;
                     break;
 
                 //moving but player input is the opposite direction of the movement
@@ -496,8 +538,9 @@ public class PlayerController : MonoBehaviour
         }
         
         rigidbody.velocity = new Vector2(movementVelocity + airMoveVelocity, rigidY);
-      
+
     }
+
 
 
     public void MovementPerformed(InputAction.CallbackContext context)
@@ -534,9 +577,8 @@ public class PlayerController : MonoBehaviour
         if(context.started)
         {
             GroundCheck();
-            runState = runningState.deccelerating;
-            AnimatorManager.instance.ResetAnimatorTriggers();
-            AnimatorManager.instance.DecceleratingTurnOn();
+            //runState = runningState.deccelerating;
+            
 
         }
         if(context.performed && isGrounded)
@@ -547,7 +589,21 @@ public class PlayerController : MonoBehaviour
             
             isCrouching = true;
             
-            if(moveDirection != 0)
+            if(Mathf.Abs(movementVelocity)>0.5f)
+            {
+                runState = runningState.sliding;
+                AnimatorManager.instance.ResetAnimatorTriggers();
+                AnimatorManager.instance.SlidingTurnOn();
+            }
+            else
+            {
+                Debug.Log("Entering The crawl state");
+                runState = runningState.crawling;
+                AnimatorManager.instance.ResetAnimatorTriggers();
+                AnimatorManager.instance.CrawlingTurnOn();
+            }
+
+            if (moveDirection != 0)
             {
                 this.transform.rotation *= Quaternion.AngleAxis(moveDirection * 90f, Vector3.forward);
                 
@@ -565,18 +621,21 @@ public class PlayerController : MonoBehaviour
             //stand up
             //this.transform.rotation = new Vector3(0, 0, 0);
             //quarternions is required to return the rotation
-            
-            if (moveDirection != 0)
+
+            /*if (moveDirection != 0)
             {
-                this.transform.rotation *= Quaternion.AngleAxis(-1*moveDirection * 90f, Vector3.forward);
+                this.transform.rotation = Quaternion.AngleAxis(-1*moveDirection * 90f, Vector3.forward);
                 
             }
             else
             {
                 this.transform.rotation *= Quaternion.AngleAxis(-90f, Vector3.forward);
                 
-            }
+            }*/
+            CrouchCancelled();
+            this.transform.rotation = Quaternion.identity;
             isCrouching = false;
+            
         }
     }
 
@@ -893,6 +952,49 @@ public class PlayerController : MonoBehaviour
     public Vector2 GetPlayerVelocity()
     {
         return rigidbody.velocity;
+    }
+
+    private void CrouchCancelled()
+    {
+        //Change the airmove to deccelerate when crouched so that the speed will fall. Should be considered 1/-1 for the sake of the game
+        //Errata Above, completely erase air movement during the crouch, handle the crouch state by itself
+        //This only determines what state the player will be in when the crouch is cancelled
+
+        if(movementVelocity <= 1f && movementVelocity >= -1f && moveVector.x == 0)
+        {
+            movementVelocity = 0;
+            runState = runningState.idle;
+            AnimatorManager.instance.ResetAnimatorTriggers();
+            AnimatorManager.instance.IdlingTurnOn();
+            //Debug.Log("WE IDLING");
+            return;
+        }
+
+        else if (moveVector.x == moveDirection && movementVelocity != 0)
+        {
+            runState = runningState.accelerating;
+            AnimatorManager.instance.ResetAnimatorTriggers();
+            AnimatorManager.instance.AcceleratingTurnOn();
+            //Debug.Log("WE acceling");
+            return;
+        }
+        else if (moveVector.x != moveDirection && moveVector.x != 0)
+        {
+            
+            runState = runningState.turning;
+            AnimatorManager.instance.ResetAnimatorTriggers();
+            AnimatorManager.instance.TurningTurnOn();
+            //Debug.Log("WE turning");
+            return;
+        }
+        else if(moveVector.x == 0f)
+        {
+            runState = runningState.deccelerating;
+            AnimatorManager.instance.ResetAnimatorTriggers();
+            AnimatorManager.instance.DecceleratingTurnOn();
+            //Debug.Log("WE decceling");
+            return;
+        }
     }
 
 }
