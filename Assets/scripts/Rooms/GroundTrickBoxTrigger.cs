@@ -1,16 +1,24 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class GroundTrickBoxTrigger : MonoBehaviour
 {
     private bool active = false, used = false;
     
+    public Func<Vector3> piecewiseTrick
+    {
+        get;
+
+        set;
+    }
+
 
     //the trigger will be active when the player is in the box
     //There are then 2 options
-        //1. The player does the trick, then the hitbox is turned off and inactive afterwards
-        //2. The player doesn't trick and then player class needs to be told it cant.
+    //1. The player does the trick, then the hitbox is turned off and inactive afterwards
+    //2. The player doesn't trick and then player class needs to be told it cant.
 
     // Start is called before the first frame update
     void Start()

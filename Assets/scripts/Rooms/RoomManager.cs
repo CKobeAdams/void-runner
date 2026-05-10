@@ -2,15 +2,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using System;
 
 public class RoomManager : MonoBehaviour
 {
     public static RoomManager instance {get; private set; }
 
     [SerializeField]
-    private GameObject basePlatform;
+    private GameObject basePlatform, trickBox;
 
-
+    
 
     public List<GameObject> roomList, specialRooms, normalRooms;
 
@@ -20,6 +21,8 @@ public class RoomManager : MonoBehaviour
 
     [SerializeField]
     private GameObject currentRoom, oldRoom;
+
+    //private Dictionary((string, string), delegate) Trick
 
     // Start is called before the first frame update
     void Awake()
@@ -35,7 +38,7 @@ public class RoomManager : MonoBehaviour
         specialRooms.Add(ascendingRoom);
         specialRooms.Add(descendingRoom);
         specialRooms.Add(risingRoom);
-        //specialRooms.Add(randomRoom);
+        //specialRooms.Add(UnityEngine.RandomRoom);
 
 
         normalRooms = new List<GameObject>();
@@ -71,14 +74,14 @@ public class RoomManager : MonoBehaviour
         //GameObject newRoom = Instantiate(baseRoom, GetListEndNode().transform);
         //makes the new room and gets starting node
 
-        //Change to Random.Value
-        float roomChooser = Random.value;
+        //Change to UnityEngine.Random.Value
+        float roomChooser = UnityEngine.Random.value;
         GameObject newRoom;
 
         //Reset back to 0.1f after testing
-        if(roomChooser < 0.1f)
+        if(roomChooser < 0.5f)
         {
-            //Random Special rooms
+            //UnityEngine.Random Special rooms
             newRoom = Instantiate(GenerateSpecialRoom());
         }
         else
@@ -100,7 +103,33 @@ public class RoomManager : MonoBehaviour
        
         newRoom.transform.position = new Vector3(nodePosition.x-newRoomOffset.x, nodePosition.y-newRoomOffset.y, nodePosition.z);
 
+        string newRoomName = newRoom.GetComponent<ParentRoom>().name;
+        string oldRoomName;
+        if (roomList.Count>2)
+        {
+             oldRoomName = roomList[roomList.Count - 1].GetComponent<ParentRoom>().name;
+        }
+        else
+        {
+            oldRoomName = "Self";
+        }
+        
+
         //adds the starting room to a new room
+        roomChooser = UnityEngine.Random.value;
+        if(roomChooser<1f)
+        {
+            roomChooser = UnityEngine.Random.value;
+            if(roomChooser<0.5f)
+            {
+                GenerateTrickBoxes((newRoomName, oldRoomName), newRoom);
+            }
+            else
+            {
+                GenerateTrickBoxes((newRoomName, "Self"), newRoom);
+            }
+        }
+        
         roomList.Add(newRoom);
     }
 
@@ -141,31 +170,72 @@ public class RoomManager : MonoBehaviour
             if(roomPos.x - roomHalfLength <= playerPos.x || roomPos.x + roomHalfLength <=playerPos.x)
             {
                 currentRoom = room;
+                /*try
+                {
+                    Debug.Log(currentRoom.GetComponent<ParentRoom>().name);
+                }
+                catch { }*/
+                
             }
 
             
         }
     }
 
-    //This method selects a room randomly from the special room list
+    //This method selects a room UnityEngine.Randomly from the special room list
     private GameObject GenerateSpecialRoom()
     {
         
-        return specialRooms[(int)Mathf.Floor(Random.Range(0,specialRooms.Count))];
+        //return specialRooms[(int)Mathf.Floor(UnityEngine.Random.Range(0,specialRooms.Count))];
         //Line below should be commented and the line above should be uncommented after testing
-        //return specialRooms[1];
+        return specialRooms[0];
 
         
     }
 
 
-    //selects a room randomly from the normal room list
+    //selects a room UnityEngine.Randomly from the normal room list
     private GameObject GenerateNormalRoom()
     {
-        return normalRooms[(int)Mathf.Floor(Random.Range(0, normalRooms.Count))];
+        
+        //return normalRooms[(int)Mathf.Floor(UnityEngine.Random.Range(0, normalRooms.Count))];
+        return normalRooms[0];
     }
    
     
     //Us the general manager to determine when to spawn another room
     //When a room has been spawned generate obstacles that the player needs to jump/crouch over
+
+    private void GenerateTrickBoxes((string currentRoom, string prevRoom) index, GameObject room)
+    {
+       
+        (Vector3 location, Func<Vector3> piecewise) dictionaryCite;
+        try
+        {
+            dictionaryCite = TrickDictionary.instance.CiteValue(index);
+
+            
+        }
+        catch
+        {
+            return;
+        }
+        
+        GameObject trick = Instantiate(trickBox);
+
+        //trick.transform.position = dictionaryCite.location;
+        //trick.GetComponent<GroundTrickBoxTrigger>.piecewiseTrick = dictionaryCite.piecewise;
+
+        trick.transform.SetParent(room.transform,false);
+        //trick.transform.localPosition += dictionaryCite.location;
+        trick.transform.localPosition = new Vector3(0f,0f,0f);
+        trick.transform.localPosition += dictionaryCite.location;
+        
+
+        trick.GetComponent<GroundTrickBoxTrigger>().piecewiseTrick = dictionaryCite.piecewise;
+
+        Debug.Log("Index Found at: "+ index+"\nGenerating at:"+trick.transform.position);
+
+
+    }
 }
