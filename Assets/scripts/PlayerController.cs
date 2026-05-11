@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
+using System;
 
 public class PlayerController : MonoBehaviour
 {
@@ -22,14 +23,18 @@ public class PlayerController : MonoBehaviour
         startUpSpeed = 2.5f, startUpAcceleration = 100f, turningAcceleration = 15f, crouchingDecceleration = 0, invincibleTimer = 2.5f, 
         invincibleCounter = 0f, airMoveAcceleration = 5f, airMoveVelocity = 0f, airMoveDifferentialCap = 2f, wallSlidingMultiplier = 0.85f, coyoteTimingCounter,
         crawlingSpeed;
+
     private bool isMoving, isGrounded, gravityAffected, jumpCancelled, isCrouching, isDead = false, cameraLockStatus = true, 
         cameraLockSetting, isStumbled = false, isWalled, isStuckOnWall, tookDamage, leftWallCollision, rightWallCollision, isWallSliding,
         hasTricked = false, isTrickable, onCoyoteTime, coyoteAvailable, damageFlickerOn;
+
     private int flipOutRevs = 0, flipOutDirection, unstumbleCount = 0, playerHealth = 3, flickerCounter;
     private const int stumblePressNeeded = 3, playerMaxHealth = 3;
     private const float wallCheckOffset = 0.1f, LRoffset = 0.4f, coyoteTimer = 0.1f;
     private Vector2 moveVector, LRcheckerOffset;
-    private Vector3 leftCheckerPos, rightCheckerPos;
+    private Vector3 leftCheckerPos, rightCheckerPos, trickStartingPosition;
+
+    private Func<Vector3> trickFunction;
 
     private enum runningState
     {
@@ -40,7 +45,8 @@ public class PlayerController : MonoBehaviour
         turning,
         deccelerating,
         sliding,
-        crawling
+        crawling,
+        tricking
     }
 
     /*private enum airMoveState
@@ -106,7 +112,7 @@ public class PlayerController : MonoBehaviour
             CoyoteTimeCheck();
         }
 
-        if (!isStumbled) //Change this to check for a stumb
+        if (!isStumbled) //Change this to check for a stumbling or if the player is tricking
         {
             //THIS IS WHERE WE ACTUALLY MOVE THE CHARACTER
             ManageMovementInput();
@@ -506,6 +512,10 @@ public class PlayerController : MonoBehaviour
 
 
                     break;
+
+                case runningState.tricking:
+                    trickFunction();
+                    break;
             }
 
 
@@ -567,6 +577,8 @@ public class PlayerController : MonoBehaviour
                 
                 hasTricked = true;
                 isTrickable = false;
+                trickStartingPosition = GetPlayerPosition();
+                runState = runningState.tricking;
             }
         }
     }
@@ -876,6 +888,12 @@ public class PlayerController : MonoBehaviour
         isTrickable = setter;
     }
 
+    public void SetIsTrickable(bool setter, Func<Vector3> trick)
+    {
+        isTrickable = setter;
+        trickFunction = trick;
+    }
+
     public bool GetIsTrickable()
     {
         return isTrickable;
@@ -996,5 +1014,7 @@ public class PlayerController : MonoBehaviour
             return;
         }
     }
+
+
 
 }

@@ -15,8 +15,9 @@ public class TrickDictionary : MonoBehaviour
     //private Dictionary<(string currentRoom, string prevRoom), Vector3>       trickLocationDictionary= new Dictionary<(string currentRoom, string prevRoom), Vector3>();
 
     private const string ascendingTag = "Ascension", selfTag = "Self", baseTag = "Base", oneJumpTag = "OneJump";
-    private Vector3   ascendingFromBaseLocation = new Vector3(-23f, 11f, 0f),
-                      OneJumpFromSelfLocation = new Vector3(2.5f, 0.5f,0f);
+    private Vector3 ascendingFromBaseLocation = new Vector3(-23f, 11f, 0f),
+                      OneJumpFromSelfLocation = new Vector3(2.5f, 0.5f, 0f),
+                      baseFromSelfLocation = new Vector3(0f, 0.5f, 0f);
                                                                                                      
     // Start is called before the first frame update
     void Awake()
@@ -40,6 +41,8 @@ public class TrickDictionary : MonoBehaviour
         //Ascending Room to Base Platform
         trickFunctionDictionary.Add((baseTag, ascendingTag),(ascendingFromBaseLocation, AscendingFromBaseRoom));
         //trickLocationDictionary.Add((ascendingTag, baseTag), new Vector3(15f,30f,0f));
+
+        trickFunctionDictionary.Add((baseTag, selfTag), (baseFromSelfLocation, BaseFromSelf));
 
 
     }
@@ -99,6 +102,12 @@ public class TrickDictionary : MonoBehaviour
         Debug.Log("Flip off the top paltform! Ascneding Room trick");
         return new Vector3(1f, 0f, 0f);
 
+    }
+
+    private Vector3 BaseFromSelf()
+    {
+        Debug.Log("Doin Cool tricks in the base room!");
+        return new Vector3(1f, 0f, 0f);
     }
 
     
