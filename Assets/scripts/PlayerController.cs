@@ -34,7 +34,7 @@ public class PlayerController : MonoBehaviour
     private Vector2 moveVector, LRcheckerOffset;
     private Vector3 leftCheckerPos, rightCheckerPos, trickStartingPosition;
 
-    private Func<Vector3> trickFunction;
+    private Func<Vector3, Vector3> trickFunction;
 
     private enum runningState
     {
@@ -57,7 +57,7 @@ public class PlayerController : MonoBehaviour
     }
 
     private airMoveState airState;*/
-    private runningState runState;
+    private runningState runState, previousRunState;
 
     // Start is called before the first frame update
     void Start()
@@ -514,7 +514,12 @@ public class PlayerController : MonoBehaviour
                     break;
 
                 case runningState.tricking:
-                    trickFunction();
+                    trickFunction(trickStartingPosition);
+                    if(hasTricked == false)
+                    {
+                        CrouchCancelled();
+                        GroundCheck();
+                    }
                     break;
             }
 
@@ -568,6 +573,7 @@ public class PlayerController : MonoBehaviour
 
     }
 
+    //Possibly change this to function as an event listener in the future, more concise that way
     public void TrickInput(InputAction.CallbackContext context)
     {
         if (context.performed)
@@ -577,7 +583,8 @@ public class PlayerController : MonoBehaviour
                 
                 hasTricked = true;
                 isTrickable = false;
-                trickStartingPosition = GetPlayerPosition();
+                //trickStartingPosition = GetPlayerPosition();
+                previousRunState = runState;
                 runState = runningState.tricking;
             }
         }
@@ -682,6 +689,8 @@ public class PlayerController : MonoBehaviour
             isStumbled = false;
         }
     }
+
+
 
     public void GroundCheck()
     {
@@ -888,10 +897,17 @@ public class PlayerController : MonoBehaviour
         isTrickable = setter;
     }
 
-    public void SetIsTrickable(bool setter, Func<Vector3> trick)
+    public void SetIsTrickable(bool setter, Func<Vector3, Vector3> trick)
     {
         isTrickable = setter;
         trickFunction = trick;
+    }
+
+    public void SetIsTrickable(bool setter, Func<Vector3, Vector3> trick, Vector3 startPosition)
+    {
+        isTrickable= setter;
+        trickFunction = trick;
+        trickStartingPosition = startPosition;
     }
 
     public bool GetIsTrickable()
@@ -970,6 +986,11 @@ public class PlayerController : MonoBehaviour
     public Vector2 GetPlayerVelocity()
     {
         return rigidbody.velocity;
+    }
+
+    public void SetHasTricked(bool tricked)
+    {
+        hasTricked = tricked;
     }
 
     private void CrouchCancelled()

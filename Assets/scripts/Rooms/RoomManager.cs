@@ -209,7 +209,7 @@ public class RoomManager : MonoBehaviour
     private void GenerateTrickBoxes((string currentRoom, string prevRoom) index, GameObject room)
     {
        
-        (Vector3 location, Func<Vector3> piecewise) dictionaryCite;
+        (Vector3 location, Func<Vector3, Vector3> piecewise) dictionaryCite;
         try
         {
             dictionaryCite = TrickDictionary.instance.CiteValue(index);

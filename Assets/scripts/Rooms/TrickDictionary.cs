@@ -10,8 +10,8 @@ public class TrickDictionary : MonoBehaviour
     [SerializeField]
     private GameObject tickBox;
 
-    private Dictionary<(string currentRoom, string prevRoom), (Vector3 location, Func<Vector3> piecewise)> trickFunctionDictionary 
-        = new Dictionary<(string currentRoom, string prevRoom),(Vector3, Func<Vector3>)>();
+    private Dictionary<(string currentRoom, string prevRoom), (Vector3 location, Func<Vector3,Vector3> piecewise)> trickFunctionDictionary 
+        = new Dictionary<(string currentRoom, string prevRoom),(Vector3, Func<Vector3, Vector3>)>();
     //private Dictionary<(string currentRoom, string prevRoom), Vector3>       trickLocationDictionary= new Dictionary<(string currentRoom, string prevRoom), Vector3>();
 
     private const string ascendingTag = "Ascension", selfTag = "Self", baseTag = "Base", oneJumpTag = "OneJump";
@@ -47,9 +47,9 @@ public class TrickDictionary : MonoBehaviour
 
     }
 
-    public (Vector3 location, Func<Vector3> piecewise) CiteValue((string currentRoom, string prevRoom) index)
+    public (Vector3 location, Func<Vector3, Vector3> piecewise) CiteValue((string currentRoom, string prevRoom) index)
     {
-        (Vector3, Func<Vector3>) value = (new Vector3(0f, 0f, 0f), FailToFind);
+        (Vector3, Func<Vector3, Vector3>) value = (new Vector3(0f, 0f, 0f), FailToFind);
 
         
         value = trickFunctionDictionary[index];
@@ -57,9 +57,9 @@ public class TrickDictionary : MonoBehaviour
         return value;
     }
 
-    public Func<Vector3> CiteFucntion((string currentRoom, string prevRoom) index)
+    public Func<Vector3, Vector3> CiteFucntion((string currentRoom, string prevRoom) index)
     {
-        Func<Vector3> funct = FailToFind;
+        Func<Vector3, Vector3> funct = FailToFind;
 
         //funct = trickFunctionDictionary[index].piecewise;
 
@@ -85,29 +85,60 @@ public class TrickDictionary : MonoBehaviour
         return value;
     }
 
-    private Vector3 FailToFind()
+    private Vector3 FailToFind(Vector3 initialPosition)
     {
         return new Vector3(0f,0f,0f);
     }
 
 
     //The functions below are the core functions of the movement of the tricks
-    private Vector3 OneJumpFromSelf()
+    private Vector3 OneJumpFromSelf(Vector3 initialPosition)
     {
+        Vector3 currentPosition = PlayerController.instance.GetPlayerPosition();
+
+        if (currentPosition.x - initialPosition.x >= 5f)
+        {
+            PlayerController.instance.SetIsTrickable(false);
+            PlayerController.instance.SetHasTricked(false);
+
+        }
+        
         Debug.Log("Flip off the box! Jump room trick");
-        return new Vector3(1f,0f,0f);
+        
+
+        
+
+        return initialPosition;
     }
-    private Vector3 AscendingFromBaseRoom()
+    private Vector3 AscendingFromBaseRoom(Vector3 initialPosition)
     {
+        Vector3 currentPosition = PlayerController.instance.GetPlayerPosition();
+
+        if (currentPosition.x - initialPosition.x >= 5f)
+        {
+            PlayerController.instance.SetIsTrickable(false);
+            PlayerController.instance.SetHasTricked(false);
+
+        }
+
         Debug.Log("Flip off the top paltform! Ascneding Room trick");
-        return new Vector3(1f, 0f, 0f);
+        return initialPosition;
 
     }
 
-    private Vector3 BaseFromSelf()
+    private Vector3 BaseFromSelf(Vector3 initialPosition)
     {
+        Vector3 currentPosition = PlayerController.instance.GetPlayerPosition();
+
+        if (currentPosition.x - initialPosition.x >= 5f)
+        {
+            PlayerController.instance.SetIsTrickable(false);
+            PlayerController.instance.SetHasTricked(false);
+
+        }
+
         Debug.Log("Doin Cool tricks in the base room!");
-        return new Vector3(1f, 0f, 0f);
+        return initialPosition;
     }
 
     

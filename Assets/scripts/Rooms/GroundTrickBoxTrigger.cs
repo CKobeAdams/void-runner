@@ -7,7 +7,7 @@ public class GroundTrickBoxTrigger : MonoBehaviour
 {
     private bool active = false, used = false;
     
-    public Func<Vector3> piecewiseTrick
+    public Func<Vector3, Vector3> piecewiseTrick
     {
         get;
 
@@ -35,12 +35,14 @@ public class GroundTrickBoxTrigger : MonoBehaviour
             {
                 active = true;
                 Debug.Log("Trick Box is Active");
-                PlayerController.instance.SetIsTrickable(active, piecewiseTrick);
+                PlayerController.instance.SetIsTrickable(active, piecewiseTrick, this.transform.position);
 
             }
             else
             {
                 active = false;
+                PlayerController.instance.SetIsTrickable(active);
+
             }
 
 
@@ -49,6 +51,7 @@ public class GroundTrickBoxTrigger : MonoBehaviour
         if(PlayerController.instance.GetHasTricked())
         {
             used = true;
+            PlayerController.instance.SetIsTrickable(false);
         }
         
     }
