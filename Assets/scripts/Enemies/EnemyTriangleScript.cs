@@ -23,6 +23,7 @@ public class EnemyTriangleScript : EnemyParent
     private int idleDirection;
     private const int attackingDamage = 1, scoreValue = 300;
     private Rigidbody2D rigidBody;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -82,6 +83,7 @@ public class EnemyTriangleScript : EnemyParent
             
         }
 
+        //This state machine handles the movement of the triangle entity
         switch (state)
         {
             case State.idle:
@@ -95,6 +97,8 @@ public class EnemyTriangleScript : EnemyParent
                 break;
         }
 
+
+        //CHecks if the player is dead or in a death state, then calls the players take damage function for them to take damage
         if (!PlayerController.instance.GetPlayerDeathState())
         {
             if (this.GetComponent<PolygonCollider2D>().IsTouchingLayers(LayerMask.GetMask("Player")))
@@ -108,6 +112,7 @@ public class EnemyTriangleScript : EnemyParent
         
     }
 
+    //Idly moving back and forth, flying through space
     private void Idle()
     {
         
@@ -122,16 +127,11 @@ public class EnemyTriangleScript : EnemyParent
 
     }
 
+    //Get the players position, find the slope and move the velocity
+    //Consider normalizing the slope
     private void Seeking()
     {
         //make use of the physics system
-        //Use Velocitys
-
-        //Vector3 playerPosition = PlayerController.instance.GetPlayerPosition();
-        //Vector3 velocity;
-        //float step = Time.deltaTime * movementSpeed;
-        //transform.position = Vector3.MoveTowards(transform.position, playerPosition, step);
-
         Vector3 playerPosition = PlayerController.instance.GetPlayerPosition();
         Vector3 vectorToPlayer = Utilities.instance.SlopeFormula(playerPosition, transform.position).normalized;
         rigidBody.velocity = new Vector3(vectorToPlayer.x * movementSpeed, vectorToPlayer.y * movementSpeed, vectorToPlayer.z * movementSpeed);
@@ -139,6 +139,7 @@ public class EnemyTriangleScript : EnemyParent
         
     }
 
+    //Triangle makes a mad dash at the player after "charging"
     private void Attacking()
     {
         Vector3 playerPosition = PlayerController.instance.GetPlayerPosition();
@@ -208,11 +209,8 @@ public class EnemyTriangleScript : EnemyParent
 
        
     }
-    //movement Function
-
-    //private void MovementFunction
-    //Attack Function
-
+   
+    //Allows the triangle to take damage when struck by the player
     public override void TakeDamage(float damageTaken, bool adjustScore)
     {
         health -= damageTaken;

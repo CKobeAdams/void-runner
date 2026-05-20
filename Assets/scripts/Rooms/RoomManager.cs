@@ -16,13 +16,13 @@ public class RoomManager : MonoBehaviour
     public List<GameObject> roomList, specialRooms, normalRooms;
 
     [SerializeField]
-    private GameObject baseRoom, startRoom, ascendingRoom, descendingRoom, risingRoom, randomRoom, oneHopRoom, doubleHopRoom,
+    private GameObject baseRoom, startRoom, ascendingRoom, descendingRoom, risingRoom, oneHopRoom, doubleHopRoom,
         oneSlideJumpRoom, doubleSlideJumpRoom, oneJumpRoom, dropFloorRoom;
 
     [SerializeField]
     private GameObject currentRoom, oldRoom;
 
-    //private Dictionary((string, string), delegate) Trick
+    
 
     // Start is called before the first frame update
     void Awake()
@@ -32,13 +32,13 @@ public class RoomManager : MonoBehaviour
         roomList = new List<GameObject>();
         roomList.Add(startRoom);
 
+        //Sets the current room fro generating rooms later
         currentRoom = startRoom;
 
         specialRooms = new List<GameObject>();
         specialRooms.Add(ascendingRoom);
         specialRooms.Add(descendingRoom);
         specialRooms.Add(risingRoom);
-        //specialRooms.Add(UnityEngine.RandomRoom);
 
 
         normalRooms = new List<GameObject>();
