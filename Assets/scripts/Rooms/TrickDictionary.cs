@@ -114,7 +114,7 @@ public class TrickDictionary : MonoBehaviour
     {
         Vector3 currentPosition = PlayerController.instance.GetPlayerPosition();
 
-        if (currentPosition.x - initialPosition.x >= 5f)
+        if (currentPosition.x - initialPosition.x >= 10f)
         {
             PlayerController.instance.SetIsTrickable(false);
             PlayerController.instance.SetHasTricked(false);
@@ -130,7 +130,7 @@ public class TrickDictionary : MonoBehaviour
     {
         Vector3 currentPosition = PlayerController.instance.GetPlayerPosition();
 
-        if (currentPosition.x - initialPosition.x >= 5f)
+        if (currentPosition.x - initialPosition.x >= 10f)
         {
             PlayerController.instance.SetIsTrickable(false);
             PlayerController.instance.SetHasTricked(false);

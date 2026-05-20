@@ -38,17 +38,18 @@ public class GroundTrickBoxTrigger : MonoBehaviour
                 PlayerController.instance.SetIsTrickable(active, piecewiseTrick, this.transform.position);
 
             }
-            else
+            else if(active)
             {
                 active = false;
                 PlayerController.instance.SetIsTrickable(active);
+  
 
             }
 
 
         }
 
-        if(PlayerController.instance.GetHasTricked())
+        if(active&&PlayerController.instance.GetHasTricked())
         {
             used = true;
             PlayerController.instance.SetIsTrickable(false);

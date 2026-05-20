@@ -171,7 +171,8 @@ public class PlayerController : MonoBehaviour
         }
 
 
-
+        //set trickable to false
+        //SetIsTrickable(false);
 
 
     }
@@ -514,11 +515,16 @@ public class PlayerController : MonoBehaviour
                     break;
 
                 case runningState.tricking:
+
+                    //Debug.Log("LETS CHANGE THAT COLOR");
+                    
                     trickFunction(trickStartingPosition);
                     if(hasTricked == false)
                     {
                         CrouchCancelled();
                         GroundCheck();
+                        Debug.Log("Change the color back!");
+                        this.transform.GetChild(0).gameObject.GetComponent<SpriteRenderer>().color = new Color(1f, 1f, 1f, 1f);
                     }
                     break;
             }
@@ -586,6 +592,7 @@ public class PlayerController : MonoBehaviour
                 //trickStartingPosition = GetPlayerPosition();
                 previousRunState = runState;
                 runState = runningState.tricking;
+                this.transform.GetChild(0).gameObject.GetComponent<SpriteRenderer>().color = new Color(0.2f, 0.2f, 1f, 1f);
             }
         }
     }
