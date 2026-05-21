@@ -120,7 +120,7 @@ public class RoomManager : MonoBehaviour
         if(roomChooser<1f)
         {
             roomChooser = UnityEngine.Random.value;
-            if(roomChooser<0.5f)
+            if(roomChooser<1f)
             {
                 GenerateTrickBoxes((newRoomName, oldRoomName), newRoom);
             }
@@ -234,7 +234,7 @@ public class RoomManager : MonoBehaviour
 
         trick.GetComponent<GroundTrickBoxTrigger>().piecewiseTrick = dictionaryCite.piecewise;
 
-        Debug.Log("Index Found at: "+ index+"\nGenerating at:"+trick.transform.position);
+        //Debug.Log("Index Found at: "+ index+"\nGenerating at:"+trick.transform.position);
 
 
     }

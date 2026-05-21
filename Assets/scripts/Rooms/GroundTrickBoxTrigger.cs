@@ -35,7 +35,7 @@ public class GroundTrickBoxTrigger : MonoBehaviour
             {
                 active = true;
                 Debug.Log("Trick Box is Active");
-                PlayerController.instance.SetIsTrickable(active, piecewiseTrick, this.transform.position);
+                PlayerController.instance.SetIsTrickable(active, piecewiseTrick);
 
             }
             else if(active)

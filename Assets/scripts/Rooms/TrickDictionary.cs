@@ -110,25 +110,55 @@ public class TrickDictionary : MonoBehaviour
 
         return initialPosition;
     }
+
     private Vector3 AscendingFromBaseRoom(Vector3 initialPosition)
     {
-        Vector3 currentPosition = PlayerController.instance.GetPlayerPosition();
+        //Movement function y=(-50/506.25 * x^2 + 9.75/5.625*x + 11)
+        //Derivative y = -50/506.25*x + 9.75/5.625
+        //End position x=22.5
+        Vector3 returnPosition = new Vector3(0f, 0f, 0f);
 
-        if (currentPosition.x - initialPosition.x >= 10f)
+        Vector3 playerPosition = PlayerController.instance.GetPlayerPosition();
+        float endPosition = 22.5f, componentA = -(50f/506.25f), componentB = 9.75f/5.625f, componentC = 11f, currentFunctionXposition = playerPosition.x-initialPosition.x;
+
+
+        Debug.Log("Current function position = " + currentFunctionXposition);
+
+        
+
+
+        if (currentFunctionXposition >= endPosition)
         {
+            float slope = componentA * currentFunctionXposition + componentB;
+            Vector3 normailizedSlope = new Vector3(1f, slope, 0f);
+            normailizedSlope.Normalize();
+            returnPosition = normailizedSlope * PlayerController.instance.GetPlayerSpeed();
+
             PlayerController.instance.SetIsTrickable(false);
             PlayerController.instance.SetHasTricked(false);
+            
 
+        }
+        else
+        {
+            float slope = componentA * currentFunctionXposition + componentB;
+            Vector2 normailizedSlope = new Vector3(1f, slope);
+            normailizedSlope.Normalize();
+            Debug.Log("normalized slope = " + normailizedSlope);
+            returnPosition = normailizedSlope * PlayerController.instance.GetPlayerSpeed();
+            
+            
         }
 
         Debug.Log("Flip off the top paltform! Ascneding Room trick");
-        return initialPosition;
+        return returnPosition;
 
     }
 
     private Vector3 BaseFromSelf(Vector3 initialPosition)
     {
         Vector3 currentPosition = PlayerController.instance.GetPlayerPosition();
+
 
         if (currentPosition.x - initialPosition.x >= 10f)
         {

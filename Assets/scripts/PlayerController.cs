@@ -22,7 +22,7 @@ public class PlayerController : MonoBehaviour
         jumpVelocity = 6f, jumpCancelAcel = 5f, flipOutSpeed = 260f, ragdollTimer = 0, moveAccel = 10f, decceleration = -0.01f, 
         startUpSpeed = 2.5f, startUpAcceleration = 100f, turningAcceleration = 15f, crouchingDecceleration = 0, invincibleTimer = 2.5f, 
         invincibleCounter = 0f, airMoveAcceleration = 5f, airMoveVelocity = 0f, airMoveDifferentialCap = 2f, wallSlidingMultiplier = 0.85f, coyoteTimingCounter,
-        crawlingSpeed;
+        crawlingSpeed, storedTrickVelocity;
 
     private bool isMoving, isGrounded, gravityAffected, jumpCancelled, isCrouching, isDead = false, cameraLockStatus = true, 
         cameraLockSetting, isStumbled = false, isWalled, isStuckOnWall, tookDamage, leftWallCollision, rightWallCollision, isWallSliding,
@@ -295,34 +295,6 @@ public class PlayerController : MonoBehaviour
 
         if(isGrounded||isCrouching)
         {
-            /*if (moveDirection == 0)
-            {
-                movementVelocity = startUpSpeed * moveVector.x + moveAccel * Time.deltaTime * moveVector.x;
-            }
-            if (moveDirection != moveVector.x)
-            {
-
-                movementVelocity = movementVelocity + decceleration * Time.deltaTime * moveDirection;
-                if (moveVector.x == 0 && Mathf.Abs(movementVelocity) < 0.1f)
-                {
-                    movementVelocity = 0;
-                    moveDirection = 0;
-                    return;
-                }
-            }
-            else
-            {
-                movementVelocity = movementVelocity + moveAccel * Time.deltaTime * moveVector.x;
-            }
-
-            if (Mathf.Abs(movementVelocity) > maxMovementSpeed)
-            {
-                movementVelocity = maxMovementSpeed;
-            }*/
-
-            //Maybe try using move towards for the velocity
-
-            //Debug.Log(movementVelocity);
 
             switch (runState)
             {
@@ -344,8 +316,6 @@ public class PlayerController : MonoBehaviour
                 case runningState.startUp:
                     movementVelocity = movementVelocity + startUpAcceleration * Time.deltaTime * moveVector.x;
                     this.GetComponent<SpriteRenderer>().color = new Color(180f/255f, 66f/255f, 1f, 1f);
-
-
                     //0 within the this if statement 
                     if (moveVector.x != moveDirection && moveVector.x != 0)
                     {
@@ -415,23 +385,8 @@ public class PlayerController : MonoBehaviour
 
                 //Moving but there is no player input
                 case runningState.deccelerating:
+                     movementVelocity = movementVelocity + decceleration * Time.deltaTime * -moveDirection;
 
-
-                 
-                        
-                        
-
-                  
-                        movementVelocity = movementVelocity + decceleration * Time.deltaTime * -moveDirection;
-                    
-                    
-                    //movementVelocity = movementVelocity + moveAccel * Time.deltaTime * moveDirection;
-                    
-
-                    
-                    //this.GetComponent<SpriteRenderer>().color = new Color(0.8f, 0f, 0f, 1f);
-
-                    //if(moveDirection == moveVector.x && moveVector.x == 0)
                     if(movementVelocity <= 1f && movementVelocity >= -1f)
                     {
                      
@@ -444,10 +399,6 @@ public class PlayerController : MonoBehaviour
                         
                     }
 
-                    
-
-
-                
                     if (moveVector.x == moveDirection && movementVelocity != 0)
                     {
                         runState = runningState.accelerating;
@@ -460,10 +411,6 @@ public class PlayerController : MonoBehaviour
                         AnimatorManager.instance.ResetAnimatorTriggers();
                         AnimatorManager.instance.TurningTurnOn();
                     }
-                    
-
-                    
-
                     break;
                     //move the sliding and srawling state into their own states.
                 case runningState.sliding:
@@ -485,8 +432,6 @@ public class PlayerController : MonoBehaviour
                 case runningState.turning:
                     movementVelocity = movementVelocity + turningAcceleration * Time.deltaTime * (-moveDirection);
                     this.GetComponent<SpriteRenderer>().color = new Color(1f, 148f/255f, 66f/255f, 1f);
-                   
-
 
                     if (movementVelocity <= 0.1f && movementVelocity >= -0.1f)
                     {
@@ -518,14 +463,17 @@ public class PlayerController : MonoBehaviour
 
                     //Debug.Log("LETS CHANGE THAT COLOR");
                     
-                    trickFunction(trickStartingPosition);
+                    rigidbody.velocity = trickFunction(trickStartingPosition);
                     if(hasTricked == false)
                     {
                         CrouchCancelled();
                         GroundCheck();
                         Debug.Log("Change the color back!");
                         this.transform.GetChild(0).gameObject.GetComponent<SpriteRenderer>().color = new Color(1f, 1f, 1f, 1f);
+                        TurnOnGravity();
                     }
+
+                    Debug.Log("starting position = "+trickStartingPosition);
                     break;
             }
 
@@ -558,7 +506,11 @@ public class PlayerController : MonoBehaviour
             }
         }
         
-        rigidbody.velocity = new Vector2(movementVelocity + airMoveVelocity, rigidY);
+        if(runState!=runningState.tricking)
+        {
+            rigidbody.velocity = new Vector2(movementVelocity + airMoveVelocity, rigidY);
+        }
+        
 
     }
 
@@ -590,9 +542,21 @@ public class PlayerController : MonoBehaviour
                 hasTricked = true;
                 isTrickable = false;
                 //trickStartingPosition = GetPlayerPosition();
+                storedTrickVelocity = GetPlayerSpeed();
                 previousRunState = runState;
                 runState = runningState.tricking;
                 this.transform.GetChild(0).gameObject.GetComponent<SpriteRenderer>().color = new Color(0.2f, 0.2f, 1f, 1f);
+
+                //make unaffected by gravity
+                //turn the gravity back on when the trick is over
+
+                TurnOffGravity();
+
+                Debug.Log("TRICKING");
+                trickStartingPosition = GetPlayerTransform().position;
+
+                //rigidbody.velocity = trickFunction(trickStartingPosition);
+                
             }
         }
     }
@@ -892,6 +856,16 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    public void TurnOffGravity()
+    {
+        rigidbody.gravityScale = 0;
+    }
+
+    public void TurnOnGravity()
+    {
+        rigidbody.gravityScale = 3;
+    }
+
     public void KillPlayer()
     {
         isDead = true;
@@ -940,7 +914,15 @@ public class PlayerController : MonoBehaviour
 
     public float GetPlayerSpeed()
     {
-        return maxMovementSpeed;
+        if(runState == runningState.tricking)
+        {
+            return storedTrickVelocity;
+        }
+        else
+        {
+            return Mathf.Sqrt(Mathf.Pow(rigidbody.velocity.x, 2) + Mathf.Pow(rigidbody.velocity.y, 2));
+        }
+        return 0f;
     }
 
     private void resetTwinWallCheckers()
