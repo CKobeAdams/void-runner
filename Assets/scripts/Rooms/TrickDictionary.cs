@@ -113,25 +113,33 @@ public class TrickDictionary : MonoBehaviour
 
     private Vector3 AscendingFromBaseRoom(Vector3 initialPosition)
     {
-        //Movement function y=(-50/506.25 * x^2 + 9.75/5.625*x + 11)
-        //Derivative y = -100/506.25*x + 9.75/5.625
+        //Movement function y=(-112/2025 * x^2 + 23/45*x + 11)
+        //Derivative y = -224/2025*x + 23/45
         //End position x=22.5
-        Vector3 returnPosition = new Vector3(0f, 0f, 0f);
+        Vector3 returnVelocity = new Vector3(0f, 0f, 0f);
 
         Vector3 playerPosition = PlayerController.instance.GetPlayerPosition();
-        float endPosition = 22.5f, componentA = -(50f/506.25f), componentB = 9.75f/5.625f, componentC = 11f, currentFunctionXposition = playerPosition.x-initialPosition.x;
+        float endPosition = 22.5f, componentA = -112f/2025f, componentB = 23f/45f, componentC=11, currentFunctionXposition = playerPosition.x-initialPosition.x;
+        float gravMultiplier = 4f, playerSpeed = 25;
 
-        //Debug.Log("Calling The Ascending function");
+        Vector2 initialVelocity = new Vector2(22.5f,25f);
+
+        float gravityAccel = Physics.gravity.y * gravMultiplier;
         
+        //Debug.Log("Calling The Ascending function");
+        float trickTimeElapsed = currentFunctionXposition/initialVelocity.x;
         
 
 
         if (currentFunctionXposition >= endPosition)
         {
-            float slope = componentA * currentFunctionXposition + componentB;
+            //derivative of the first function
+            /*float slope = (componentA*2) * currentFunctionXposition + componentB;
             Vector3 normailizedSlope = new Vector3(1f, slope, 0f);
             normailizedSlope.Normalize();
-            returnPosition = normailizedSlope * PlayerController.instance.GetPlayerSpeed();
+            returnVelocity = normailizedSlope * PlayerController.instance.GetPlayerSpeed();*/
+
+            returnVelocity = new Vector3(initialVelocity.x, initialVelocity.y + trickTimeElapsed * gravityAccel * 2);
 
             PlayerController.instance.SetIsTrickable(false);
             PlayerController.instance.SetHasTricked(false);
@@ -140,22 +148,36 @@ public class TrickDictionary : MonoBehaviour
         }
         else
         {
-            float slope = (2*componentA) * currentFunctionXposition + componentB;
-            Vector2 normailizedSlope = new Vector3(1f, slope);
-            normailizedSlope.Normalize();
+            //these are derivatives of the first function
+            /*float slope = (2*componentA) * currentFunctionXposition + componentB;
+            Vector2 normailizedSlope = new Vector2(1f, slope);
+            //normailizedSlope.Normalize();
             Debug.Log("Current function position = " + currentFunctionXposition+
                 "\nPlayerSpeed= " + PlayerController.instance.GetPlayerSpeed()+
                 "\nCurrent Function Step = " + currentFunctionXposition+
                 "\nRelative Y = " + (playerPosition.y)+
                 "\nWorldPosition Y = " + playerPosition.y+
-                "\nslope = " + slope);
-            returnPosition = normailizedSlope * PlayerController.instance.GetPlayerSpeed();
-            
-            
+                "\nslope = " + slope);*/
+            //returnVelocity = new Vector3(initalVelocity);
+            //returnVelocity = normailizedSlope * PlayerController.instance.GetPlayerSpeed() * gravMultiplier;
+            //gravMultiplier = 1 + ((currentFunctionXposition / endPosition)  - (endPosition/2));
+            /*returnVelocity = new Vector2(initialVelocity.x, Mathf.Sqrt(Mathf.Pow(initialVelocity.y, 2f)
+                            + Mathf.Pow(Physics.gravity.y * gravMultiplier * 2 * currentFunctionXposition,2f)));*/
+
+
+            //returnVelocity = new Vector3(returnVelocity.x, returnVelocity.y, 0f)
+
+
+            //change ALLL of this over to kinematics
+            //BECAUSE x velocity is constant we can use the current position as a timer
+
+            returnVelocity = new Vector3(initialVelocity.x, initialVelocity.y + trickTimeElapsed * gravityAccel * 2);
+
+
         }
 
         Debug.Log("Flip off the top paltform! Ascneding Room trick");
-        return returnPosition;
+        return returnVelocity;
 
     }
 
