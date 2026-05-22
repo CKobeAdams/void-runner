@@ -293,7 +293,7 @@ public class PlayerController : MonoBehaviour
 
         }
 
-        if(isGrounded||isCrouching)
+        if(isGrounded||isCrouching||runState == runningState.tricking)
         {
 
             switch (runState)
@@ -464,13 +464,15 @@ public class PlayerController : MonoBehaviour
                     //Debug.Log("LETS CHANGE THAT COLOR");
                     
                     rigidbody.velocity = trickFunction(trickStartingPosition);
-                    if(hasTricked == false)
+                    this.transform.GetChild(0).gameObject.GetComponent<SpriteRenderer>().color = new Color(0.2f, 0.2f, 1f, 1f);
+                    if (hasTricked == false)
                     {
                         CrouchCancelled();
                         GroundCheck();
                         Debug.Log("Change the color back!");
                         this.transform.GetChild(0).gameObject.GetComponent<SpriteRenderer>().color = new Color(1f, 1f, 1f, 1f);
                         TurnOnGravity();
+                        CameraManager.instance.SetTrickLock(false);
                     }
 
                     Debug.Log("starting position = "+trickStartingPosition);
@@ -545,7 +547,7 @@ public class PlayerController : MonoBehaviour
                 storedTrickVelocity = GetPlayerSpeed();
                 previousRunState = runState;
                 runState = runningState.tricking;
-                this.transform.GetChild(0).gameObject.GetComponent<SpriteRenderer>().color = new Color(0.2f, 0.2f, 1f, 1f);
+                
 
                 //make unaffected by gravity
                 //turn the gravity back on when the trick is over
@@ -554,6 +556,7 @@ public class PlayerController : MonoBehaviour
 
                 Debug.Log("TRICKING");
                 trickStartingPosition = GetPlayerTransform().position;
+                CameraManager.instance.SetTrickLock(true);
 
                 //rigidbody.velocity = trickFunction(trickStartingPosition);
                 

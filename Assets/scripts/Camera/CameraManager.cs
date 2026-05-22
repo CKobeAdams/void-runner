@@ -9,9 +9,10 @@ public class CameraManager : MonoBehaviour
 
     public static CameraManager instance { get; private set; }
 
-    private bool CameraLockSetting, CameraLockStatus, isLingering = false;
+    private bool CameraLockSetting, CameraLockStatus, isLingering = false, trickLock;
 
     private float minimumCameraHeight = 0f, cameraFloorDistance = 5f, cameraSpeed = 6f, cameraRaiseLower, cameraLingerTimer = 0f;
+   
 
     //this constant determines how long the camera lingers for
     private const float cameraLingerLimit = 0f;
@@ -96,9 +97,9 @@ public class CameraManager : MonoBehaviour
 
         float step = cameraSpeed * Time.deltaTime;
 
-        if (CameraLockStatus)
+        if (CameraLockStatus&&!trickLock)
         {
-            cameraHeight.y = MainCam.transform.position.y;
+            cameraHeight.y = cameraMoveOffset.y;
         }
         else
         {
@@ -222,5 +223,9 @@ public class CameraManager : MonoBehaviour
         return new Vector2(cameraMovingStep.x, cameraMovingStep.y);
     }
 
+    public void SetTrickLock(bool setting)
+    {
+        trickLock = setting;
+    }
    
 }

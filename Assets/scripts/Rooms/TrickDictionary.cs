@@ -114,16 +114,15 @@ public class TrickDictionary : MonoBehaviour
     private Vector3 AscendingFromBaseRoom(Vector3 initialPosition)
     {
         //Movement function y=(-50/506.25 * x^2 + 9.75/5.625*x + 11)
-        //Derivative y = -50/506.25*x + 9.75/5.625
+        //Derivative y = -100/506.25*x + 9.75/5.625
         //End position x=22.5
         Vector3 returnPosition = new Vector3(0f, 0f, 0f);
 
         Vector3 playerPosition = PlayerController.instance.GetPlayerPosition();
         float endPosition = 22.5f, componentA = -(50f/506.25f), componentB = 9.75f/5.625f, componentC = 11f, currentFunctionXposition = playerPosition.x-initialPosition.x;
 
-
-        Debug.Log("Current function position = " + currentFunctionXposition);
-
+        //Debug.Log("Calling The Ascending function");
+        
         
 
 
@@ -141,10 +140,15 @@ public class TrickDictionary : MonoBehaviour
         }
         else
         {
-            float slope = componentA * currentFunctionXposition + componentB;
+            float slope = (2*componentA) * currentFunctionXposition + componentB;
             Vector2 normailizedSlope = new Vector3(1f, slope);
             normailizedSlope.Normalize();
-            Debug.Log("normalized slope = " + normailizedSlope);
+            Debug.Log("Current function position = " + currentFunctionXposition+
+                "\nPlayerSpeed= " + PlayerController.instance.GetPlayerSpeed()+
+                "\nCurrent Function Step = " + currentFunctionXposition+
+                "\nRelative Y = " + (playerPosition.y)+
+                "\nWorldPosition Y = " + playerPosition.y+
+                "\nslope = " + slope);
             returnPosition = normailizedSlope * PlayerController.instance.GetPlayerSpeed();
             
             
