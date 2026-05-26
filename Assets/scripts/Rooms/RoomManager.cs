@@ -79,7 +79,7 @@ public class RoomManager : MonoBehaviour
         GameObject newRoom;
 
         //Reset back to 0.1f after testing
-        if(roomChooser < 0.5f)
+        if(roomChooser < 0.4f)
         {
             //UnityEngine.Random Special rooms
             newRoom = Instantiate(GenerateSpecialRoom());
@@ -117,10 +117,10 @@ public class RoomManager : MonoBehaviour
 
         //adds the starting room to a new room
         roomChooser = UnityEngine.Random.value;
-        if(roomChooser<1f)
+        if(roomChooser<0.9f)
         {
             roomChooser = UnityEngine.Random.value;
-            if(roomChooser<1f)
+            if(roomChooser<0.5f)
             {
                 GenerateTrickBoxes((newRoomName, oldRoomName), newRoom);
             }

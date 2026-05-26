@@ -15,9 +15,9 @@ public class TrickDictionary : MonoBehaviour
     //private Dictionary<(string currentRoom, string prevRoom), Vector3>       trickLocationDictionary= new Dictionary<(string currentRoom, string prevRoom), Vector3>();
 
     private const string ascendingTag = "Ascension", selfTag = "Self", baseTag = "Base", oneJumpTag = "OneJump";
-    private Vector3 ascendingFromBaseLocation = new Vector3(-23f, 11f, 0f),
+    private Vector3 ascendingFromBaseLocation = new Vector3(-23f, 12f, 0f),
                       OneJumpFromSelfLocation = new Vector3(2.5f, 0.5f, 0f),
-                      baseFromSelfLocation = new Vector3(0f, 0.5f, 0f);
+                      baseFromSelfLocation = new Vector3(0f, -3f, 0f);
                                                                                                      
     // Start is called before the first frame update
     void Awake()
@@ -103,7 +103,7 @@ public class TrickDictionary : MonoBehaviour
 
         }
         
-        Debug.Log("Flip off the box! Jump room trick");
+        //Debug.Log("Flip off the box! Jump room trick");
         
 
         
@@ -176,25 +176,34 @@ public class TrickDictionary : MonoBehaviour
 
         }
 
-        Debug.Log("Flip off the top paltform! Ascneding Room trick");
+        //Debug.Log("Flip off the top paltform! Ascneding Room trick");
         return returnVelocity;
 
     }
 
     private Vector3 BaseFromSelf(Vector3 initialPosition)
     {
+        //This is the general layout for the trick functions 
         Vector3 currentPosition = PlayerController.instance.GetPlayerPosition();
 
+        Vector3 returnVelocity = new Vector3(0f, 0f, 0f), initialVelocity = new Vector3(25f,0f,0f);
 
-        if (currentPosition.x - initialPosition.x >= 10f)
+        float endPosition = 10f, currentFunctionXPosition = currentPosition.x - initialPosition.x;
+
+        //the function
+
+        returnVelocity = initialVelocity;
+
+
+        if ( currentFunctionXPosition >= endPosition)
         {
             PlayerController.instance.SetIsTrickable(false);
             PlayerController.instance.SetHasTricked(false);
 
         }
 
-        Debug.Log("Doin Cool tricks in the base room!");
-        return initialPosition;
+        //Debug.Log("Doin Cool tricks in the base room!");
+        return returnVelocity;
     }
 
     

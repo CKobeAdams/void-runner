@@ -9,7 +9,7 @@ public class CameraManager : MonoBehaviour
 
     public static CameraManager instance { get; private set; }
 
-    private bool CameraLockSetting, CameraLockStatus, isLingering = false, trickLock;
+    private bool CameraLockSetting, CameraLockStatus, isLingering = false, trickLock = false;
 
     private float minimumCameraHeight = 0f, cameraFloorDistance = 5f, cameraSpeed = 6f, cameraRaiseLower, cameraLingerTimer = 0f;
    
@@ -41,13 +41,15 @@ public class CameraManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
         cameraMovingStep = MainCam.transform.position - previousPosition;
         previousPosition = MainCam.transform.position;
+
     }
 
     void FixedUpdate()
     {
+        
+
         playerMoveVector = PlayerController.instance.GetMoveVector();
 
         //changes the Camera lock and against the status | used to be in PlayerController
@@ -97,9 +99,11 @@ public class CameraManager : MonoBehaviour
 
         float step = cameraSpeed * Time.deltaTime;
 
+        //The below if and if/else statements can be written more efficiently
+
         if (CameraLockStatus&&!trickLock)
         {
-            cameraHeight.y = cameraMoveOffset.y;
+            cameraHeight.y = minimumCameraHeight;
         }
         else
         {
@@ -148,13 +152,13 @@ public class CameraManager : MonoBehaviour
             MainCam.transform.position.z);*/
 
 
-        if (playerMoveVector.x == 1)
+        if (!trickLock)
         {
             step = 35f*Time.deltaTime;
         }
         else
         {
-            step = 15f*Time.deltaTime;
+            step = 55f*Time.deltaTime;
         }
 
         

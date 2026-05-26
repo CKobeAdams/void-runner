@@ -26,7 +26,7 @@ public class PlayerController : MonoBehaviour
 
     private bool isMoving, isGrounded, gravityAffected, jumpCancelled, isCrouching, isDead = false, cameraLockStatus = true, 
         cameraLockSetting, isStumbled = false, isWalled, isStuckOnWall, tookDamage, leftWallCollision, rightWallCollision, isWallSliding,
-        hasTricked = false, isTrickable, onCoyoteTime, coyoteAvailable, damageFlickerOn;
+        hasTricked = false, isTrickable, onCoyoteTime, coyoteAvailable, damageFlickerOn, isInvincible = false;
 
     private int flipOutRevs = 0, flipOutDirection, unstumbleCount = 0, playerHealth = 3, flickerCounter;
     private const int stumblePressNeeded = 3, playerMaxHealth = 3;
@@ -469,13 +469,13 @@ public class PlayerController : MonoBehaviour
                     {
                         CrouchCancelled();
                         GroundCheck();
-                        Debug.Log("Change the color back!");
+                        //Debug.Log("Change the color back!");
                         this.transform.GetChild(0).gameObject.GetComponent<SpriteRenderer>().color = new Color(1f, 1f, 1f, 1f);
                         TurnOnGravity();
                         CameraManager.instance.SetTrickLock(false);
                     }
 
-                    Debug.Log("starting position = "+trickStartingPosition);
+                    //Debug.Log("starting position = "+trickStartingPosition);
                     break;
             }
 
@@ -553,6 +553,7 @@ public class PlayerController : MonoBehaviour
                 //turn the gravity back on when the trick is over
 
                 TurnOffGravity();
+
 
                 Debug.Log("TRICKING");
                 trickStartingPosition = GetPlayerTransform().position;
@@ -839,7 +840,7 @@ public class PlayerController : MonoBehaviour
 
     public void TakeDamage(int damage)
     {
-        if(!tookDamage)
+        if(!tookDamage&&!isInvincible)
         {
             playerHealth = playerHealth - damage;
             healthManager.instance.UpdateHealthDisplay(playerHealth);
@@ -983,6 +984,11 @@ public class PlayerController : MonoBehaviour
     public void SetHasTricked(bool tricked)
     {
         hasTricked = tricked;
+    }
+
+    public void SetIsInvincible(bool invincible)
+    {
+        isInvincible = invincible;
     }
 
     private void CrouchCancelled()
