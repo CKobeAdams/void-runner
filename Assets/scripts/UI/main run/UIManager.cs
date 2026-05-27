@@ -110,4 +110,9 @@ public class UIManager : MonoBehaviour
         runDataValues.timeSeconds = seconds;
         runDataValues.timeMillis = milliseconds;
     }
+
+    public int GetRoomsCleared()
+    {
+        return roomCounter;
+    }
 }

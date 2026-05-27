@@ -7,28 +7,27 @@ public class MobsterSpawnerScript : MonoBehaviour
     [SerializeField]
     protected GameObject spawningObject;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    protected float SpawnChance;
+    
+    protected int roomMinimum;
+    protected float baseSpawnChance, increaseRate;
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 
     protected void SpawnObject()
     {
-        Transform parentTrans = this.GetComponent<Transform>();
 
-        GameObject spawn = Instantiate(spawningObject, parentTrans.position, parentTrans.rotation);
-        EnemyManager.instance.AddEnemy(spawn.GetComponent<EnemyParent>());
+        int roomsCleared = UIManager.instance.GetRoomsCleared();
 
+        if (roomsCleared >= roomMinimum)
+        {
+            SpawnChance = baseSpawnChance + increaseRate * roomsCleared;
+            if (Random.value < SpawnChance)
+            {
+                Transform parentTrans = this.GetComponent<Transform>();
 
-
-       
-     
-    }
+                GameObject spawn = Instantiate(spawningObject, parentTrans.position, parentTrans.rotation);
+                EnemyManager.instance.AddEnemy(spawn.GetComponent<EnemyParent>());
+            }
+        }
+    } 
 }

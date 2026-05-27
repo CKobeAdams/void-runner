@@ -7,6 +7,11 @@ public class CircleSpawner : MobsterSpawnerScript
     // Start is called before the first frame update
     void Start()
     {
+        SpawnChance = 0.20f;
+
+        roomMinimum = 10;
+        baseSpawnChance = 0.1f;
+        increaseRate = 1f / 290f;
         SpawnObject();
     }
 
