@@ -21,7 +21,7 @@ public class EnemyTriangleScript : EnemyParent
     private const float diveSpeed = 15f , diveTime = 0.25f, diveCoolDown = 0.5f, diveStartUp = 0.25f, idleDirectionTimer = 0.5f, rotationSpeed = 40, rotationModifier = 90;
     private bool isDiving, onCoolDown, isLockedOn;
     private int idleDirection;
-    private const int attackingDamage = 1, scoreValue = 300;
+    private const int attackingDamage = 1;
     private Rigidbody2D rigidBody;
 
     // Start is called before the first frame update
@@ -99,14 +99,7 @@ public class EnemyTriangleScript : EnemyParent
 
 
         //CHecks if the player is dead or in a death state, then calls the players take damage function for them to take damage
-        if (!PlayerController.instance.GetPlayerDeathState())
-        {
-            if (this.GetComponent<PolygonCollider2D>().IsTouchingLayers(LayerMask.GetMask("Player")))
-            {
-                PlayerController.instance.TakeDamage(attackingDamage);
-                TakeDamage(health, false);
-            }
-        }
+        CollisionDamageCheck();
 
         
         

@@ -2223,6 +2223,7 @@ MonoBehaviour:
   wallSlidingMultiplier: 0.5
   coyoteTimingCounter: 0
   crawlingSpeed: 5
+  storedTrickVelocity: 0
 --- !u!114 &1214171202
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2661,7 +2662,6 @@ MonoBehaviour:
   ascendingRoom: {fileID: 8705274127253838628, guid: 8be09d1ba4d31b646bfb0e8100418e04, type: 3}
   descendingRoom: {fileID: 1266965778570859563, guid: d7aeaacd38ac45a4e9c4fe8ae1b3afd0, type: 3}
   risingRoom: {fileID: 8087396165315499725, guid: 6104291b647a20c4fbfab54a569a5424, type: 3}
-  randomRoom: {fileID: 2059186192524722721, guid: 37ec7e0a847a3d64fb5fe2f70f2a5cab, type: 3}
   oneHopRoom: {fileID: 6577467017490912589, guid: 9459b4f40dc94c34da5af65d27b661f0, type: 3}
   doubleHopRoom: {fileID: 4021495237919067566, guid: a7367a11c50fad6469c060407cc38300, type: 3}
   oneSlideJumpRoom: {fileID: 4495197432931215369, guid: b53b840901058ee4eafca537aaecb62a, type: 3}
@@ -3126,6 +3126,37 @@ Transform:
   - {fileID: 763935106}
   m_Father: {fileID: 0}
   m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1978044158
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1978044159}
+  m_Layer: 0
+  m_Name: Circle Spawner
+  m_TagString: Untagged
+  m_Icon: {fileID: 5132851093641282708, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1978044159
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1978044158}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 1.4105926, y: -1.3993328, z: 0.005367879}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1986920429
 GameObject:
