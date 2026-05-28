@@ -9,9 +9,13 @@ public class RandomTriangleSpawner : MobsterSpawnerScript
 
     void Start()
     {
+        
         SpawnChance = 0.20f;
 
+        //original Value is 50
         roomMinimum = 50;
+
+        //original value is 0.05
         baseSpawnChance = 0.05f;
         increaseRate = 1f / 250f;
 

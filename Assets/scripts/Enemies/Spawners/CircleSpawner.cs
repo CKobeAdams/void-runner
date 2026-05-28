@@ -9,7 +9,10 @@ public class CircleSpawner : MobsterSpawnerScript
     {
         SpawnChance = 0.20f;
 
+        //original value is 10
         roomMinimum = 10;
+
+        //original value is 0.1
         baseSpawnChance = 0.1f;
         increaseRate = 1f / 290f;
         SpawnObject();

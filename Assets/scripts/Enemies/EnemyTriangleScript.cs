@@ -202,25 +202,4 @@ public class EnemyTriangleScript : EnemyParent
 
        
     }
-   
-    //Allows the triangle to take damage when struck by the player
-    public override void TakeDamage(float damageTaken, bool adjustScore)
-    {
-        health -= damageTaken;
-        
-        if(health<=0)
-        {
-            isDead = true;
-            EnemyManager.instance.RemoveEnemy(this.GetComponent<EnemyParent>());
-            if(adjustScore)
-            {
-                UIManager.instance.AdjustScore(scoreValue);
-            }
-            
-            
-        }
-
-       
-       
-    }
 }

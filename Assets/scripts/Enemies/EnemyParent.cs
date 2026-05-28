@@ -33,10 +33,11 @@ public class EnemyParent : MonoBehaviour
                 UIManager.instance.AdjustScore(scoreValue);
             }
 
+            Debug.Log("Enemy Taking Damage: "+this.name);
 
         }
 
-        Debug.Log("Taking Damage");
+        //Debug.Log("Taking Damage");
     }
 
     protected virtual void CollisionDamageCheck()
