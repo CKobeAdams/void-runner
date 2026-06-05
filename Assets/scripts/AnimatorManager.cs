@@ -78,6 +78,31 @@ public class AnimatorManager : MonoBehaviour
         animator.SetTrigger("Crawling");
     }
 
+    public void GroundedTurnOn()
+    {
+        animator.SetBool("Grounded", true);
+    }
+
+    public void JumpingTurnOn()
+    {
+        animator.SetBool("Jumping", true);
+    }
+
+    public void FallingTurnOn()
+    {
+        animator.SetBool("Falling", true);
+    }
+
+    public void FlipLeftTurnOn()
+    {
+        animator.SetTrigger("FlipLeft");
+    }
+
+    public void FlipRightTurnOn()
+    {
+        animator.SetTrigger("FlipRight");
+    }
+
     public void ResetAnimatorTriggers()
     {
         animator.SetBool("StartUp", false);
@@ -86,13 +111,22 @@ public class AnimatorManager : MonoBehaviour
         animator.SetBool("Turning", false);
         animator.SetBool("TopSpeed", false);
         animator.SetBool("Idling", false);
+        animator.SetBool("Falling",false);
+        animator.SetBool("Jumping", false);
         animator.ResetTrigger("Sliding");
         animator.ResetTrigger("Crawling");
+        animator.ResetTrigger("FlipRight");
+        animator.ResetTrigger("FlipLeft");
     }
 
     public void ResetSlidingTrigger()
     {
         animator.ResetTrigger("Sliding");
+    }
+
+    public void TurnOffGrounded()
+    {
+        animator.SetBool("Grounded", false);
     }
 
 
