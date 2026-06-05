@@ -16,7 +16,7 @@ public class TrickDictionary : MonoBehaviour
 
     private const string ascendingTag = "Ascension", selfTag = "Self", baseTag = "Base", oneJumpTag = "OneJump";
     private Vector3 ascendingFromBaseLocation = new Vector3(-23f, 12f, 0f),
-                      OneJumpFromSelfLocation = new Vector3(2.5f, 0.5f, 0f),
+                      OneJumpFromSelfLocation = new Vector3(-1.5f, 1f, 0f),
                       baseFromSelfLocation = new Vector3(0f, -3f, 0f);
                                                                                                      
     // Start is called before the first frame update
@@ -96,11 +96,23 @@ public class TrickDictionary : MonoBehaviour
     {
         Vector3 currentPosition = PlayerController.instance.GetPlayerPosition();
 
-        if (currentPosition.x - initialPosition.x >= 5f)
+        float endPosition = 10f, currentFunctionXPosition = currentPosition.x - initialPosition.x,
+            gravMultiplier = 2f;
+
+        Vector3 returnVelocity = new Vector3(0f, 0f, 0f), initialVelocity = new Vector3(24f,7.5f);
+        float trickTimeElapsed = currentFunctionXPosition / initialVelocity.x;
+
+        float gravityAccel = Physics.gravity.y * gravMultiplier;
+
+        if (currentFunctionXPosition>= endPosition)
         {
             PlayerController.instance.SetIsTrickable(false);
             PlayerController.instance.SetHasTricked(false);
 
+        }
+        else
+        {
+            returnVelocity = new Vector3(initialVelocity.x, initialVelocity.y + trickTimeElapsed * gravityAccel * 2);
         }
         
         //Debug.Log("Flip off the box! Jump room trick");
@@ -108,7 +120,7 @@ public class TrickDictionary : MonoBehaviour
 
         
 
-        return initialPosition;
+        return returnVelocity;
     }
 
     private Vector3 AscendingFromBaseRoom(Vector3 initialPosition)

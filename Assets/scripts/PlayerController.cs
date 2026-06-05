@@ -19,14 +19,18 @@ public class PlayerController : MonoBehaviour
 
     [SerializeField]
     private float CameraFloorDistance = 4.5f, minimunCameraHeight = 0f, movementVelocity = 0, maxMovementSpeed = 20f, moveDirection,
-        jumpVelocity = 6f, jumpCancelAcel = 5f, flipOutSpeed = 260f, ragdollTimer = 0, moveAccel = 10f, decceleration = -0.01f, 
-        startUpSpeed = 2.5f, startUpAcceleration = 100f, turningAcceleration = 15f, crouchingDecceleration = 0, invincibleTimer = 2.5f, 
+        jumpVelocity = 6f, jumpCancelAcel = 5f, flipOutSpeed = 260f, ragdollTimer = 0, moveAccel = 10f, decceleration = -0.01f,
+        startUpSpeed = 2.5f, startUpAcceleration = 100f, turningAcceleration = 15f, crouchingDecceleration = 0, invincibleTimer = 2.5f,
         invincibleCounter = 0f, airMoveAcceleration = 5f, airMoveVelocity = 0f, airMoveDifferentialCap = 2f, wallSlidingMultiplier = 0.85f, coyoteTimingCounter,
         crawlingSpeed, storedTrickVelocity;
 
-    private bool isMoving, isGrounded, gravityAffected, jumpCancelled, isCrouching, isDead = false, cameraLockStatus = true, 
-        cameraLockSetting, isStumbled = false, isWalled, isStuckOnWall, tookDamage, leftWallCollision, rightWallCollision, isWallSliding,
+    private bool isMoving, isGrounded, gravityAffected, jumpCancelled, isCrouching, isDead = false, cameraLockStatus = true,
+        cameraLockSetting, isStumbled = false, isWalled, isStuckOnWall, tookDamage, isWallSliding,
         hasTricked = false, isTrickable, onCoyoteTime, coyoteAvailable, damageFlickerOn, isInvincible = false;
+
+    [SerializeField]
+    private bool leftWallCollision, rightWallCollision;
+
 
     private int flipOutRevs = 0, flipOutDirection, unstumbleCount = 0, playerHealth = 3, flickerCounter;
     private const int stumblePressNeeded = 3, playerMaxHealth = 3;
@@ -467,6 +471,7 @@ public class PlayerController : MonoBehaviour
                     this.transform.GetChild(0).gameObject.GetComponent<SpriteRenderer>().color = new Color(0.2f, 0.2f, 1f, 1f);
                     if (hasTricked == false)
                     {
+                        AnimatorManager.instance.TrickingTurnOff();
                         CrouchCancelled();
                         GroundCheck();
                         //Debug.Log("Change the color back!");
@@ -489,22 +494,29 @@ public class PlayerController : MonoBehaviour
 
         if (isWalled)
         {
-            if (leftWallCollision && moveVector.x < 0)
+            if (leftWallCollision)
             {
-                movementVelocity = 0;
-                airMoveVelocity = 0;
-                isWallSliding = true;
-                
-                rigidY = rigidbody.velocity.y < 0 ? rigidbody.velocity.y * wallSlidingMultiplier : rigidbody.velocity.y;
+                if (moveDirection < 0 || moveVector.x < 0)
+                {
 
+
+                    movementVelocity = 0;
+                    airMoveVelocity = 0;
+                    isWallSliding = true;
+
+                    rigidY = rigidbody.velocity.y < 0 ? rigidbody.velocity.y * wallSlidingMultiplier : rigidbody.velocity.y;
+                }
             }
 
-            if (rightWallCollision && moveVector.x > 0)
+            if (rightWallCollision)
             {
-                movementVelocity = 0;
-                airMoveVelocity = 0;
-                isWallSliding = true;
-                rigidY = rigidbody.velocity.y < 0 ? rigidbody.velocity.y * wallSlidingMultiplier : rigidbody.velocity.y;
+                if (moveDirection > 0 || moveVector.x > 0)
+                {
+                    movementVelocity = 0;
+                    airMoveVelocity = 0;
+                    isWallSliding = true;
+                    rigidY = rigidbody.velocity.y < 0 ? rigidbody.velocity.y * wallSlidingMultiplier : rigidbody.velocity.y;
+                }
             }
         }
         
@@ -558,6 +570,7 @@ public class PlayerController : MonoBehaviour
                 Debug.Log("TRICKING");
                 trickStartingPosition = GetPlayerTransform().position;
                 CameraManager.instance.SetTrickLock(true);
+                AnimatorManager.instance.TrickingTurnOn();
 
                 //rigidbody.velocity = trickFunction(trickStartingPosition);
                 
@@ -692,6 +705,7 @@ public class PlayerController : MonoBehaviour
             //airMoveVelocity = 0;
             isGrounded = true;
             coyoteAvailable = true;
+            AnimatorManager.instance.GroundedTurnOn();
             //reset the offset to the wall checkers
             resetTwinWallCheckers();
 
@@ -703,7 +717,9 @@ public class PlayerController : MonoBehaviour
             {
                 onCoyoteTime = true;
             }
-            
+
+            AnimatorManager.instance.GroundedTurnOff();
+
             
         }
 
@@ -799,11 +815,20 @@ public class PlayerController : MonoBehaviour
     //used for flipping out
     public void FlipLeft(InputAction.CallbackContext context)
     {
-        if (isDead || isCrouching) return;
+        if (isDead || isCrouching || isGrounded)
+        {
+            flipHitBox.SetActive(false);
+            flipOutDirection = 0;
+            AnimatorManager.instance.FlipLeftTurnOff();
+            return;
+        }
         if (context.started)
         {
             FlipOutHitbox.instance.ResetBox();
             flipHitBox.SetActive(true);
+            AnimatorManager.instance.FlipLeftTurnOn();
+                
+
 
         }
         if(context.performed)
@@ -812,19 +837,28 @@ public class PlayerController : MonoBehaviour
         }
         if(context.canceled)
         {
-           flipHitBox.SetActive(false);
-           flipOutDirection = 0;
+            flipHitBox.SetActive(false);
+            flipOutDirection = 0;
+            AnimatorManager.instance.FlipLeftTurnOff();
         }
     }
 
     //used for flipping out
     public void FlipRight(InputAction.CallbackContext context)
     {
-        if (isDead || isCrouching) return;
+        if (isDead || isCrouching || isGrounded)
+        {
+            flipHitBox.SetActive(false);
+            flipOutDirection = 0;
+            AnimatorManager.instance.FlipRightTurnOff();
+            return;
+        }
         if (context.started)
         {
             FlipOutHitbox.instance.ResetBox();
             flipHitBox.SetActive(true);
+            AnimatorManager.instance.FlipRightTurnOn();
+
 
         }
         if (context.performed)
@@ -835,6 +869,7 @@ public class PlayerController : MonoBehaviour
         {
             flipHitBox.SetActive(false);
             flipOutDirection = 0;
+            AnimatorManager.instance.FlipRightTurnOff();
         }
     }
 

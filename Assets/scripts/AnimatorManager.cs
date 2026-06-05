@@ -93,6 +93,11 @@ public class AnimatorManager : MonoBehaviour
         animator.SetBool("Falling", true);
     }
 
+    public void TrickingTurnOn()
+    {
+        animator.SetBool("Tricking", true);
+    }
+
     public void FlipLeftTurnOn()
     {
         animator.SetTrigger("FlipLeft");
@@ -113,20 +118,38 @@ public class AnimatorManager : MonoBehaviour
         animator.SetBool("Idling", false);
         animator.SetBool("Falling",false);
         animator.SetBool("Jumping", false);
+        animator.SetBool("Tricking", false);
         animator.ResetTrigger("Sliding");
         animator.ResetTrigger("Crawling");
         animator.ResetTrigger("FlipRight");
         animator.ResetTrigger("FlipLeft");
     }
 
+
+
     public void ResetSlidingTrigger()
     {
         animator.ResetTrigger("Sliding");
     }
 
-    public void TurnOffGrounded()
+    public void TrickingTurnOff()
+    {
+        animator.SetBool("Tricking", false);
+    }
+
+    public void GroundedTurnOff()
     {
         animator.SetBool("Grounded", false);
+    }
+
+    public void FlipLeftTurnOff()
+    {
+        animator.SetBool("FlipLeft", false);
+    }
+
+    public void FlipRightTurnOff()
+    {
+        animator.SetBool("FlipRight", false);
     }
 
 
