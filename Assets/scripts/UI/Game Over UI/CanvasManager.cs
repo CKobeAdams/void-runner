@@ -16,7 +16,7 @@ public class CanvasManager : MonoBehaviour
     void Start()
     {
         scoreTextObject.text = "Score: " + runValues.score;
-        timeTextObject.text = "Time survived: " + runValues.timeMinutes + " mins " + runValues.timeSeconds + "." + runValues.timeMillis + " secs";
+        timeTextObject.text = "Time survived: " + runValues.totalTimeMinutes + " mins " + runValues.totalTimeSeconds + "." + runValues.totalTimeMillis + " secs";
         roomsTextObject.text = "Rooms Cleared: " + runValues.roomsCleared;
     }
 

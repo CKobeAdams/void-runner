@@ -106,9 +106,11 @@ public class UIManager : MonoBehaviour
         //roomsCleared, score, timeMinutes, timeSeconds, timeMillis;
         runDataValues.roomsCleared = roomCounter;
         runDataValues.score = (int)scoreCounter;
-        runDataValues.timeMinutes = minutes;
-        runDataValues.timeSeconds = seconds;
-        runDataValues.timeMillis = milliseconds;
+        runDataValues.runTimeMinutes = minutes;
+        runDataValues.runTimeSeconds = seconds;
+        runDataValues.runTimeMillis = milliseconds;
+
+        runDataValues.totalTime = stopwatchCounter;
     }
 
     public int GetRoomsCleared()

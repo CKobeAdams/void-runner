@@ -7,7 +7,7 @@ public class RunDataInteracter : MonoBehaviour
     [SerializeField]
     private RunDataSO runDataValues;
 
-    // Start is called before the first frame update
+    /*// Start is called before the first frame update
     void Start()
     {
         
@@ -68,5 +68,5 @@ public class RunDataInteracter : MonoBehaviour
     public void SetTimeMillis(int millis)
     {
         runDataValues.timeMillis = millis;
-    }
+    }*/
 }
