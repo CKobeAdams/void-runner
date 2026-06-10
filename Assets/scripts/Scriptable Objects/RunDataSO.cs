@@ -6,6 +6,7 @@ using UnityEngine;
 [CreateAssetMenu]
 public class RunDataSO : ScriptableObject
 {
-    public int roomsCleared, score, timeMinutes, timeSeconds, timeMillis;
+    public int roomsCleared, score, timeMinutes, timeSeconds, timeMillis, Threads;
+    public float totalTime, previousTime;
 
 }

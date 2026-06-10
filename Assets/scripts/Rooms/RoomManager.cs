@@ -22,6 +22,8 @@ public class RoomManager : MonoBehaviour
     [SerializeField]
     private GameObject currentRoom, oldRoom;
 
+    private int roomCounter, roomCountCap, levelCounter, baseRoomCountMinimum = 50, levelMulptiplier = 10;
+
     
 
     // Start is called before the first frame update
@@ -49,6 +51,8 @@ public class RoomManager : MonoBehaviour
         normalRooms.Add(doubleSlideJumpRoom);
         normalRooms.Add(oneJumpRoom);
         normalRooms.Add(dropFloorRoom);
+
+        roomCountCap = (levelCounter - 1) * levelMulptiplier + baseRoomCountMinimum;
 
     }
 
@@ -131,6 +135,7 @@ public class RoomManager : MonoBehaviour
         }
         
         roomList.Add(newRoom);
+        AddRoomCounter();
     }
 
     private Vector3 GetListEndNodePosition()
@@ -237,5 +242,10 @@ public class RoomManager : MonoBehaviour
         //Debug.Log("Index Found at: "+ index+"\nGenerating at:"+trick.transform.position);
 
 
+    }
+
+    public void AddRoomCounter()
+    {
+        roomCounter++;
     }
 }
