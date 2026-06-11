@@ -16,23 +16,31 @@ public class RoomManager : MonoBehaviour
     public List<GameObject> roomList, specialRooms, normalRooms;
 
     [SerializeField]
-    private GameObject baseRoom, startRoom, ascendingRoom, descendingRoom, risingRoom, oneHopRoom, doubleHopRoom,
+    private GameObject baseRoom, startRoom, endRoom, ascendingRoom, descendingRoom, risingRoom, oneHopRoom, doubleHopRoom,
         oneSlideJumpRoom, doubleSlideJumpRoom, oneJumpRoom, dropFloorRoom;
 
     [SerializeField]
     private GameObject currentRoom, oldRoom;
 
-    private int roomCounter, roomCountCap, levelCounter, baseRoomCountMinimum = 50, levelMulptiplier = 10;
+    [SerializeField]
+    private int roomCounter = 0, roomCountCap, levelCounter, baseRoomCountMinimum = 5, levelMulptiplier = 10;
+
+    private bool hasEndRoomSpawned = false;
 
     
 
     // Start is called before the first frame update
     void Awake()
     {
+        roomCounter = 0;
         instance = this;
 
         roomList = new List<GameObject>();
         roomList.Add(startRoom);
+        AddRoomCounter();
+        //Set the room counter to 0 and add 1 for the start room
+
+
 
         //Sets the current room fro generating rooms later
         currentRoom = startRoom;
@@ -52,7 +60,10 @@ public class RoomManager : MonoBehaviour
         normalRooms.Add(oneJumpRoom);
         normalRooms.Add(dropFloorRoom);
 
-        roomCountCap = (levelCounter - 1) * levelMulptiplier + baseRoomCountMinimum;
+        roomCountCap = levelCounter == 0 ? baseRoomCountMinimum : (levelCounter - 1) * levelMulptiplier + baseRoomCountMinimum;
+
+        hasEndRoomSpawned = false;
+
 
     }
 
@@ -78,20 +89,35 @@ public class RoomManager : MonoBehaviour
         //GameObject newRoom = Instantiate(baseRoom, GetListEndNode().transform);
         //makes the new room and gets starting node
 
+        if(hasEndRoomSpawned)
+        {
+            return;
+        }
+
         //Change to UnityEngine.Random.Value
         float roomChooser = UnityEngine.Random.value;
         GameObject newRoom;
 
         //Reset back to 0.1f after testing
-        if(roomChooser < 0.1)
+        if(roomCounter==roomCountCap-1)
         {
-            //UnityEngine.Random Special rooms
-            newRoom = Instantiate(GenerateSpecialRoom());
+
+            newRoom = Instantiate(endRoom);
+            hasEndRoomSpawned = true;
         }
         else
         {
-            newRoom = Instantiate(GenerateNormalRoom());
+            if (roomChooser < 0.1)
+            {
+                //UnityEngine.Random Special rooms
+                newRoom = Instantiate(GenerateSpecialRoom());
+            }
+            else
+            {
+                newRoom = Instantiate(GenerateNormalRoom());
+            }
         }
+        
         
 
         

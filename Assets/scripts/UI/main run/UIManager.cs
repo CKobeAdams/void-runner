@@ -111,6 +111,8 @@ public class UIManager : MonoBehaviour
         runDataValues.runTimeMillis = milliseconds;
 
         runDataValues.totalTime = stopwatchCounter;
+
+        runDataValues.playerHealth = PlayerController.instance.GetCurrentHealth();
     }
 
     public int GetRoomsCleared()

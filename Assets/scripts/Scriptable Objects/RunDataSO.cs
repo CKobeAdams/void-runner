@@ -7,18 +7,20 @@ using UnityEngine;
 public class RunDataSO : ScriptableObject
 {
     public int roomsCleared, score, runTimeMinutes, runTimeSeconds, runTimeMillis, totalTimeMinutes, totalTimeSeconds, totalTimeMillis, threadCount;
-    public float previousTime;
+    public float previousTime, _totalTime;
+    public int playerHealth = 3;
+    
 
     public float totalTime
     {
         set {
-            totalTime = value;
-            totalTimeMinutes = (int)Mathf.Floor(totalTime / 60);
-            totalTimeSeconds = (int)Mathf.Floor(totalTime % 60);
-            totalTimeMillis = (int)Mathf.Floor((totalTime * 1000 % 1000) / 10);
+            _totalTime = value;
+            totalTimeMinutes = (int)Mathf.Floor(_totalTime / 60f);
+            totalTimeSeconds = (int)Mathf.Floor(_totalTime % 60f);
+            totalTimeMillis = (int)Mathf.Floor((_totalTime * 1000f % 1000f) / 10f);
 
         }
-        get { return totalTime; }
+        get { return _totalTime; }
     }
 
 }

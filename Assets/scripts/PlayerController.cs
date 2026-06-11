@@ -12,6 +12,9 @@ public class PlayerController : MonoBehaviour
     private Rigidbody2D rigidbody;
 
     [SerializeField]
+    private RunDataSO runDataValues;
+
+    [SerializeField]
     private GameObject groundCheck, flipHitBox, wallCheckerMain, wallCheckLeft, wallCheckRight, wallHeadCheck, stumbleBox;
 
     [SerializeField]
@@ -26,7 +29,7 @@ public class PlayerController : MonoBehaviour
 
     private bool isMoving, isGrounded, gravityAffected, jumpCancelled, isCrouching, isDead = false, cameraLockStatus = true,
         cameraLockSetting, isStumbled = false, isWalled, isStuckOnWall, tookDamage, isWallSliding,
-        hasTricked = false, isTrickable, onCoyoteTime, coyoteAvailable, damageFlickerOn, isInvincible = false;
+        hasTricked = false, isTrickable, onCoyoteTime, coyoteAvailable, damageFlickerOn, isInvincible = false, isLockedForEndPortal = false;
 
     [SerializeField]
     private bool leftWallCollision, rightWallCollision;
@@ -67,8 +70,7 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         runState = runningState.idle;
-        
-
+        playerHealth = runDataValues.playerHealth;        
         
         
         gravityAffected = true;
@@ -92,7 +94,7 @@ public class PlayerController : MonoBehaviour
 
         cameraLockSetting = true;
         cameraLockStatus = true;
-
+        isLockedForEndPortal = false;
         flipHitBox.SetActive(false);
     }
 
@@ -116,13 +118,18 @@ public class PlayerController : MonoBehaviour
             CoyoteTimeCheck();
         }
 
-        if (!isStumbled) //Change this to check for a stumbling or if the player is tricking
+        if (!isStumbled&&!isLockedForEndPortal) //Change this to check for a stumbling or if the player is tricking
         {
             //THIS IS WHERE WE ACTUALLY MOVE THE CHARACTER
             ManageMovementInput();
 
 
         }
+        else if(isLockedForEndPortal)
+        {
+            rigidbody.velocity = new Vector2(movementVelocity + airMoveVelocity, 0f);
+        }
+
 
         if (movementVelocity < 0)
         {
@@ -137,7 +144,7 @@ public class PlayerController : MonoBehaviour
             moveDirection = 0;
         }
 
-        if(tookDamage)
+        if(tookDamage&&!isInvincible)
         {
             invincibleCounter += Time.deltaTime;
             
@@ -153,11 +160,11 @@ public class PlayerController : MonoBehaviour
 
             if(damageFlickerOn)
             {
-                this.transform.GetChild(0).gameObject.GetComponent<SpriteRenderer>().color = new Color(1f, 0f, 0f, 1f);
+                ChangeSpriteColor(new Color(1f, 0f, 0f, 1f));
             }
             else
             {
-                this.transform.GetChild(0).gameObject.GetComponent<SpriteRenderer>().color = new Color(1f, 1f, 1f, 1f);
+                ChangeSpriteColor(new Color(1f, 1f, 1f, 1f));
             }
             
             
@@ -165,7 +172,7 @@ public class PlayerController : MonoBehaviour
 
             if(invincibleCounter>=invincibleTimer)
             {
-                this.transform.GetChild(0).gameObject.GetComponent<SpriteRenderer>().color = new Color(1f, 1f, 1f, 1f);
+                ChangeSpriteColor(new Color(1f, 1f, 1f, 1f));
                 invincibleCounter = 0f;
                 flickerCounter = 0;
                 tookDamage = false;
@@ -478,6 +485,7 @@ public class PlayerController : MonoBehaviour
                         this.transform.GetChild(0).gameObject.GetComponent<SpriteRenderer>().color = new Color(1f, 1f, 1f, 1f);
                         TurnOnGravity();
                         CameraManager.instance.SetTrickLock(false);
+                        SetIsInvincible(false);
                     }
 
                     //Debug.Log("starting position = "+trickStartingPosition);
@@ -537,7 +545,11 @@ public class PlayerController : MonoBehaviour
             moveVector = new Vector2(0f, 0f);
             return;
         }
-        moveVector = new Vector2(context.ReadValue<float>(), moveVector.y);
+        if(!isLockedForEndPortal)
+        {
+            moveVector = new Vector2(context.ReadValue<float>(), moveVector.y);
+        }
+        
 
 
         
@@ -571,6 +583,7 @@ public class PlayerController : MonoBehaviour
                 trickStartingPosition = GetPlayerTransform().position;
                 CameraManager.instance.SetTrickLock(true);
                 AnimatorManager.instance.TrickingTurnOn();
+                SetIsInvincible(true);
 
                 //rigidbody.velocity = trickFunction(trickStartingPosition);
                 
@@ -786,7 +799,7 @@ public class PlayerController : MonoBehaviour
         if(context.performed)
         {
             GroundCheck();
-            if(isGrounded || onCoyoteTime)
+            if(isGrounded || onCoyoteTime && !isLockedForEndPortal)
             {
                 rigidbody.velocity = new Vector2(rigidbody.velocity.x, jumpVelocity);
                 onCoyoteTime = false;
@@ -1067,6 +1080,29 @@ public class PlayerController : MonoBehaviour
             //Debug.Log("WE decceling");
             return;
         }
+    }
+
+    public void LockForEndPortal()
+    {
+        //removes any Y velocity and keeps the x velocty
+        //Removing the 
+        rigidbody.velocity = new Vector2( rigidbody.velocity.x, 0f);
+
+        isLockedForEndPortal = true;
+        isInvincible = true;
+        TurnOffGravity();
+        ChangeSpriteColor(1f, 1f, 1f, 0f);
+    }
+
+    private void ChangeSpriteColor(Color color)
+    {
+        this.transform.GetChild(0).gameObject.GetComponent<SpriteRenderer>().color = color;
+
+    }
+    private void ChangeSpriteColor(float red, float green, float blue, float alpha)
+    {
+        this.transform.GetChild(0).gameObject.GetComponent<SpriteRenderer>().color = new Color(red, green, blue, alpha);
+
     }
 
 

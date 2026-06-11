@@ -29,4 +29,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Controls/5-Tricks.unity
     guid: 92433fbc0e47cc1438445b24e57dc89a
+  - enabled: 1
+    path: Assets/Scenes/Sub Run Screen.unity
+    guid: 854d8e1cb0e7aae4f803eef19c52d7af
   m_configObjects: {}
