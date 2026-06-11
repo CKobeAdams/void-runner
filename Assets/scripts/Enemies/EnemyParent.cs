@@ -6,7 +6,7 @@ public class EnemyParent : MonoBehaviour
 {
     protected float health = 3, movementSpeed;
     protected bool isDead = false;
-    protected int attackingDamage = 1, scoreValue = 300;
+    protected int attackingDamage = 1, scoreValue = 300, threadValue = 10;
 
     // Start is called before the first frame update
     void Start()
@@ -31,6 +31,7 @@ public class EnemyParent : MonoBehaviour
             if (adjustScore)
             {
                 UIManager.instance.AdjustScore(scoreValue);
+                UIManager.instance.AdjustThreads(threadValue);
             }
 
             Debug.Log("Enemy Taking Damage: "+this.name);

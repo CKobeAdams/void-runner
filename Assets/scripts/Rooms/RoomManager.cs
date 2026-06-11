@@ -6,11 +6,16 @@ using System;
 
 public class RoomManager : MonoBehaviour
 {
+    //This File Manages rooms and manipulates the level counter of RunDataSO
+    //The Manipulation of rundata happens near the ends of the Start() and Awake() functions
+
     public static RoomManager instance {get; private set; }
 
     [SerializeField]
     private GameObject basePlatform, trickBox;
 
+    [SerializeField]
+    private RunDataSO runDataValues;
     
 
     public List<GameObject> roomList, specialRooms, normalRooms;
@@ -60,10 +65,12 @@ public class RoomManager : MonoBehaviour
         normalRooms.Add(oneJumpRoom);
         normalRooms.Add(dropFloorRoom);
 
-        roomCountCap = levelCounter == 0 ? baseRoomCountMinimum : (levelCounter - 1) * levelMulptiplier + baseRoomCountMinimum;
+        
 
         hasEndRoomSpawned = false;
 
+        runDataValues.levelCount++;
+        levelCounter = runDataValues.levelCount;
 
     }
 
@@ -73,6 +80,8 @@ public class RoomManager : MonoBehaviour
         {
             GenerateRoom();
         }
+
+        roomCountCap = levelCounter < 1 ? baseRoomCountMinimum : (levelCounter - 1) * levelMulptiplier + baseRoomCountMinimum;
     }
 
     // Update is called once per frame

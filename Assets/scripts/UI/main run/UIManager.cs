@@ -11,7 +11,7 @@ public class UIManager : MonoBehaviour
     public static UIManager instance { get; private set; }
 
     [SerializeField]
-    TMP_Text stopwatchObject, roomCounterObject, scoreText;
+    TMP_Text stopwatchObject, roomCounterObject, scoreText, threadText;
 
     [SerializeField]
     Canvas canvasObject;
@@ -24,7 +24,7 @@ public class UIManager : MonoBehaviour
 
 
     private float stopwatchCounter, scoreCounter;
-    private int roomCounter;
+    private int roomCounter, threadCounter;
     private bool timerPaused;
     private Vector2 renderingDisplaySize;
     private int minutes, seconds, milliseconds;
@@ -81,6 +81,15 @@ public class UIManager : MonoBehaviour
 
     }
 
+    public void AdjustThreads(int addingThreads)
+    {
+        threadCounter += addingThreads;
+
+        string text = "Threads: " + threadCounter;
+
+        threadText.text = text;
+    }
+
     public void SetUIPositions()
     {
         renderingDisplaySize = canvasObject.renderingDisplaySize;
@@ -105,11 +114,11 @@ public class UIManager : MonoBehaviour
     {
         //roomsCleared, score, timeMinutes, timeSeconds, timeMillis;
         runDataValues.roomsCleared = roomCounter;
-        runDataValues.score = (int)scoreCounter;
+        runDataValues.score += (int)scoreCounter;
         runDataValues.runTimeMinutes = minutes;
         runDataValues.runTimeSeconds = seconds;
         runDataValues.runTimeMillis = milliseconds;
-
+        runDataValues.threadCount += threadCounter;
         runDataValues.totalTime = stopwatchCounter;
 
         runDataValues.playerHealth = PlayerController.instance.GetCurrentHealth();

@@ -29,6 +29,8 @@ public class SubRunCanvasManager : MonoBehaviour
 
         roomsTextObject.color = new Color(1f, 1f, 1f, 0);
 
+        levelCompleted.text = "Level " + runValues.levelCount + " Completed!";
+
     }
 
 

@@ -70,14 +70,15 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         runState = runningState.idle;
-        playerHealth = runDataValues.playerHealth;        
+                
         
         
         gravityAffected = true;
         
         rigidbody = GetComponent<Rigidbody2D>();
-        
-        
+        healthManager.instance.UpdateHealthDisplay(playerHealth);
+
+
 
 
     }
@@ -96,6 +97,7 @@ public class PlayerController : MonoBehaviour
         cameraLockStatus = true;
         isLockedForEndPortal = false;
         flipHitBox.SetActive(false);
+        playerHealth = runDataValues.playerHealth;
     }
 
     void Update()

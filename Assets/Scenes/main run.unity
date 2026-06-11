@@ -2537,6 +2537,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   basePlatform: {fileID: 6921127995656133283, guid: db11eb303a0d9c441b1a6ca1a3f74313, type: 3}
   trickBox: {fileID: 2716641248817767969, guid: ecfe460f20a6a9149858ece172f3039f, type: 3}
+  runDataValues: {fileID: 11400000, guid: f66e7461c3ca8e04182af70382f74c5b, type: 2}
   roomList: []
   specialRooms: []
   normalRooms: []
