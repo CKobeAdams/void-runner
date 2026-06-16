@@ -11,7 +11,7 @@ public class UIManager : MonoBehaviour
     public static UIManager instance { get; private set; }
 
     [SerializeField]
-    TMP_Text stopwatchObject, roomCounterObject, scoreText, threadText;
+    TMP_Text stopwatchObject, roomCounterObject, scoreText, threadsText;
 
     [SerializeField]
     Canvas canvasObject;
@@ -35,9 +35,12 @@ public class UIManager : MonoBehaviour
     void Start()
     {
         stopwatchCounter = 0f;
-        scoreCounter = 0f;
+        scoreCounter = runDataValues.score;
         roomCounter = 0;
+        threadCounter = runDataValues.threadCount;    
         timerPaused = false;
+        AdjustScore(0);
+        AdjustThreads(0);
         SetUIPositions();
     }
 
@@ -87,7 +90,7 @@ public class UIManager : MonoBehaviour
 
         string text = "Threads: " + threadCounter;
 
-        threadText.text = text;
+        threadsText.text = text;
     }
 
     public void SetUIPositions()
@@ -98,6 +101,7 @@ public class UIManager : MonoBehaviour
         stopwatchObject.transform.position = new Vector3(0.5f * renderingDisplaySize.x, 0.95f * renderingDisplaySize.y, 0f);
         roomCounterObject.transform.position = new Vector3(0.15f * renderingDisplaySize.x, 0.95f * renderingDisplaySize.y, 0f);
         scoreText.transform.position = new Vector3(0.1f * renderingDisplaySize.x, 0.88f * renderingDisplaySize.y, 0f);
+        threadsText.transform.position = new Vector3(0.1f * renderingDisplaySize.x, 0.81f * renderingDisplaySize.y, 0f);
     }
 
     public void RoomCleared()
@@ -113,7 +117,7 @@ public class UIManager : MonoBehaviour
     public void PassValuesToRunData()
     {
         //roomsCleared, score, timeMinutes, timeSeconds, timeMillis;
-        runDataValues.roomsCleared = roomCounter;
+        runDataValues.roomsCleared += roomCounter;
         runDataValues.score += (int)scoreCounter;
         runDataValues.runTimeMinutes = minutes;
         runDataValues.runTimeSeconds = seconds;

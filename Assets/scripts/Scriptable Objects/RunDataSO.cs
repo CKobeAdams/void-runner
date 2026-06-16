@@ -9,7 +9,8 @@ public class RunDataSO : ScriptableObject
     public int roomsCleared, score, runTimeMinutes, runTimeSeconds, runTimeMillis, totalTimeMinutes, totalTimeSeconds, totalTimeMillis, threadCount,
         levelCount;
     public float previousTime, _totalTime;
-    public int playerHealth = 3;
+    public int playerHealth = 3, playerMaxHealth = 3;
+    public List<ItemParent> inventory;
     
 
     public float totalTime
@@ -38,6 +39,10 @@ public class RunDataSO : ScriptableObject
         levelCount = 0;
         _totalTime = 0;
         playerHealth = 3;
+        playerMaxHealth = 3;
+        inventory.Clear();
     }
+
+    
 
 }

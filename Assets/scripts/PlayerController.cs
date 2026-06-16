@@ -35,8 +35,8 @@ public class PlayerController : MonoBehaviour
     private bool leftWallCollision, rightWallCollision;
 
 
-    private int flipOutRevs = 0, flipOutDirection, unstumbleCount = 0, playerHealth = 3, flickerCounter;
-    private const int stumblePressNeeded = 3, playerMaxHealth = 3;
+    private int flipOutRevs = 0, flipOutDirection, unstumbleCount = 0, playerHealth = 3, flickerCounter, playerMaxHealth = 3;
+    private const int stumblePressNeeded = 3;
     private const float wallCheckOffset = 0.1f, LRoffset = 0.4f, coyoteTimer = 0.1f;
     private Vector2 moveVector, LRcheckerOffset;
     private Vector3 leftCheckerPos, rightCheckerPos, trickStartingPosition;
