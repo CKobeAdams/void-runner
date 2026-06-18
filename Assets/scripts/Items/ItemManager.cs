@@ -25,7 +25,7 @@ public class ItemManager : MonoBehaviour
 
     void Awake()
     {
-        
+        instance = this;
 
         //AddedToInventory = new UnityEvent();
 
@@ -88,5 +88,17 @@ public class ItemManager : MonoBehaviour
 
 
 
+    }
+
+    public ItemParent RandomFromList()
+    {
+        float randomChooser = UnityEngine.Random.value;
+        randomChooser = Mathf.Floor(randomChooser * masterItemList.Count);
+        return masterItemList[(int)randomChooser];
+    }
+
+    public ItemParent SpecificFromList()
+    {
+        return masterItemList[1];
     }
 }
