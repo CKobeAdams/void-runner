@@ -25,7 +25,7 @@ public class ShopManager : MonoBehaviour
     void Start()
     {
         PullFromMasterList();
-        
+        DisplayShopList();
     }
 
     // Update is called once per frame
@@ -44,7 +44,7 @@ public class ShopManager : MonoBehaviour
     
     public void DisplayShopList()
     {
-        for(int i = 0;i<shopList.Length; i++)
+        for(int i = 0;i<shopItemButtons.Length; i++)
         {
             shopItemButtons[i].GetComponent<ShopItemButton>().item = shopList[i];
             shopItemButtons[i].GetComponent<ShopItemButton>().DisplayItem();

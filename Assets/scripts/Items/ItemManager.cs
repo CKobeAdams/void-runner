@@ -18,6 +18,8 @@ public class ItemManager : MonoBehaviour
 
     //public UnityEvent AddedToInventory;
     public event EventHandler AddedToInventory;
+
+    [SerializeField]
     private ItemParent item_HeartRefill;
 
 
