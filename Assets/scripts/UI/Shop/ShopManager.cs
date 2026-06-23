@@ -14,7 +14,9 @@ public class ShopManager : MonoBehaviour
     private ItemParent[] shopList = new ItemParent[4];
     private string defaultDescriptBoxText = "Hover over an item to read its description";
     [SerializeField]
-    private TMP_Text descriptionBox;
+    private TMP_Text descriptionBox, threadBox;
+    [SerializeField]
+    private RunDataSO runDataValues;
 
     void Awake()
     {
@@ -24,6 +26,7 @@ public class ShopManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        UpdateThreadDisplay();
         PullFromMasterList();
         DisplayShopList();
     }
@@ -59,5 +62,11 @@ public class ShopManager : MonoBehaviour
     public void ResetDescriptionBox()
     {
         descriptionBox.text = defaultDescriptBoxText;
+    }
+
+    public void UpdateThreadDisplay()
+    {
+        threadBox.text = "Threads: " + runDataValues.threadCount+"T";
+        Debug.Log(runDataValues.threadCount);
     }
 }

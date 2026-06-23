@@ -14,6 +14,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   roomsCleared: 0
   score: 0
-  timeMinutes: 0
-  timeSeconds: 0
-  timeMillis: 0
+  runTimeMinutes: 0
+  runTimeSeconds: 0
+  runTimeMillis: 0
+  totalTimeMinutes: 0
+  totalTimeSeconds: 0
+  totalTimeMillis: 0
+  threadCount: 10
+  levelCount: 0
+  previousTime: 0
+  _totalTime: 0
+  playerHealth: 3
+  playerMaxHealth: 3
+  inventory:
+  - {fileID: 11400000, guid: 40bc1cd9a0a01e04c88068fc578a0294, type: 2}

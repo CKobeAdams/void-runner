@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 [CreateAssetMenu]
 public class Item_HeartRefill : ItemParent
@@ -8,7 +9,7 @@ public class Item_HeartRefill : ItemParent
     [SerializeField]
     private RunDataSO runDataValues;
 
-    private int timesAdded;
+    public int timesAdded;
 
     /*
     name = "Heart Refill";
@@ -17,17 +18,23 @@ public class Item_HeartRefill : ItemParent
     */
 
     // Start is called before the first frame update
-    void Start()
+
+    public override void AddEvent()
     {
         
-        ItemManager.instance.AddedToInventory += ItemEventHandler;
+        ItemManager.AddedToInventory += ItemEventHandler;
+        Debug.Log("Event has been Added!");
+       
         //ItemManager.instance.AddedToInventory.AddListener(ItemFunctionality);
     }
 
     public override void ItemFunctionality()
     {
+        Debug.Log("Child Override call");
+
         if(timesAdded<quantity)
         {
+            Debug.Log("WE SUPER FUNCTIONAL IN THIS BITCH");
             runDataValues.playerHealth = runDataValues.playerMaxHealth;
             timesAdded++;
         }

@@ -7,9 +7,14 @@ using TMPro;
 
 public class ShopItemButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
+    [SerializeField]
+    private RunDataSO runDataValues;
+
     public ItemParent item;
     private Button button;
     private TMP_Text nameField;
+    private bool HasPurchased = false;
+
     
     
 
@@ -17,33 +22,57 @@ public class ShopItemButton : MonoBehaviour, IPointerEnterHandler, IPointerExitH
     {
         button = this.gameObject.GetComponent<Button>();
         nameField = button.gameObject.transform.GetChild(0).gameObject.GetComponent<TMP_Text>();
+        
     }
 
     public void DisplayItem()
     {
-        Debug.Log(button.gameObject.GetComponent<Image>().sprite);
-        Debug.Log(item);
+       
         button.gameObject.GetComponent<Image>().sprite = item.itemSprite;
-        nameField.text = item.name;
+        nameField.text = item.price+"T: "+item.name;
 
         
     }
 
-    public void WhenClicked()
+    public void AttemptItemPurchase()
     {
-        
+        if(item.price <= runDataValues.threadCount && !HasPurchased)
+        {
+            ItemManager.instance.AddToPlayerInventory(item);
+            HasPurchased = true;
+            button.gameObject.GetComponent<Image>().color = new Color(0.5f, 0.5f, 0.5f, 0.25f);
+            nameField.text = "SOLD!";
+
+            runDataValues.threadCount -= item.price;
+            ShopManager.instance.UpdateThreadDisplay();
+            
+        }
+
     }
 
     public void OnPointerEnter(PointerEventData pointerEventData)
     {
-        Debug.Log("The Hover Was Called");
+        
         ShopManager.instance.SetDescriptionBox(item.description);
+        if(item.price> runDataValues.threadCount)
+        {
+            button.gameObject.GetComponent<Image>().color = new Color(0.5f,0.5f,0.5f,0.5f);
+        }
+        else
+        {
+            button.gameObject.GetComponent<Image>().color = new Color(0.5f, 0.5f, 0.5f, 0.5f);
+        }
     }
 
     public void OnPointerExit(PointerEventData pointerEventData)
     {
-        Debug.Log("The Hover Was Called");
+       
         ShopManager.instance.ResetDescriptionBox();
+        if(!HasPurchased)
+        {
+            button.gameObject.GetComponent<Image>().color = new Color(1f, 1f, 1f, 1f);
+        }
+        
     }
 
 }

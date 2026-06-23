@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 [CreateAssetMenu]
 public class ItemParent : ScriptableObject
@@ -16,11 +17,22 @@ public class ItemParent : ScriptableObject
     //in the child,on start add the item function to the corresponding event listener
     public virtual void ItemFunctionality()
     {
-
+        Debug.Log("Parent Virtual Call");
     }
 
-    protected void ItemEventHandler(object sender, EventArgs e)
+    public virtual void AddEvent()
     {
+        Debug.Log("Parent AddEvent Called");
+    }
+
+    protected void ItemEventHandler()
+    {
+        Debug.Log("The Event Was Called");
         ItemFunctionality();
+    }
+
+    public void ResetQuantity()
+    {
+        quantity = 0;
     }
 }

@@ -15,9 +15,11 @@ public class ItemManager : MonoBehaviour
     public List<EventHandler> masterEventList = new List<EventHandler>();
     public Dictionary<string, float> temporaryStatBonuses = new Dictionary<string, float>();
 
+    public delegate void EventHandler();
+
 
     //public UnityEvent AddedToInventory;
-    public event EventHandler AddedToInventory;
+    public static event EventHandler AddedToInventory;
 
     [SerializeField]
     private ItemParent item_HeartRefill;
@@ -41,7 +43,10 @@ public class ItemManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        foreach(ItemParent item in runDataValues.inventory)
+        {
+            item.AddEvent();
+        }
     }
 
     // Update is called once per frame
@@ -76,7 +81,7 @@ public class ItemManager : MonoBehaviour
             if(i.name == item.name)
             {
                 alreadyHasItem = true;
-                i.quantity++;
+                //i.quantity++;
             }
         }
 
@@ -84,9 +89,14 @@ public class ItemManager : MonoBehaviour
         {
             item.quantity = 1;
             runDataValues.inventory.Add(item);
+            item.AddEvent();
+        }
+        else
+        {
+            item.quantity++;
         }
 
-        AddedToInventory?.Invoke(this, new EventArgs());
+        AddedToInventory?.Invoke();
 
 
 
