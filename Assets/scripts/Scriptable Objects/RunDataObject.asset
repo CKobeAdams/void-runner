@@ -12,19 +12,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 372fd7a621e2c80478796fbf8b890e78, type: 3}
   m_Name: RunDataObject
   m_EditorClassIdentifier: 
-  roomsCleared: 0
+  roomsCleared: 4
   score: 0
   runTimeMinutes: 0
-  runTimeSeconds: 0
-  runTimeMillis: 0
+  runTimeSeconds: 24
+  runTimeMillis: 27
   totalTimeMinutes: 0
-  totalTimeSeconds: 0
-  totalTimeMillis: 0
-  threadCount: 10
-  levelCount: 0
+  totalTimeSeconds: 24
+  totalTimeMillis: 27
+  threadCount: 20
+  levelCount: 2
   previousTime: 0
-  _totalTime: 0
+  _totalTime: 24.279608
   playerHealth: 3
   playerMaxHealth: 3
-  inventory:
-  - {fileID: 11400000, guid: 40bc1cd9a0a01e04c88068fc578a0294, type: 2}
+  inventory: []

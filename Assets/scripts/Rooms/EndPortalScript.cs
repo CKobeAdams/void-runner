@@ -10,6 +10,8 @@ public class EndPortalScript : MonoBehaviour
     private bool activated = false, startTimer = false;
 
     private float timer;
+    private const string subRun = "Sub Run Screen", shopScreen = "ShopScreen";
+    private int shopLevelSpacer = 3;
 
     // Start is called before the first frame update
     void Start()
@@ -38,7 +40,15 @@ public class EndPortalScript : MonoBehaviour
             {
                 UIManager.instance.PauseTimer();
                 UIManager.instance.PassValuesToRunData();
-                SceneManager.LoadScene("Sub Run Screen", LoadSceneMode.Single);
+                if (RoomManager.instance.GetLevelCounter() % shopLevelSpacer == 0)
+                {
+                    SceneManager.LoadScene(shopScreen, LoadSceneMode.Single);
+                }
+                else
+                {
+                    SceneManager.LoadScene(subRun, LoadSceneMode.Single);
+                }
+                    
             }
         }
 

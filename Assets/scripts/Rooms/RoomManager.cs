@@ -283,4 +283,9 @@ public class RoomManager : MonoBehaviour
     {
         roomCounter++;
     }
+
+    public int GetLevelCounter()
+    {
+        return levelCounter;
+    }
 }

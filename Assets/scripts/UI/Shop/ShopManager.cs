@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using UnityEngine.SceneManagement;
 
 
 public class ShopManager : MonoBehaviour
@@ -68,5 +69,10 @@ public class ShopManager : MonoBehaviour
     {
         threadBox.text = "Threads: " + runDataValues.threadCount+"T";
         Debug.Log(runDataValues.threadCount);
+    }
+
+    public void LoadNextScene()
+    {
+        SceneManager.LoadScene("main run", LoadSceneMode.Single);
     }
 }
