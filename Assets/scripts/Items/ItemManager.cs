@@ -15,11 +15,17 @@ public class ItemManager : MonoBehaviour
     public List<EventHandler> masterEventList = new List<EventHandler>();
     public Dictionary<string, float> temporaryStatBonuses = new Dictionary<string, float>();
 
+    [SerializeField]
+    private float itemTempBoostSpeed = 0, boostSpeedDrainRate = 1.5f/*units a second*/;
+
     public delegate void EventHandler();
 
 
     //public UnityEvent AddedToInventory;
+    //Add all events that could happen to the player
     public static event EventHandler AddedToInventory;
+    public static event EventHandler PlayerKillsEnemy;
+    public static event EventHandler FlipOut360;
 
     [SerializeField]
     private ItemParent item_HeartRefill;

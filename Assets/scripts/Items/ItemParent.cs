@@ -7,6 +7,8 @@ using UnityEngine.Events;
 [CreateAssetMenu]
 public class ItemParent : ScriptableObject
 {
+    [SerializeField]
+    protected RunDataSO runDataValues;
     public string name;
     public Sprite itemSprite;
     public int price;
@@ -31,7 +33,7 @@ public class ItemParent : ScriptableObject
         ItemFunctionality();
     }
 
-    public void ResetQuantity()
+    public virtual void ResetQuantity()
     {
         quantity = 0;
     }

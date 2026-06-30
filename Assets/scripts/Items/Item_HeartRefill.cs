@@ -6,8 +6,7 @@ using UnityEngine.Events;
 [CreateAssetMenu]
 public class Item_HeartRefill : ItemParent
 {
-    [SerializeField]
-    private RunDataSO runDataValues;
+    
 
     public int timesAdded;
 
@@ -39,6 +38,12 @@ public class Item_HeartRefill : ItemParent
             timesAdded++;
         }
         
+    }
+
+    public override void ResetQuantity()
+    {
+        quantity = 0;
+        timesAdded = 0;
     }
     
 }

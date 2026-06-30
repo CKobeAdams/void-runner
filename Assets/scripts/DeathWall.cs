@@ -6,14 +6,20 @@ public class DeathWall : MonoBehaviour
 {
     public static DeathWall instance { get; private set; }
 
+    //Change the wall to 1 constant speed to make it to the end of the level in 3 minutes
     [SerializeField]
     private float wallSpeed = 3f, wallAcceleration = 0.25f, currentSpeed = 0, speedMarker, wallDistance = 30f, wallTimerCount = 0f,
            wallDamage = 10000f;
 
+    
+
 
     private bool playerKilled = false, onScreen;
     private Rigidbody2D rigidBody;
-    private const int sourceCode = 1;
+    private const int sourceCode = 1, averageRoomLength = 45;
+    private int roomCap;
+    private float desiredLevelTime = 120; //this is in seconds
+    
     
 
     // Start is called before the first frame update
@@ -25,11 +31,17 @@ public class DeathWall : MonoBehaviour
         wallTimerCount = 0f;
     }
 
+    void Start()
+    {
+        roomCap = RoomManager.instance.GetRoomCountCap();
+        wallSpeed = (float)roomCap * (float)averageRoomLength / desiredLevelTime;
+
+    }
+
     // Update is called once per frame
     void Update()
     {
-        wallTimerCount += Time.deltaTime;
-        currentSpeed = wallSpeed + wallTimerCount* wallAcceleration;
+        rigidBody.velocity = new Vector2(wallSpeed,0);
     }
 
     void FixedUpdate()
@@ -48,7 +60,7 @@ public class DeathWall : MonoBehaviour
             }*/
             
 
-            if (Utilities.instance.DistanceFormula(this.transform.position, PlayerController.instance.GetPlayerPosition()) >= wallDistance
+            /*if (Utilities.instance.DistanceFormula(this.transform.position, PlayerController.instance.GetPlayerPosition()) >= wallDistance
                 && currentSpeed < PlayerController.instance.GetPlayerSpeed())
             {
                 rigidBody.velocity = new Vector2(PlayerController.instance.GetPlayerSpeed(), 0f);
@@ -56,7 +68,7 @@ public class DeathWall : MonoBehaviour
             else
             {
                 rigidBody.velocity = new Vector2(currentSpeed, 0f);
-            }
+            }*/
 
 
             if (this.GetComponent<BoxCollider2D>().IsTouchingLayers(LayerMask.GetMask("Player")))

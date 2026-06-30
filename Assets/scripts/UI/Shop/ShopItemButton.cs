@@ -58,7 +58,7 @@ public class ShopItemButton : MonoBehaviour, IPointerEnterHandler, IPointerExitH
         {
             button.gameObject.GetComponent<Image>().color = new Color(0.5f,0.5f,0.5f,0.5f);
         }
-        else
+        else if(!HasPurchased)
         {
             button.gameObject.GetComponent<Image>().color = new Color(0.5f, 0.5f, 0.5f, 0.5f);
         }

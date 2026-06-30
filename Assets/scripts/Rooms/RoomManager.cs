@@ -288,4 +288,9 @@ public class RoomManager : MonoBehaviour
     {
         return levelCounter;
     }
+
+    public int GetRoomCountCap()
+    {
+        return roomCountCap;
+    }
 }
