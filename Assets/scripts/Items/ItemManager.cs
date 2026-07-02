@@ -13,13 +13,18 @@ public class ItemManager : MonoBehaviour
 
     public List<ItemParent> masterItemList = new List<ItemParent>();
     public List<EventHandler> masterEventList = new List<EventHandler>();
-    public Dictionary<string, float> temporaryStatBonuses = new Dictionary<string, float>();
+    //public Dictionary<string, float> temporaryStatBonuses = new Dictionary<string, float>();
 
     [SerializeField]
-    private float itemTempBoostSpeed = 0, boostSpeedDrainRate = 1.5f/*units a second*/;
+    private float itemTempBoostSpeed = 0, boostSpeedDecayTime = 1.5f/*units a second*/, 
+        boostDecayStartTimer = 0.2f, boostTimeCounter = 0f;
+
+    private bool isBoosted = false;
+
 
     public delegate void EventHandler();
 
+    //public static event EventHandler SpeedBoostAdded;
 
     //public UnityEvent AddedToInventory;
     //Add all events that could happen to the player
@@ -28,7 +33,8 @@ public class ItemManager : MonoBehaviour
     public static event EventHandler FlipOut360;
 
     [SerializeField]
-    private ItemParent item_HeartRefill;
+    private ItemParent item_HeartRefill, item_JockStrap, item_FermentedJacket, item_EMG;
+
 
 
 
@@ -41,8 +47,12 @@ public class ItemManager : MonoBehaviour
 
 
         masterEventList.Add(AddedToInventory);
+        masterEventList.Add(PlayerKillsEnemy);
 
         masterItemList.Add(item_HeartRefill);
+        masterItemList.Add(item_JockStrap);
+        //masterItemList.Add(item_EMG);
+        //masterItemList.Add(item_FermentedJacket);
 
         
     }
@@ -58,7 +68,26 @@ public class ItemManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        if(isBoosted)
+        {
+            if(boostTimeCounter > boostDecayStartTimer)
+            {
+                float sinceDecayStart = boostTimeCounter - boostDecayStartTimer;
+                itemTempBoostSpeed = itemTempBoostSpeed * (1-sinceDecayStart / boostSpeedDecayTime);
+            }
+
+            if(itemTempBoostSpeed<0)
+            {
+                isBoosted = false;
+                itemTempBoostSpeed = 0;
+            }
+
+
+
+            boostTimeCounter += Time.deltaTime;
+            PlayerController.instance.AdjustBoostSpeed(itemTempBoostSpeed);
+
+        }
     }
 
     public void AddToPlayerInventory(ItemParent item)
@@ -119,4 +148,22 @@ public class ItemManager : MonoBehaviour
     {
         return masterItemList[1];
     }
+
+    public void AddTempBoost(float boostAdded)
+    {
+        itemTempBoostSpeed += boostAdded;
+        isBoosted = true;
+        ResetDecayTimer();
+    }
+
+    public void ResetDecayTimer()
+    {
+
+    }
+
+    public void InvokeEvent_PlayerKillsEnemy()
+    {
+        PlayerKillsEnemy?.Invoke();
+    }
 }
+

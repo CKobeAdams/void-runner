@@ -3,7 +3,12 @@ guid: 259e5dfbff751b84daed1d9830113d4d
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - runDataValues: {fileID: 11400000, guid: f66e7461c3ca8e04182af70382f74c5b, type: 2}
+  - item_HeartRefill: {fileID: 11400000, guid: 40bc1cd9a0a01e04c88068fc578a0294, type: 2}
+  - item_JockStrap: {fileID: 11400000, guid: 0b60e6092b48b69429dabd902766c9d3, type: 2}
+  - item_FermentedJacket: {instanceID: 0}
+  - item_EMG: {instanceID: 0}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

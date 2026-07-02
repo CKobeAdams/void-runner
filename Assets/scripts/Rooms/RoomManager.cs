@@ -28,7 +28,7 @@ public class RoomManager : MonoBehaviour
     private GameObject currentRoom, oldRoom;
 
     [SerializeField]
-    private int roomCounter = 0, roomCountCap, levelCounter, baseRoomCountMinimum = 5, levelMulptiplier = 10;
+    private int roomCounter = 0, roomCountCap, levelCounter, baseRoomCountMinimum = 5, levelMulptiplier = 3;
 
     private bool hasEndRoomSpawned = false;
 
@@ -72,6 +72,7 @@ public class RoomManager : MonoBehaviour
         runDataValues.levelCount++;
         levelCounter = runDataValues.levelCount;
 
+        roomCountCap = levelCounter < 1 ? baseRoomCountMinimum : (levelCounter - 1) * levelMulptiplier + baseRoomCountMinimum;
     }
 
     void Start()
@@ -81,7 +82,7 @@ public class RoomManager : MonoBehaviour
             GenerateRoom();
         }
 
-        roomCountCap = levelCounter < 1 ? baseRoomCountMinimum : (levelCounter - 1) * levelMulptiplier + baseRoomCountMinimum;
+        
     }
 
     // Update is called once per frame

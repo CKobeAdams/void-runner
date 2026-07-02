@@ -50,6 +50,7 @@ public class EnemyManager : MonoBehaviour
                 if(source == (int)DamageSources.player)
                 {
                     enem.TakeDamage(damage, true);
+                    ItemManager.instance.InvokeEvent_PlayerKillsEnemy();
 
                 }
                 else

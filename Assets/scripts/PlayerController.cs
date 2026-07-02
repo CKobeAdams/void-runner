@@ -25,7 +25,7 @@ public class PlayerController : MonoBehaviour
         jumpVelocity = 6f, jumpCancelAcel = 5f, flipOutSpeed = 260f, ragdollTimer = 0, moveAccel = 10f, decceleration = -0.01f,
         startUpSpeed = 2.5f, startUpAcceleration = 100f, turningAcceleration = 15f, crouchingDecceleration = 0, invincibleTimer = 2.5f,
         invincibleCounter = 0f, airMoveAcceleration = 5f, airMoveVelocity = 0f, airMoveDifferentialCap = 2f, wallSlidingMultiplier = 0.85f, coyoteTimingCounter,
-        crawlingSpeed, storedTrickVelocity;
+        crawlingSpeed, storedTrickVelocity, tempSpeedBoost = 0;
 
     private bool isMoving, isGrounded, gravityAffected, jumpCancelled, isCrouching, isDead = false, cameraLockStatus = true,
         cameraLockSetting, isStumbled = false, isWalled, isStuckOnWall, tookDamage, isWallSliding,
@@ -327,8 +327,10 @@ public class PlayerController : MonoBehaviour
 
                 //rapid acceleration up to the speed, i.e. smooth movement from not moving to moving
                 case runningState.startUp:
-                    movementVelocity = movementVelocity + startUpAcceleration * Time.deltaTime * moveVector.x;
-                    this.GetComponent<SpriteRenderer>().color = new Color(180f/255f, 66f/255f, 1f, 1f);
+                    movementVelocity = movementVelocity + startUpAcceleration * Time.deltaTime * moveVector.x
+                        + tempSpeedBoost*moveDirection;
+                    
+                    //this.GetComponent<SpriteRenderer>().color = new Color(180f/255f, 66f/255f, 1f, 1f);
                     //0 within the this if statement 
                     if (moveVector.x != moveDirection && moveVector.x != 0)
                     {
@@ -337,7 +339,7 @@ public class PlayerController : MonoBehaviour
                         AnimatorManager.instance.TurningTurnOn();
                         runState = runningState.turning;
                     }
-                    else if(Mathf.Abs(movementVelocity) >= startUpSpeed)
+                    else if(Mathf.Abs(movementVelocity) - tempSpeedBoost >= startUpSpeed)
                     {
                         AnimatorManager.instance.ResetAnimatorTriggers();
                         AnimatorManager.instance.AcceleratingTurnOn();
@@ -348,10 +350,11 @@ public class PlayerController : MonoBehaviour
 
                 //move but gaining speed to top speed
                 case runningState.accelerating:
-                    movementVelocity = movementVelocity + moveAccel * Time.deltaTime * moveDirection;
-                    this.GetComponent<SpriteRenderer>().color = new Color(0f, 0f, 1f, 1f);
+                    movementVelocity = movementVelocity + moveAccel * Time.deltaTime * moveDirection 
+                        + tempSpeedBoost*moveDirection;
+                    //this.GetComponent<SpriteRenderer>().color = new Color(0f, 0f, 1f, 1f);
 
-                    if (Mathf.Abs(movementVelocity) >= maxMovementSpeed)
+                    if (Mathf.Abs(movementVelocity) - tempSpeedBoost >= maxMovementSpeed)
                     {
                         runState = runningState.topSpeed;
                         movementVelocity = maxMovementSpeed*moveVector.x;
@@ -378,7 +381,7 @@ public class PlayerController : MonoBehaviour
 
                 //top speed, moving and can only slow down
                 case runningState.topSpeed:
-                    movementVelocity = maxMovementSpeed*moveDirection;
+                    movementVelocity = maxMovementSpeed*moveDirection + tempSpeedBoost*moveDirection;
                     //this.GetComponent<SpriteRenderer>().color = new Color(0.5f, 1.0f, 0.5f, 1f);
 
                     if (moveVector.x != 0 && moveVector.x != moveDirection)
@@ -427,7 +430,8 @@ public class PlayerController : MonoBehaviour
                     break;
                     //move the sliding and srawling state into their own states.
                 case runningState.sliding:
-                    movementVelocity = movementVelocity + crouchingDecceleration * Time.deltaTime * -moveDirection;
+                    movementVelocity = movementVelocity + crouchingDecceleration * Time.deltaTime * -moveDirection
+                        +tempSpeedBoost*moveDirection;
 
                     if (Mathf.Abs(movementVelocity) < 0.5f)
                     {
@@ -1105,6 +1109,11 @@ public class PlayerController : MonoBehaviour
     {
         this.transform.GetChild(0).gameObject.GetComponent<SpriteRenderer>().color = new Color(red, green, blue, alpha);
 
+    }
+
+    public void AdjustBoostSpeed(float newSpeed)
+    {
+        tempSpeedBoost = newSpeed;
     }
 
 

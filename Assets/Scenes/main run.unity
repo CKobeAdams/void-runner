@@ -2316,6 +2316,7 @@ MonoBehaviour:
   coyoteTimingCounter: 0
   crawlingSpeed: 5
   storedTrickVelocity: 0
+  tempSpeedBoost: 0
   leftWallCollision: 0
   rightWallCollision: 0
 --- !u!114 &1214171202
@@ -2592,6 +2593,7 @@ GameObject:
   - component: {fileID: 1369950007}
   - component: {fileID: 1369950008}
   - component: {fileID: 1369950009}
+  - component: {fileID: 1369950010}
   m_Layer: 6
   m_Name: General Manager
   m_TagString: Untagged
@@ -2746,6 +2748,28 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tickBox: {fileID: 2716641248817767969, guid: ecfe460f20a6a9149858ece172f3039f, type: 3}
+--- !u!114 &1369950010
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1369950002}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 259e5dfbff751b84daed1d9830113d4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  runDataValues: {fileID: 11400000, guid: f66e7461c3ca8e04182af70382f74c5b, type: 2}
+  masterItemList: []
+  itemTempBoostSpeed: 0
+  boostSpeedDecayTime: 1.5
+  boostDecayStartTimer: 0.2
+  boostTimeCounter: 0
+  item_HeartRefill: {fileID: 11400000, guid: 40bc1cd9a0a01e04c88068fc578a0294, type: 2}
+  item_JockStrap: {fileID: 11400000, guid: 0b60e6092b48b69429dabd902766c9d3, type: 2}
+  item_FermentedJacket: {fileID: 0}
+  item_EMG: {fileID: 0}
 --- !u!1 &1370127674
 GameObject:
   m_ObjectHideFlags: 0
