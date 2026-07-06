@@ -48,9 +48,11 @@ public class ItemManager : MonoBehaviour
 
         masterEventList.Add(AddedToInventory);
         masterEventList.Add(PlayerKillsEnemy);
+        masterEventList.Add(FlipOut360);
 
         masterItemList.Add(item_HeartRefill);
         masterItemList.Add(item_JockStrap);
+        masterItemList.Add(item_EMG);
         //masterItemList.Add(item_EMG);
         //masterItemList.Add(item_FermentedJacket);
 
@@ -164,6 +166,11 @@ public class ItemManager : MonoBehaviour
     public void InvokeEvent_PlayerKillsEnemy()
     {
         PlayerKillsEnemy?.Invoke();
+    }
+
+    public void InvokeEvent_FlipOut360()
+    {
+        FlipOut360?.Invoke();
     }
 }
 

@@ -16,7 +16,7 @@ public class Item_JockStrap : ItemParent
 
     public override void ItemFunctionality()
     {
-        float addedBoost = quantity > 1 ? baseline+quantity*multiplier : baseline ;
+        float addedBoost = quantity > 1 ? baseline+quantity*multiplier : baseline;
 
         ItemManager.instance.AddTempBoost(addedBoost);
     }

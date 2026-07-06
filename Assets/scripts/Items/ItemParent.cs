@@ -29,7 +29,7 @@ public class ItemParent : ScriptableObject
 
     protected void ItemEventHandler()
     {
-        Debug.Log("The Event Was Called");
+        //Debug.Log("The Event Was Called");
         ItemFunctionality();
     }
 

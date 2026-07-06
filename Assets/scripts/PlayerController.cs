@@ -25,7 +25,7 @@ public class PlayerController : MonoBehaviour
         jumpVelocity = 6f, jumpCancelAcel = 5f, flipOutSpeed = 260f, ragdollTimer = 0, moveAccel = 10f, decceleration = -0.01f,
         startUpSpeed = 2.5f, startUpAcceleration = 100f, turningAcceleration = 15f, crouchingDecceleration = 0, invincibleTimer = 2.5f,
         invincibleCounter = 0f, airMoveAcceleration = 5f, airMoveVelocity = 0f, airMoveDifferentialCap = 2f, wallSlidingMultiplier = 0.85f, coyoteTimingCounter,
-        crawlingSpeed, storedTrickVelocity, tempSpeedBoost = 0;
+        crawlingSpeed, storedTrickVelocity, tempSpeedBoost = 0, startingFlipRotation, rotationCounter = 0;
 
     private bool isMoving, isGrounded, gravityAffected, jumpCancelled, isCrouching, isDead = false, cameraLockStatus = true,
         cameraLockSetting, isStumbled = false, isWalled, isStuckOnWall, tookDamage, isWallSliding,
@@ -187,6 +187,10 @@ public class PlayerController : MonoBehaviour
         //set trickable to false
         //SetIsTrickable(false);
 
+        if(flipOutDirection != 0)
+        {
+            TrackSpins();
+        }
 
     }
 
@@ -846,13 +850,16 @@ public class PlayerController : MonoBehaviour
             FlipOutHitbox.instance.ResetBox();
             flipHitBox.SetActive(true);
             AnimatorManager.instance.FlipLeftTurnOn();
-                
+
+            startingFlipRotation = GetPlayerTransform().rotation.z;
+            rotationCounter = 0;
 
 
         }
         if(context.performed)
         {
             flipOutDirection = -1;
+               
         }
         if(context.canceled)
         {
@@ -878,11 +885,14 @@ public class PlayerController : MonoBehaviour
             flipHitBox.SetActive(true);
             AnimatorManager.instance.FlipRightTurnOn();
 
-
+            startingFlipRotation= GetPlayerTransform().rotation.z;
+            rotationCounter = 0;            
         }
         if (context.performed)
         {
             flipOutDirection = 1;
+
+
         }
         if (context.canceled)
         {
@@ -890,6 +900,8 @@ public class PlayerController : MonoBehaviour
             flipOutDirection = 0;
             AnimatorManager.instance.FlipRightTurnOff();
         }
+
+        
     }
 
     public void TakeDamage(int damage)
@@ -991,6 +1003,23 @@ public class PlayerController : MonoBehaviour
         leftCheckerPos = new Vector3(CheckerPos.x - LRoffset, CheckerPos.y, CheckerPos.z);
     }
 
+    private void TrackSpins()
+    {
+        float currentRotation = GetPlayerTransform().rotation.z;
+
+        rotationCounter += Mathf.Abs(currentRotation - (rotationCounter + startingFlipRotation));
+        Debug.Log(Mathf.Abs(rotationCounter));
+
+        //checks for 360s, This is not exact and the round is for player ease
+        if (Mathf.Abs(rotationCounter) >= 0.9f)
+        {
+            Debug.Log("We are calling the the event");
+            ItemManager.instance.InvokeEvent_FlipOut360();
+            startingFlipRotation = currentRotation;
+            rotationCounter = 0;
+        }
+    }
+
     public void FlipOut(float direction)
     {
         Quaternion q = Quaternion.AngleAxis(flipOutSpeed*direction, Vector3.forward);
@@ -1002,7 +1031,11 @@ public class PlayerController : MonoBehaviour
         LRcheckerOffset.x = Mathf.Cos(zRotation) * halfHeight;
         //LRcheckerOffset.y = Mathf.Sin(zRotation) * halfHeight;
 
+
+
         
+
+
     }
 
     public Transform GetPlayerTransform()

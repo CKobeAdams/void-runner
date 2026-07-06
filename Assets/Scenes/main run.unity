@@ -2317,6 +2317,8 @@ MonoBehaviour:
   crawlingSpeed: 5
   storedTrickVelocity: 0
   tempSpeedBoost: 0
+  startingFlipRotation: 0
+  rotationCounter: 0
   leftWallCollision: 0
   rightWallCollision: 0
 --- !u!114 &1214171202
@@ -2769,7 +2771,7 @@ MonoBehaviour:
   item_HeartRefill: {fileID: 11400000, guid: 40bc1cd9a0a01e04c88068fc578a0294, type: 2}
   item_JockStrap: {fileID: 11400000, guid: 0b60e6092b48b69429dabd902766c9d3, type: 2}
   item_FermentedJacket: {fileID: 0}
-  item_EMG: {fileID: 0}
+  item_EMG: {fileID: 11400000, guid: d36a6dcc1d71a1d4683689b748fcf3e9, type: 2}
 --- !u!1 &1370127674
 GameObject:
   m_ObjectHideFlags: 0
