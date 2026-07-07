@@ -14,10 +14,12 @@ public class Item_EMG : ItemParent
 
     public override void ItemFunctionality()
     {
-        Debug.Log("FlipOut Performed! We are gaming");
+        //Debug.Log("FlipOut Performed! We are gaming");
 
         float addedBoost = quantity > 1 ? baseline + quantity * multiplier : baseline;
 
         ItemManager.instance.AddTempBoost(addedBoost);
+
+        Debug.Log("Added Boost! " + addedBoost);
     }
 }

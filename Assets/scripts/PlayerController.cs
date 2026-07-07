@@ -25,7 +25,7 @@ public class PlayerController : MonoBehaviour
         jumpVelocity = 6f, jumpCancelAcel = 5f, flipOutSpeed = 260f, ragdollTimer = 0, moveAccel = 10f, decceleration = -0.01f,
         startUpSpeed = 2.5f, startUpAcceleration = 100f, turningAcceleration = 15f, crouchingDecceleration = 0, invincibleTimer = 2.5f,
         invincibleCounter = 0f, airMoveAcceleration = 5f, airMoveVelocity = 0f, airMoveDifferentialCap = 2f, wallSlidingMultiplier = 0.85f, coyoteTimingCounter,
-        crawlingSpeed, storedTrickVelocity, tempSpeedBoost = 0, startingFlipRotation, rotationCounter = 0;
+        crawlingSpeed, storedTrickVelocity, tempSpeedBoost = 0, startingFlipRotation, previousRotation, rotationCounter = 0;
 
     private bool isMoving, isGrounded, gravityAffected, jumpCancelled, isCrouching, isDead = false, cameraLockStatus = true,
         cameraLockSetting, isStumbled = false, isWalled, isStuckOnWall, tookDamage, isWallSliding,
@@ -77,6 +77,9 @@ public class PlayerController : MonoBehaviour
         
         rigidbody = GetComponent<Rigidbody2D>();
         healthManager.instance.UpdateHealthDisplay(playerHealth);
+        startingFlipRotation = 0;
+        rotationCounter = 0;
+        
 
 
 
@@ -853,6 +856,7 @@ public class PlayerController : MonoBehaviour
 
             startingFlipRotation = GetPlayerTransform().rotation.z;
             rotationCounter = 0;
+            previousRotation = GetPlayerTransform().rotation.z;
 
 
         }
@@ -886,7 +890,8 @@ public class PlayerController : MonoBehaviour
             AnimatorManager.instance.FlipRightTurnOn();
 
             startingFlipRotation= GetPlayerTransform().rotation.z;
-            rotationCounter = 0;            
+            rotationCounter = 0;
+            previousRotation = GetPlayerTransform().rotation.z;
         }
         if (context.performed)
         {
@@ -1005,18 +1010,24 @@ public class PlayerController : MonoBehaviour
 
     private void TrackSpins()
     {
-        float currentRotation = GetPlayerTransform().rotation.z;
+        float currentRotation = transform.eulerAngles.z;
 
-        rotationCounter += Mathf.Abs(currentRotation - (rotationCounter + startingFlipRotation));
-        Debug.Log(Mathf.Abs(rotationCounter));
+       
+        rotationCounter += Mathf.DeltaAngle(previousRotation, currentRotation);
+        previousRotation = currentRotation;
+        
+        
+        //Debug.Log("R C: "+Mathf.Abs(rotationCounter)+" SFR: "+startingFlipRotation+" CR: "+ currentRotation);
+       
 
         //checks for 360s, This is not exact and the round is for player ease
-        if (Mathf.Abs(rotationCounter) >= 0.9f)
+        if (Mathf.Abs(rotationCounter) >= 360f)
         {
             Debug.Log("We are calling the the event");
             ItemManager.instance.InvokeEvent_FlipOut360();
-            startingFlipRotation = currentRotation;
+            
             rotationCounter = 0;
+
         }
     }
 

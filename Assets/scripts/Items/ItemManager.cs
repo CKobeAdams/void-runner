@@ -82,6 +82,7 @@ public class ItemManager : MonoBehaviour
             {
                 isBoosted = false;
                 itemTempBoostSpeed = 0;
+                boostTimeCounter = 0;
             }
 
 
@@ -90,6 +91,8 @@ public class ItemManager : MonoBehaviour
             PlayerController.instance.AdjustBoostSpeed(itemTempBoostSpeed);
 
         }
+
+        Debug.Log(itemTempBoostSpeed);
     }
 
     public void AddToPlayerInventory(ItemParent item)
