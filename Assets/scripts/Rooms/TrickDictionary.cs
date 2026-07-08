@@ -131,8 +131,8 @@ public class TrickDictionary : MonoBehaviour
         Vector3 returnVelocity = new Vector3(0f, 0f, 0f);
 
         Vector3 playerPosition = PlayerController.instance.GetPlayerPosition();
-        float endPosition = 22.5f, componentA = -112f/2025f, componentB = 23f/45f, componentC=11, currentFunctionXposition = playerPosition.x-initialPosition.x;
-        float gravMultiplier = 4f, playerSpeed = 25;
+        float endPosition = 22.5f, currentFunctionXposition = playerPosition.x-initialPosition.x;
+        float gravMultiplier = 4f;
 
         Vector2 initialVelocity = new Vector2(22.5f,25f);
 

@@ -21,7 +21,7 @@ public class EnemyTriangleScript : EnemyParent
     private const float diveSpeed = 15f , diveTime = 0.25f, diveCoolDown = 0.5f, diveStartUp = 0.25f, idleDirectionTimer = 0.5f, rotationSpeed = 40, rotationModifier = 90;
     private bool isDiving, onCoolDown, isLockedOn;
     private int idleDirection;
-    private const int attackingDamage = 1;
+    //private const int attackingDamage = 1;
     private Rigidbody2D rigidBody;
 
     // Start is called before the first frame update
@@ -35,7 +35,7 @@ public class EnemyTriangleScript : EnemyParent
         health = 1f;
         isDead = false;
         movementSpeed = 4f;
-        
+        attackingDamage = 1;
         rigidBody = GetComponent<Rigidbody2D>();
 
         

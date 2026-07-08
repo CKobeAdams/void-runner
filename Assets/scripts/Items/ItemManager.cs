@@ -70,29 +70,10 @@ public class ItemManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(isBoosted)
-        {
-            if(boostTimeCounter > boostDecayStartTimer)
-            {
-                float sinceDecayStart = boostTimeCounter - boostDecayStartTimer;
-                itemTempBoostSpeed = itemTempBoostSpeed * (1-sinceDecayStart / boostSpeedDecayTime);
-            }
+        ManageBoost();
+        ManageBeerShield();
 
-            if(itemTempBoostSpeed<0)
-            {
-                isBoosted = false;
-                itemTempBoostSpeed = 0;
-                boostTimeCounter = 0;
-            }
-
-
-
-            boostTimeCounter += Time.deltaTime;
-            PlayerController.instance.AdjustBoostSpeed(itemTempBoostSpeed);
-
-        }
-
-        Debug.Log(itemTempBoostSpeed);
+        //Debug.Log(itemTempBoostSpeed);
     }
 
     public void AddToPlayerInventory(ItemParent item)
@@ -175,5 +156,38 @@ public class ItemManager : MonoBehaviour
     {
         FlipOut360?.Invoke();
     }
+
+    private void ManageBoost()
+    {
+        if (isBoosted)
+        {
+            if (boostTimeCounter > boostDecayStartTimer)
+            {
+                float sinceDecayStart = boostTimeCounter - boostDecayStartTimer;
+                itemTempBoostSpeed = itemTempBoostSpeed * (1 - sinceDecayStart / boostSpeedDecayTime);
+            }
+
+            if (itemTempBoostSpeed < 0)
+            {
+                isBoosted = false;
+                itemTempBoostSpeed = 0;
+                boostTimeCounter = 0;
+            }
+
+
+
+            boostTimeCounter += Time.deltaTime;
+            PlayerController.instance.AdjustBoostSpeed(itemTempBoostSpeed);
+
+        }
+    }
+
+    private void ManageBeerShield()
+    {
+
+
+    }
+
+    
 }
 

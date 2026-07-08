@@ -8,7 +8,7 @@ public class DeathWall : MonoBehaviour
 
     //Change the wall to 1 constant speed to make it to the end of the level in 3 minutes
     [SerializeField]
-    private float wallSpeed = 3f, wallAcceleration = 0.25f, currentSpeed = 0, speedMarker, wallDistance = 30f, wallTimerCount = 0f,
+    private float wallSpeed = 3f, speedMarker,
            wallDamage = 10000f;
 
     
@@ -27,8 +27,7 @@ public class DeathWall : MonoBehaviour
     {
         rigidBody = this.GetComponent<Rigidbody2D>();
         wallSpeed = 1f;
-        wallAcceleration = 0.01f;
-        wallTimerCount = 0f;
+        
     }
 
     void Start()
@@ -101,6 +100,6 @@ public class DeathWall : MonoBehaviour
 
     public void ResetWallTimerCount()
     {
-        wallTimerCount = 0;
+        
     }
 }

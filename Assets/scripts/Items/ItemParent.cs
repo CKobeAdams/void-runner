@@ -9,7 +9,7 @@ public class ItemParent : ScriptableObject
 {
     [SerializeField]
     protected RunDataSO runDataValues;
-    public string name;
+    public string itemName;
     public Sprite itemSprite;
     public int price;
     public int quantity;

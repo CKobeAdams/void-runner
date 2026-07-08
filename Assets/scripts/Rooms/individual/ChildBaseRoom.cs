@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class ChildBaseRoom : ParentRoom
 {
-    public override string name
+    public override string roomName
     {
         get { return "Base";  }
     }

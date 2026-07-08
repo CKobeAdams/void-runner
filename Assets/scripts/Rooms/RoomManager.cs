@@ -143,11 +143,11 @@ public class RoomManager : MonoBehaviour
        
         newRoom.transform.position = new Vector3(nodePosition.x-newRoomOffset.x, nodePosition.y-newRoomOffset.y, nodePosition.z);
 
-        string newRoomName = newRoom.GetComponent<ParentRoom>().name;
+        string newRoomName = newRoom.GetComponent<ParentRoom>().roomName;
         string oldRoomName;
         if (roomList.Count>2)
         {
-             oldRoomName = roomList[roomList.Count - 1].GetComponent<ParentRoom>().name;
+             oldRoomName = roomList[roomList.Count - 1].GetComponent<ParentRoom>().roomName;
         }
         else
         {

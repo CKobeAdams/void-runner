@@ -12,7 +12,7 @@ public class AnimatorManager : MonoBehaviour
     [SerializeField]
     private GameObject playerSprite;
 
-    private bool startUpState;
+    
 
     void Awake()
     {
@@ -23,7 +23,7 @@ public class AnimatorManager : MonoBehaviour
     void Start()
     {
         
-        startUpState = false;
+        
         animator = playerSprite.GetComponent<Animator>();
         IdlingTurnOn();
     }

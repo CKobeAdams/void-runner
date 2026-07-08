@@ -9,7 +9,7 @@ public class PlayerController : MonoBehaviour
 {
     public static PlayerController instance { get; private set; }
 
-    private Rigidbody2D rigidbody;
+    //private Rigidbody2D rigidbody2d;
 
     [SerializeField]
     private RunDataSO runDataValues;
@@ -21,21 +21,21 @@ public class PlayerController : MonoBehaviour
     private Camera MainCam;
 
     [SerializeField]
-    private float CameraFloorDistance = 4.5f, minimunCameraHeight = 0f, movementVelocity = 0, maxMovementSpeed = 20f, moveDirection,
+    private float minimunCameraHeight = 0f, movementVelocity = 0, maxMovementSpeed = 20f, moveDirection,
         jumpVelocity = 6f, jumpCancelAcel = 5f, flipOutSpeed = 260f, ragdollTimer = 0, moveAccel = 10f, decceleration = -0.01f,
         startUpSpeed = 2.5f, startUpAcceleration = 100f, turningAcceleration = 15f, crouchingDecceleration = 0, invincibleTimer = 2.5f,
         invincibleCounter = 0f, airMoveAcceleration = 5f, airMoveVelocity = 0f, airMoveDifferentialCap = 2f, wallSlidingMultiplier = 0.85f, coyoteTimingCounter,
         crawlingSpeed, storedTrickVelocity, tempSpeedBoost = 0, startingFlipRotation, previousRotation, rotationCounter = 0;
 
     private bool isMoving, isGrounded, gravityAffected, jumpCancelled, isCrouching, isDead = false, cameraLockStatus = true,
-        cameraLockSetting, isStumbled = false, isWalled, isStuckOnWall, tookDamage, isWallSliding,
+        isStumbled = false, isWalled, isStuckOnWall, tookDamage, isWallSliding,
         hasTricked = false, isTrickable, onCoyoteTime, coyoteAvailable, damageFlickerOn, isInvincible = false, isLockedForEndPortal = false;
 
     [SerializeField]
     private bool leftWallCollision, rightWallCollision;
 
 
-    private int flipOutRevs = 0, flipOutDirection, unstumbleCount = 0, playerHealth = 3, flickerCounter, playerMaxHealth = 3;
+    private int flipOutDirection, unstumbleCount = 0, playerHealth = 3, flickerCounter, playerMaxHealth = 3;
     private const int stumblePressNeeded = 3;
     private const float wallCheckOffset = 0.1f, LRoffset = 0.4f, coyoteTimer = 0.1f;
     private Vector2 moveVector, LRcheckerOffset;
@@ -75,7 +75,7 @@ public class PlayerController : MonoBehaviour
         
         gravityAffected = true;
         
-        rigidbody = GetComponent<Rigidbody2D>();
+        //rigidbody2d = GetComponent<Rigidbody2D>();
         healthManager.instance.UpdateHealthDisplay(playerHealth);
         startingFlipRotation = 0;
         rotationCounter = 0;
@@ -96,7 +96,7 @@ public class PlayerController : MonoBehaviour
         leftCheckerPos = wallCheckLeft.transform.position;
         rightCheckerPos = wallCheckRight.transform.position;
 
-        cameraLockSetting = true;
+        
         cameraLockStatus = true;
         isLockedForEndPortal = false;
         flipHitBox.SetActive(false);
@@ -132,7 +132,7 @@ public class PlayerController : MonoBehaviour
         }
         else if(isLockedForEndPortal)
         {
-            rigidbody.velocity = new Vector2(movementVelocity + airMoveVelocity, 0f);
+            GetComponent<Rigidbody>().velocity = new Vector2(movementVelocity + airMoveVelocity, 0f);
         }
 
 
@@ -237,9 +237,9 @@ public class PlayerController : MonoBehaviour
         
         //isGrounded = Physics.CheckSphere(groundCheck.transform.position,.2f,lay)
 
-        if(rigidbody.velocity.y < 0.75f*jumpVelocity || jumpCancelled)
+        if(GetComponent<Rigidbody2D>().velocity.y < 0.75f*jumpVelocity || jumpCancelled)
         {
-            rigidbody.velocity += Vector2.up * Physics.gravity.y * Time.fixedDeltaTime * jumpCancelAcel;
+            GetComponent<Rigidbody2D>().velocity += Vector2.up * Physics.gravity.y * Time.fixedDeltaTime * jumpCancelAcel;
         }
 
         
@@ -487,7 +487,7 @@ public class PlayerController : MonoBehaviour
 
                     //Debug.Log("LETS CHANGE THAT COLOR");
                     
-                    rigidbody.velocity = trickFunction(trickStartingPosition);
+                    GetComponent<Rigidbody2D>().velocity = trickFunction(trickStartingPosition);
                     this.transform.GetChild(0).gameObject.GetComponent<SpriteRenderer>().color = new Color(0.2f, 0.2f, 1f, 1f);
                     if (hasTricked == false)
                     {
@@ -511,7 +511,7 @@ public class PlayerController : MonoBehaviour
             
         }
 
-        float rigidY = rigidbody.velocity.y;
+        float rigidY = GetComponent<Rigidbody2D>().velocity.y;
 
         if (isWalled)
         {
@@ -525,7 +525,7 @@ public class PlayerController : MonoBehaviour
                     airMoveVelocity = 0;
                     isWallSliding = true;
 
-                    rigidY = rigidbody.velocity.y < 0 ? rigidbody.velocity.y * wallSlidingMultiplier : rigidbody.velocity.y;
+                    rigidY = GetComponent<Rigidbody2D>().velocity.y < 0 ? GetComponent<Rigidbody2D>().velocity.y * wallSlidingMultiplier : GetComponent<Rigidbody2D>().velocity.y;
                 }
             }
 
@@ -536,14 +536,14 @@ public class PlayerController : MonoBehaviour
                     movementVelocity = 0;
                     airMoveVelocity = 0;
                     isWallSliding = true;
-                    rigidY = rigidbody.velocity.y < 0 ? rigidbody.velocity.y * wallSlidingMultiplier : rigidbody.velocity.y;
+                    rigidY = GetComponent<Rigidbody2D>().velocity.y < 0 ? GetComponent<Rigidbody2D>().velocity.y * wallSlidingMultiplier : GetComponent<Rigidbody2D>().velocity.y;
                 }
             }
         }
         
         if(runState!=runningState.tricking)
         {
-            rigidbody.velocity = new Vector2(movementVelocity + airMoveVelocity, rigidY);
+            GetComponent<Rigidbody2D>().velocity = new Vector2(movementVelocity + airMoveVelocity, rigidY);
         }
         
 
@@ -814,7 +814,7 @@ public class PlayerController : MonoBehaviour
             GroundCheck();
             if(isGrounded || onCoyoteTime && !isLockedForEndPortal)
             {
-                rigidbody.velocity = new Vector2(rigidbody.velocity.x, jumpVelocity);
+                GetComponent<Rigidbody2D>().velocity = new Vector2(GetComponent<Rigidbody2D>().velocity.x, jumpVelocity);
                 onCoyoteTime = false;
                 coyoteAvailable = false;
             }
@@ -933,12 +933,12 @@ public class PlayerController : MonoBehaviour
 
     public void TurnOffGravity()
     {
-        rigidbody.gravityScale = 0;
+        GetComponent<Rigidbody2D>().gravityScale = 0;
     }
 
     public void TurnOnGravity()
     {
-        rigidbody.gravityScale = 3;
+        GetComponent<Rigidbody2D>().gravityScale = 3;
     }
 
     public void KillPlayer()
@@ -995,9 +995,9 @@ public class PlayerController : MonoBehaviour
         }
         else
         {
-            return Mathf.Sqrt(Mathf.Pow(rigidbody.velocity.x, 2) + Mathf.Pow(rigidbody.velocity.y, 2));
+            return Mathf.Sqrt(Mathf.Pow(GetComponent<Rigidbody2D>().velocity.x, 2) + Mathf.Pow(GetComponent<Rigidbody>().velocity.y, 2));
         }
-        return 0f;
+        
     }
 
     private void resetTwinWallCheckers()
@@ -1076,7 +1076,7 @@ public class PlayerController : MonoBehaviour
 
     public Vector2 GetPlayerVelocity()
     {
-        return rigidbody.velocity;
+        return GetComponent<Rigidbody2D>().velocity;
     }
 
     public void SetHasTricked(bool tricked)
@@ -1136,7 +1136,7 @@ public class PlayerController : MonoBehaviour
     {
         //removes any Y velocity and keeps the x velocty
         //Removing the 
-        rigidbody.velocity = new Vector2( rigidbody.velocity.x, 0f);
+        GetComponent<Rigidbody2D>().velocity = new Vector2( GetComponent<Rigidbody2D>().velocity.x, 0f);
 
         isLockedForEndPortal = true;
         isInvincible = true;

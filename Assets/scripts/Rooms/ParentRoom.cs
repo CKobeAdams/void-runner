@@ -5,7 +5,7 @@ using UnityEngine;
 public class ParentRoom : MonoBehaviour
 {
     
-    public virtual string name
+    public virtual string roomName
     {
         get { return ""; } 
       

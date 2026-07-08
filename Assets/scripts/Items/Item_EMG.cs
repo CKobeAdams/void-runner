@@ -20,6 +20,6 @@ public class Item_EMG : ItemParent
 
         ItemManager.instance.AddTempBoost(addedBoost);
 
-        Debug.Log("Added Boost! " + addedBoost);
+        //Debug.Log("Added Boost! " + addedBoost);
     }
 }
