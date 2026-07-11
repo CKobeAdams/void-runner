@@ -19,7 +19,9 @@ public class ItemManager : MonoBehaviour
     private float itemTempBoostSpeed = 0, boostSpeedDecayTime = 1.5f/*units a second*/, 
         boostDecayStartTimer = 0.2f, boostTimeCounter = 0f;
 
-    private bool isBoosted = false;
+    private float fermentedJacketTimer, fermentedJacketCounter;
+
+    private bool isBoosted = false, beerShielded = false;
 
 
     public delegate void EventHandler();
@@ -31,6 +33,7 @@ public class ItemManager : MonoBehaviour
     public static event EventHandler AddedToInventory;
     public static event EventHandler PlayerKillsEnemy;
     public static event EventHandler FlipOut360;
+    public static event EventHandler PlayerTakesDamage;
 
     [SerializeField]
     private ItemParent item_HeartRefill, item_JockStrap, item_FermentedJacket, item_EMG;
@@ -49,12 +52,12 @@ public class ItemManager : MonoBehaviour
         masterEventList.Add(AddedToInventory);
         masterEventList.Add(PlayerKillsEnemy);
         masterEventList.Add(FlipOut360);
+        masterEventList.Add(PlayerTakesDamage);
 
         masterItemList.Add(item_HeartRefill);
         masterItemList.Add(item_JockStrap);
         masterItemList.Add(item_EMG);
-        //masterItemList.Add(item_EMG);
-        //masterItemList.Add(item_FermentedJacket);
+        masterItemList.Add(item_FermentedJacket);
 
         
     }
@@ -65,6 +68,8 @@ public class ItemManager : MonoBehaviour
         {
             item.AddEvent();
         }
+
+        PlayerTakesDamage += BreakBeerShield;
     }
 
     // Update is called once per frame
@@ -147,6 +152,11 @@ public class ItemManager : MonoBehaviour
 
     }
 
+    public void InvokeEvent_PlayerTakesDamage()
+    {
+        PlayerTakesDamage?.Invoke();
+    }
+
     public void InvokeEvent_PlayerKillsEnemy()
     {
         PlayerKillsEnemy?.Invoke();
@@ -184,9 +194,37 @@ public class ItemManager : MonoBehaviour
 
     private void ManageBeerShield()
     {
+        if(beerShielded)
+        {
+            if(fermentedJacketCounter>=fermentedJacketTimer)
+            {
+                BreakBeerShield();
+            }
 
+            fermentedJacketCounter += Time.deltaTime;
+        }
 
     }
+
+    public void SetFermentedJacket(float timer)
+    {
+        fermentedJacketTimer = timer;
+        fermentedJacketCounter = 0;
+        beerShielded = true;
+    }
+
+    public void BreakBeerShield()
+    {
+        beerShielded = false;
+        PlayerController.instance.SetBeerShield(false);
+        healthManager.instance.UpdateHealthDisplayColor(new Color(1f,1f,1f,0f));
+
+    }
+
+    
+
+    
+
 
     
 }

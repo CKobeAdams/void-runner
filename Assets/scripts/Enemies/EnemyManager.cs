@@ -51,6 +51,7 @@ public class EnemyManager : MonoBehaviour
                 {
                     enem.TakeDamage(damage, true);
                     ItemManager.instance.InvokeEvent_PlayerKillsEnemy();
+                    Debug.Log("We are calling the playerEvent");
 
                 }
                 else

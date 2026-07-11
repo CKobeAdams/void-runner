@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+
 public class healthManager : MonoBehaviour
 {
     public static healthManager instance { get; private set; }
@@ -14,7 +15,7 @@ public class healthManager : MonoBehaviour
     private Image healthPip;
 
     [SerializeField]
-    private GameObject healthContainer;
+    private Image healthContainer;
 
     private List<Image> healthBarImages;
     private int playerMaxHealth, playerCurrentHealth;
@@ -53,6 +54,14 @@ public class healthManager : MonoBehaviour
         playerCurrentHealth = newCurrentHealth;
     }
 
+    public void UpdateHealthDisplayColor(Color pipColor)
+    {
+        foreach(Image pip in healthBarImages)
+        {
+            healthContainer.color = pipColor;
+        }
+    }
+
     public void ChangeMaxHealth(int newMaxHealth)
     {
 
@@ -71,5 +80,10 @@ public class healthManager : MonoBehaviour
             newImage.transform.position = new Vector3(pipPos.x-i*36, pipPos.y, 0);
             healthBarImages.Add(newImage);
         }
+        healthContainer.transform.position = new Vector3(pipPos.x - ((setHealth * 36) / 2)+18, pipPos.y, -1f);
+        healthContainer.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, setHealth * 40);
+        healthContainer.transform.SetAsLastSibling();
+        
+
     }
 }

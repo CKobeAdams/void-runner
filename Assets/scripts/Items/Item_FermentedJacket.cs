@@ -5,9 +5,9 @@ using UnityEngine;
 [CreateAssetMenu]
 public class Item_FermentedJacket : ItemParent
 {
-    private const float baselineTimer = 15f, quantityMultiplayer = 1f;
-
-    private bool isShielded = false;
+    public const float baselineTimer = 15f, quantityMultiplayer = 3f;
+    private Color healthPipColor = new Color(1f,0.6f, 0.05f, 0.6f);
+    
 
     private float timeCounter = 0f;
     public override void AddEvent()
@@ -20,19 +20,19 @@ public class Item_FermentedJacket : ItemParent
         //Start the timer of a the Iso Shield For the health
         //1 shot shield that breaks after use
 
-        isShielded = true;
-        timeCounter = 0f;
-
+        ItemManager.instance.SetFermentedJacket(GetBeerTimer());
+        PlayerController.instance.SetBeerShield(true);
+        healthManager.instance.UpdateHealthDisplayColor(healthPipColor);
+        Debug.Log("Check for functionality");
+        
 
     }
 
-    void Update()
+    public float GetBeerTimer()
     {
-        Debug.Log("Update is called from the fermented JacketS");
-        if(isShielded)
-        {
-            //change the color of the hearts to orange
-            //add a timer
-        }
+        timeCounter = quantity > 1 ? baselineTimer + quantity * quantityMultiplayer : baselineTimer;
+        return timeCounter;
     }
+
+    
 }

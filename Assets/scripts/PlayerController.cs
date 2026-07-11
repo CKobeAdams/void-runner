@@ -28,7 +28,7 @@ public class PlayerController : MonoBehaviour
         crawlingSpeed, storedTrickVelocity, tempSpeedBoost = 0, startingFlipRotation, previousRotation, rotationCounter = 0;
 
     private bool isMoving, isGrounded, gravityAffected, jumpCancelled, isCrouching, isDead = false, cameraLockStatus = true,
-        isStumbled = false, isWalled, isStuckOnWall, tookDamage, isWallSliding,
+        isStumbled = false, isWalled, isStuckOnWall, tookDamage, isWallSliding, isBeerShielded= false,
         hasTricked = false, isTrickable, onCoyoteTime, coyoteAvailable, damageFlickerOn, isInvincible = false, isLockedForEndPortal = false;
 
     [SerializeField]
@@ -913,9 +913,15 @@ public class PlayerController : MonoBehaviour
     {
         if(!tookDamage&&!isInvincible)
         {
-            playerHealth = playerHealth - damage;
-            healthManager.instance.UpdateHealthDisplay(playerHealth);
-            tookDamage = true;
+            if(!isBeerShielded)
+            {
+                playerHealth = playerHealth - damage;
+                healthManager.instance.UpdateHealthDisplay(playerHealth);
+                tookDamage = true;
+
+
+            }
+            ItemManager.instance.InvokeEvent_PlayerTakesDamage();
            
            
 
@@ -995,7 +1001,7 @@ public class PlayerController : MonoBehaviour
         }
         else
         {
-            return Mathf.Sqrt(Mathf.Pow(GetComponent<Rigidbody2D>().velocity.x, 2) + Mathf.Pow(GetComponent<Rigidbody>().velocity.y, 2));
+            return Mathf.Sqrt(Mathf.Pow(GetComponent<Rigidbody2D>().velocity.x, 2) + Mathf.Pow(GetComponent<Rigidbody2D>().velocity.y, 2));
         }
         
     }
@@ -1023,7 +1029,7 @@ public class PlayerController : MonoBehaviour
         //checks for 360s, This is not exact and the round is for player ease
         if (Mathf.Abs(rotationCounter) >= 360f)
         {
-            Debug.Log("We are calling the the event");
+            //Debug.Log("We are calling the the event");
             ItemManager.instance.InvokeEvent_FlipOut360();
             
             rotationCounter = 0;
@@ -1160,6 +1166,12 @@ public class PlayerController : MonoBehaviour
         tempSpeedBoost = newSpeed;
     }
 
+    public void SetBeerShield(bool setting)
+    {
+        isBeerShielded = setting;
+
+        Debug.Log("BeerShield is now set");
+    }
 
 
 }
