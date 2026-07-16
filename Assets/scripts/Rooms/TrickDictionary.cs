@@ -14,20 +14,22 @@ public class TrickDictionary : MonoBehaviour
         = new Dictionary<(string currentRoom, string prevRoom),(Vector3, Func<Vector3, Vector3>)>();
     //private Dictionary<(string currentRoom, string prevRoom), Vector3>       trickLocationDictionary= new Dictionary<(string currentRoom, string prevRoom), Vector3>();
 
-    private const string ascendingTag = "Ascension", selfTag = "Self", baseTag = "Base", oneJumpTag = "OneJump";
+    private const string ascendingTag = "Ascension", selfTag = "Self", baseTag = "Base", oneJumpTag = "OneJump", risingTag = "Rising";
     private Vector3 ascendingFromBaseLocation = new Vector3(-23f, 12f, 0f),
                       OneJumpFromSelfLocation = new Vector3(-1.5f, 1f, 0f),
-                      baseFromSelfLocation = new Vector3(0f, -3f, 0f);
+                      baseFromSelfLocation = new Vector3(0f, -3f, 0f),
+                      risingFromSelfLocation = new Vector3(0f, -3f, 0f);
                                                                                                      
     // Start is called before the first frame update
-    void Awake()
+    void Start()
     {
-        instance = this;
+        
         
     }
 
-    void Start()
+    void Awake()
     {
+        instance = this;
         //trickFunctionDictionary = new Dictionary<(string currentRoom, string prevRoom), Func<Vector3>>();
         //trickLocationDictionary = new Dictionary<(string currentRoom, string prevRoom), Vector3>();
         //MAJOR NOTE
@@ -44,6 +46,7 @@ public class TrickDictionary : MonoBehaviour
 
         trickFunctionDictionary.Add((baseTag, selfTag), (baseFromSelfLocation, BaseFromSelf));
 
+        trickFunctionDictionary.Add((risingTag, selfTag), (risingFromSelfLocation, RisingFromSelf));
 
     }
 
@@ -216,6 +219,110 @@ public class TrickDictionary : MonoBehaviour
 
         //Debug.Log("Doin Cool tricks in the base room!");
         return returnVelocity;
+    }
+
+    private Vector3 RisingFromSelf(Vector3 initialPosition)
+    {
+        //This trick is based on the Y position rather than the X position
+        Vector3 currentPosition = PlayerController.instance.GetPlayerPosition();
+
+        Vector3 returnVelocity = new Vector3(0f, 0f, 0f), initialVelocity = new Vector3(-15f, 25f, 0f);
+        //float initialYJumpVelocity = 25f;
+
+
+        float endPosition = 30f, currentFunctionYPosition = currentPosition.y - initialPosition.y;
+        float gravityMinistep, gravityMultiplier = 3;
+        float gravityAccel = Physics.gravity.y * gravityMultiplier;
+
+        float firstStep = 3f, secondStep = 6.5f, thirdStep = 10f, fourthStep = 13.5f, fifthStep = 17f, sixthStep = 20.5f, seventhStep = 24f, eighthstep = 27.5f;
+
+        
+
+        if(currentFunctionYPosition <= firstStep)
+        {
+            //returnVelocity = new Vector3(initialVelocity.x, initialVelocity.y + trickTimeElapsed * gravityAccel * 2);
+            float timeElapsed = (-initialVelocity.y + Mathf.Sqrt(Mathf.Pow(initialVelocity.y, 2) - 2 * (gravityAccel) * (currentFunctionYPosition))) / -gravityAccel;
+            Debug.Log("First step");
+
+            returnVelocity = new Vector3(initialVelocity.x, initialVelocity.y + timeElapsed*gravityAccel * 2);
+        }
+        else if (currentFunctionYPosition <= secondStep)
+        {
+            //calculate gravity based off distance from first step
+            float timeElapsed = (-initialVelocity.y + Mathf.Sqrt(Mathf.Pow(initialVelocity.y, 2) - 2 * (gravityAccel) * (currentFunctionYPosition - firstStep))) / -gravityAccel;
+
+            Debug.Log("second step");
+            Debug.Log(timeElapsed);
+
+            returnVelocity = new Vector3(-initialVelocity.x, initialVelocity.y + timeElapsed * gravityAccel * 2);
+            Debug.Log(returnVelocity);
+        }
+        else if(currentFunctionYPosition <= thirdStep)
+        {
+            float timeElapsed = (-initialVelocity.y + Mathf.Sqrt(Mathf.Pow(initialVelocity.y, 2) - 2 * (gravityAccel) * (currentFunctionYPosition - secondStep))) / -gravityAccel;
+
+            Debug.Log("third step");
+
+            returnVelocity = new Vector3(initialVelocity.x, initialVelocity.y + timeElapsed * gravityAccel * 2);
+        }
+        else if(currentFunctionYPosition <= fourthStep)
+        {
+            float timeElapsed = (-initialVelocity.y + Mathf.Sqrt(Mathf.Pow(initialVelocity.y, 2) - 2 * (gravityAccel) * (currentFunctionYPosition - thirdStep))) / -gravityAccel;
+
+            Debug.Log("4rth step");
+
+            returnVelocity = new Vector3(-initialVelocity.x, initialVelocity.y + timeElapsed * gravityAccel * 2);
+        }
+        else if(currentFunctionYPosition <= fifthStep)
+        {
+            float timeElapsed = (-initialVelocity.y + Mathf.Sqrt(Mathf.Pow(initialVelocity.y, 2) - 2 * (gravityAccel) * (currentFunctionYPosition - fourthStep))) / -gravityAccel;
+
+            Debug.Log("5th step");
+
+            returnVelocity = new Vector3(initialVelocity.x, initialVelocity.y + timeElapsed * gravityAccel * 2);
+        }
+        else if(currentFunctionYPosition <= sixthStep)
+        {
+            float timeElapsed = (-initialVelocity.y + Mathf.Sqrt(Mathf.Pow(initialVelocity.y, 2) - 2 * (gravityAccel) * (currentFunctionYPosition - fifthStep))) / -gravityAccel;
+
+            Debug.Log("6th step");
+
+            returnVelocity = new Vector3(-initialVelocity.x, initialVelocity.y + timeElapsed * gravityAccel * 2);
+        }
+        else if(currentFunctionYPosition <= seventhStep)
+        {
+            float timeElapsed = (-initialVelocity.y + Mathf.Sqrt(Mathf.Pow(initialVelocity.y, 2) - 2 * (gravityAccel) * (currentFunctionYPosition - sixthStep))) / -gravityAccel;
+            Debug.Log("7th step");
+
+
+            returnVelocity = new Vector3(initialVelocity.x, initialVelocity.y + timeElapsed * gravityAccel * 2);
+        }
+        else if(currentFunctionYPosition <= eighthstep)
+        {
+            float timeElapsed = (-initialVelocity.y + Mathf.Sqrt(Mathf.Pow(initialVelocity.y, 2) - 2 * (gravityAccel) * (currentFunctionYPosition - seventhStep))) / -gravityAccel;
+
+            Debug.Log(timeElapsed);
+
+            returnVelocity = new Vector3(-initialVelocity.x, initialVelocity.y + timeElapsed * gravityAccel * 2);
+        }
+        else if(currentFunctionYPosition < endPosition)
+        {
+            float timeElapsed = (-initialVelocity.y + Mathf.Sqrt(Mathf.Pow(initialVelocity.y, 2) - 2 * (gravityAccel) * (currentFunctionYPosition - eighthstep))) / -gravityAccel;
+
+            
+
+            returnVelocity = new Vector3(0, initialVelocity.y + timeElapsed * gravityAccel * 2);
+        }
+        else
+        {
+            PlayerController.instance.SetIsTrickable(false);
+            PlayerController.instance.SetHasTricked(false);
+        }
+
+        //Debug.Log(returnVelocity);
+        return returnVelocity;
+
+
     }
 
     
