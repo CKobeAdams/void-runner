@@ -11,13 +11,16 @@ public class ItemManager : MonoBehaviour
     [SerializeField]
     private RunDataSO runDataValues;
 
+    [SerializeField]
+    ParticleSystem boostTrail;
+
     public List<ItemParent> masterItemList = new List<ItemParent>();
     public List<EventHandler> masterEventList = new List<EventHandler>();
     //public Dictionary<string, float> temporaryStatBonuses = new Dictionary<string, float>();
 
     [SerializeField]
     private float itemTempBoostSpeed = 0, boostSpeedDecayTime = 1.5f/*units a second*/, 
-        boostDecayStartTimer = 0.2f, boostTimeCounter = 0f;
+        boostDecayStartTimer = 1f, boostTimeCounter = 0f;
 
     private float fermentedJacketTimer, fermentedJacketCounter;
 
@@ -177,7 +180,7 @@ public class ItemManager : MonoBehaviour
                 itemTempBoostSpeed = itemTempBoostSpeed * (1 - sinceDecayStart / boostSpeedDecayTime);
             }
 
-            if (itemTempBoostSpeed < 0)
+            if (itemTempBoostSpeed <= 0)
             {
                 isBoosted = false;
                 itemTempBoostSpeed = 0;
@@ -188,7 +191,21 @@ public class ItemManager : MonoBehaviour
 
             boostTimeCounter += Time.deltaTime;
             PlayerController.instance.AdjustBoostSpeed(itemTempBoostSpeed);
-
+            boostTrail.gameObject.SetActive(true);
+            if(!boostTrail.IsAlive())
+            {
+                boostTrail.Play();
+            }
+            
+        }
+        else
+        {
+            boostTrail.Stop(true, ParticleSystemStopBehavior.StopEmitting);
+            if(!boostTrail.IsAlive())
+            {
+                boostTrail.gameObject.SetActive(false);
+            }
+            
         }
     }
 
