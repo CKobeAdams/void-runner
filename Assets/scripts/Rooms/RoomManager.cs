@@ -1,4 +1,4 @@
-using System.Collections;
+ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
@@ -117,7 +117,7 @@ public class RoomManager : MonoBehaviour
         }
         else
         {
-            if (roomChooser < 0.1)
+            if (roomChooser < 0.5f)
             {
                 //UnityEngine.Random Special rooms
                 newRoom = Instantiate(GenerateSpecialRoom());
@@ -153,16 +153,18 @@ public class RoomManager : MonoBehaviour
         {
             oldRoomName = "Self";
         }
-        
 
+        
         //adds the starting room to a new room
         roomChooser = UnityEngine.Random.value;
-        if(roomChooser<0.9f)
+        if(roomChooser<1f)
         {
+            
             roomChooser = UnityEngine.Random.value;
             if(roomChooser<0.5f)
             {
                 GenerateTrickBoxes((newRoomName, oldRoomName), newRoom);
+                
             }
             else
             {
@@ -229,7 +231,7 @@ public class RoomManager : MonoBehaviour
         
         return specialRooms[(int)Mathf.Floor(UnityEngine.Random.Range(0,specialRooms.Count))];
         //Line below should be commented and the line above should be uncommented after testing
-        //return specialRooms[0];
+        //return specialRooms[2];
 
         
     }
@@ -239,8 +241,8 @@ public class RoomManager : MonoBehaviour
     private GameObject GenerateNormalRoom()
     {
         
-        return normalRooms[(int)Mathf.Floor(UnityEngine.Random.Range(0, normalRooms.Count))];
-        //return normalRooms[0];
+        //return normalRooms[(int)Mathf.Floor(UnityEngine.Random.Range(0, normalRooms.Count))];
+        return normalRooms[0];
     }
    
     
@@ -253,8 +255,8 @@ public class RoomManager : MonoBehaviour
         (Vector3 location, Func<Vector3, Vector3> piecewise) dictionaryCite;
         try
         {
+            Debug.Log(index);
             dictionaryCite = TrickDictionary.instance.CiteValue(index);
-
             
         }
         catch

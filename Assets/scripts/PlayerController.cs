@@ -132,7 +132,7 @@ public class PlayerController : MonoBehaviour
         }
         else if(isLockedForEndPortal)
         {
-            GetComponent<Rigidbody>().velocity = new Vector2(movementVelocity + airMoveVelocity, 0f);
+            GetComponent<Rigidbody2D>().velocity = new Vector2(movementVelocity + airMoveVelocity, 0f);
         }
 
 
@@ -499,6 +499,7 @@ public class PlayerController : MonoBehaviour
                         TurnOnGravity();
                         CameraManager.instance.SetTrickLock(false);
                         SetIsInvincible(false);
+                        Debug.Log(GetComponent<Rigidbody2D>().velocity);
                     }
 
                     //Debug.Log("starting position = "+trickStartingPosition);
