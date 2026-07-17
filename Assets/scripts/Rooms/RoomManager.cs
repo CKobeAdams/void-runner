@@ -117,7 +117,8 @@ public class RoomManager : MonoBehaviour
         }
         else
         {
-            if (roomChooser < 0.5f)
+            //This should be set to 0.1 when not testing
+            if (roomChooser < 1f)
             {
                 //UnityEngine.Random Special rooms
                 newRoom = Instantiate(GenerateSpecialRoom());
@@ -229,9 +230,9 @@ public class RoomManager : MonoBehaviour
     private GameObject GenerateSpecialRoom()
     {
         
-        return specialRooms[(int)Mathf.Floor(UnityEngine.Random.Range(0,specialRooms.Count))];
+        //return specialRooms[(int)Mathf.Floor(UnityEngine.Random.Range(0,specialRooms.Count))];
         //Line below should be commented and the line above should be uncommented after testing
-        //return specialRooms[2];
+        return specialRooms[2];
 
         
     }

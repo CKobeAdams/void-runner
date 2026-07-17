@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: Item_Jock Strap
   m_EditorClassIdentifier: 
   runDataValues: {fileID: 11400000, guid: f66e7461c3ca8e04182af70382f74c5b, type: 2}
-  name: Jock Strap
+  itemName: Jock Strap
   itemSprite: {fileID: 0}
-  price: 30
+  price: 15
   quantity: 0
   description: Killing an Enemy gives you a boost of speed!

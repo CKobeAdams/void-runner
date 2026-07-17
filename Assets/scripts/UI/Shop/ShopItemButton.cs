@@ -29,7 +29,7 @@ public class ShopItemButton : MonoBehaviour, IPointerEnterHandler, IPointerExitH
     {
        
         button.gameObject.GetComponent<Image>().sprite = item.itemSprite;
-        nameField.text = item.price+"T: "+item.name;
+        nameField.text = item.price+"T: "+item.itemName;
 
         
     }

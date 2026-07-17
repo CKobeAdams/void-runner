@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 39a3cf58591b6384b9fa8bd45bf173cc, type: 3}
   m_Name: Item_Heart Refill
   m_EditorClassIdentifier: 
-  name: Heart Refill
+  runDataValues: {fileID: 11400000, guid: f66e7461c3ca8e04182af70382f74c5b, type: 2}
+  itemName: Heart Refill
   itemSprite: {fileID: 21300000, guid: baaac3bec16aed74998f5444f71b93dd, type: 3}
   price: 30
   quantity: 0
   description: Top off your hearts to the MAX
-  runDataValues: {fileID: 11400000, guid: f66e7461c3ca8e04182af70382f74c5b, type: 2}
   timesAdded: 0

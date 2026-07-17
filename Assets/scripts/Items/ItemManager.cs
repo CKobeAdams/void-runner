@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.SceneManagement;
 
 public class ItemManager : MonoBehaviour
 {
@@ -78,8 +79,12 @@ public class ItemManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        ManageBoost();
-        ManageBeerShield();
+        if(SceneManager.GetActiveScene().name == "main run")
+        {
+            ManageBoost();
+            ManageBeerShield();
+        }
+        
 
         //Debug.Log(itemTempBoostSpeed);
     }

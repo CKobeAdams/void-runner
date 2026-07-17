@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: Item_Fermented Jacket
   m_EditorClassIdentifier: 
   runDataValues: {fileID: 11400000, guid: f66e7461c3ca8e04182af70382f74c5b, type: 2}
-  itemName: Fermented Jackedt
+  itemName: Fermented Jacket
   itemSprite: {fileID: 0}
-  price: 0
+  price: 45
   quantity: 0
   description: Beer Jacket Keeps you warm!

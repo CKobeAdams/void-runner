@@ -9,8 +9,10 @@ public class CameraManager : MonoBehaviour
 
     public static CameraManager instance { get; private set; }
 
+    [SerializeField]
     private bool CameraLockSetting, CameraLockStatus, isLingering = false, trickLock = false;
 
+    [SerializeField]
     private float minimumCameraHeight = 0f, cameraFloorDistance = 5f, cameraSpeed = 6f, cameraRaiseLower, cameraLingerTimer = 0f;
    
 

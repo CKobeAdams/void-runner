@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: Item_EMG
   m_EditorClassIdentifier: 
   runDataValues: {fileID: 0}
-  name: 
-  itemSprite: {fileID: 0}
-  price: 0
-  quantity: 0
-  description: 
+  itemName: E.M.G.
+  itemSprite: {fileID: 21300000, guid: 967eb323a65c4df4a9b7faf16d472ca6, type: 3}
+  price: 20
+  quantity: 1
+  description: Do some sick flips!

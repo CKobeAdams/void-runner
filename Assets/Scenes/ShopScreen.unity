@@ -1739,6 +1739,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   runDataValues: {fileID: 11400000, guid: f66e7461c3ca8e04182af70382f74c5b, type: 2}
+  boostTrail: {fileID: 0}
   masterItemList: []
   itemTempBoostSpeed: 0
   boostSpeedDecayTime: 1.5
@@ -1746,8 +1747,8 @@ MonoBehaviour:
   boostTimeCounter: 0
   item_HeartRefill: {fileID: 11400000, guid: 40bc1cd9a0a01e04c88068fc578a0294, type: 2}
   item_JockStrap: {fileID: 11400000, guid: 0b60e6092b48b69429dabd902766c9d3, type: 2}
-  item_FermentedJacket: {fileID: 0}
-  item_EMG: {fileID: 0}
+  item_FermentedJacket: {fileID: 11400000, guid: ac8caff12ede89f48ad82f2f41f02daf, type: 2}
+  item_EMG: {fileID: 11400000, guid: d36a6dcc1d71a1d4683689b748fcf3e9, type: 2}
 --- !u!4 &2022186149
 Transform:
   m_ObjectHideFlags: 0

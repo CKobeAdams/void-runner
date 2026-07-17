@@ -22,18 +22,18 @@ public class Item_HeartRefill : ItemParent
     {
         
         ItemManager.AddedToInventory += ItemEventHandler;
-        Debug.Log("Event has been Added!");
+        //Debug.Log("Event has been Added!");
        
         //ItemManager.instance.AddedToInventory.AddListener(ItemFunctionality);
     }
 
     public override void ItemFunctionality()
     {
-        Debug.Log("Child Override call");
+        //Debug.Log("Child Override call");
 
         if(timesAdded<quantity)
         {
-            Debug.Log("WE SUPER FUNCTIONAL IN THIS BITCH");
+            //Debug.Log("WE SUPER FUNCTIONAL IN THIS BITCH");
             runDataValues.playerHealth = runDataValues.playerMaxHealth;
             timesAdded++;
         }
