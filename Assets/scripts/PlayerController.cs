@@ -21,7 +21,7 @@ public class PlayerController : MonoBehaviour
     private Camera MainCam;
 
     [SerializeField]
-    private float minimunCameraHeight = 0f, movementVelocity = 0, maxMovementSpeed = 20f, moveDirection,
+    private float minimunCameraHeight = 0f, movementVelocity = 0, maxMovementSpeed = 20f, moveDirection, prevMoveDirection,
         jumpVelocity = 6f, jumpCancelAcel = 5f, flipOutSpeed = 260f, ragdollTimer = 0, moveAccel = 10f, decceleration = -0.01f,
         startUpSpeed = 2.5f, startUpAcceleration = 100f, turningAcceleration = 15f, crouchingDecceleration = 0, invincibleTimer = 2.5f,
         invincibleCounter = 0f, airMoveAcceleration = 5f, airMoveVelocity = 0f, airMoveDifferentialCap = 2f, wallSlidingMultiplier = 0.85f, coyoteTimingCounter,
@@ -139,15 +139,23 @@ public class PlayerController : MonoBehaviour
         if (movementVelocity < 0)
         {
             moveDirection = -1;
+            this.transform.GetChild(0).gameObject.GetComponent<SpriteRenderer>().flipX = true;
         }
         else if (movementVelocity > 0)
         {
             moveDirection = 1;
+            this.transform.GetChild(0).gameObject.GetComponent<SpriteRenderer>().flipX = false;
+
+
         }
         else
         {
             moveDirection = 0;
         }
+
+        
+
+        prevMoveDirection = moveDirection;
 
         if(tookDamage&&!isInvincible)
         {
@@ -499,7 +507,7 @@ public class PlayerController : MonoBehaviour
                         TurnOnGravity();
                         CameraManager.instance.SetTrickLock(false);
                         SetIsInvincible(false);
-                        Debug.Log(GetComponent<Rigidbody2D>().velocity);
+                        //Debug.Log(GetComponent<Rigidbody2D>().velocity);
                     }
 
                     //Debug.Log("starting position = "+trickStartingPosition);
@@ -593,7 +601,7 @@ public class PlayerController : MonoBehaviour
                 TurnOffGravity();
 
 
-                Debug.Log("TRICKING");
+                //Debug.Log("TRICKING");
                 trickStartingPosition = GetPlayerTransform().position;
                 CameraManager.instance.SetTrickLock(true);
                 AnimatorManager.instance.TrickingTurnOn();
@@ -1171,8 +1179,20 @@ public class PlayerController : MonoBehaviour
     {
         isBeerShielded = setting;
 
-        Debug.Log("BeerShield is now set");
+        //Debug.Log("BeerShield is now set");
     }
 
+    public bool CheckMoveDirectionChange()
+    {
+        if(moveDirection == prevMoveDirection)
+        {
+            return false;
+        }
+        else if(moveDirection!=0)
+        {
+            return true;
+        }
+        return false;
+    }
 
 }

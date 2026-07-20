@@ -68,6 +68,7 @@ public class FlipOutHitbox : MonoBehaviour
 
         if(this.GetComponent<BoxCollider2D>().IsTouchingLayers(LayerMask.GetMask("Enemy")))
         {
+            //Debug.Log("Initiating Hurt Search");
             EnemyManager.instance.EntityHurtSearch(this.GetComponent<BoxCollider2D>(), CurrentDamage, sourceCode);
            
         }

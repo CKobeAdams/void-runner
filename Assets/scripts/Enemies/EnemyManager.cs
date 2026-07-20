@@ -43,7 +43,7 @@ public class EnemyManager : MonoBehaviour
 
         foreach(EnemyParent enem in enemyList)
         {
-            if(searchBox.IsTouching(enem.GetCollider()))
+            if(searchBox.IsTouching(enem.GetCollider())&&!enem.GetIsDead())
             {
                 
                 
@@ -51,7 +51,7 @@ public class EnemyManager : MonoBehaviour
                 {
                     enem.TakeDamage(damage, true);
                     ItemManager.instance.InvokeEvent_PlayerKillsEnemy();
-                    Debug.Log("We are calling the playerEvent");
+                    CameraManager.instance.InitiateCameraShake();
 
                 }
                 else

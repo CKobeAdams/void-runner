@@ -17,5 +17,6 @@ public class EnemyCircle : EnemyParent
     {
 
         CollisionDamageCheck();
+        UpdateDeathRattle();
     }
 }

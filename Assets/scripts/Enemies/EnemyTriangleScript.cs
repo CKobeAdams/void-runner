@@ -47,7 +47,7 @@ public class EnemyTriangleScript : EnemyParent
     {
         if(isDead)
         {
-            EnemyManager.instance.RemoveEnemy(this.GetComponent<EnemyParent>());
+            //EnemyManager.instance.RemoveEnemy(this.GetComponent<EnemyParent>());
         }
 
 
@@ -79,7 +79,7 @@ public class EnemyTriangleScript : EnemyParent
             //seeking
             //attacking
 
-        
+            UpdateDeathRattle();
             
         }
 
@@ -100,7 +100,7 @@ public class EnemyTriangleScript : EnemyParent
 
         //CHecks if the player is dead or in a death state, then calls the players take damage function for them to take damage
         CollisionDamageCheck();
-
+        UpdateDeathRattle();
         
         
     }

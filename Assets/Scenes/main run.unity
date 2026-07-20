@@ -1260,6 +1260,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   MainCam: {fileID: 724600128}
+  curve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  CameraLockSetting: 0
+  CameraLockStatus: 0
+  isLingering: 0
+  trickLock: 0
+  minimumCameraHeight: 0
+  cameraFloorDistance: 5
+  cameraSpeed: 6
+  cameraRaiseLower: 0
+  cameraLingerTimer: 0
+  tester: 0
 --- !u!1 &763935105
 GameObject:
   m_ObjectHideFlags: 0
@@ -2293,6 +2309,7 @@ MonoBehaviour:
   movementVelocity: 0
   maxMovementSpeed: 20
   moveDirection: 0
+  prevMoveDirection: 0
   jumpVelocity: 20
   jumpCancelAcel: 5
   flipOutSpeed: 13

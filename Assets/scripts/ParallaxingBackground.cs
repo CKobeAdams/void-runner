@@ -78,7 +78,7 @@ public class ParallaxingBackground : MonoBehaviour
         spareForeground.transform.position = new Vector3(spareForeground.transform.position.x + spriteBounds.x * 2,
             spareForeground.transform.position.y + spriteBounds.y * 2, spareForeground.transform.position.z);
 
-        Debug.Log(backgroundParent.transform.tag);
+       
     }
 
     // Update is called once per frame

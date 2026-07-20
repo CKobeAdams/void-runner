@@ -10,17 +10,23 @@ public class CameraManager : MonoBehaviour
     public static CameraManager instance { get; private set; }
 
     [SerializeField]
+    private AnimationCurve curve;
+
+    [SerializeField]
     private bool CameraLockSetting, CameraLockStatus, isLingering = false, trickLock = false;
 
     [SerializeField]
     private float minimumCameraHeight = 0f, cameraFloorDistance = 5f, cameraSpeed = 6f, cameraRaiseLower, cameraLingerTimer = 0f;
-   
+
+    private float cameraShakeDuration = 0.5f, cameraShakeStrength = 1;
 
     //this constant determines how long the camera lingers for
     private const float cameraLingerLimit = 0f;
 
     private Vector2 playerMoveVector, cameraBaseDisplacement, previousMoveVector, cameraMoveOffset;
     private Vector3 cameraMovingStep, previousPosition;
+
+    public bool tester = false;
 
 
     // Start is called before the first frame update
@@ -43,8 +49,11 @@ public class CameraManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        
+
         cameraMovingStep = MainCam.transform.position - previousPosition;
         previousPosition = MainCam.transform.position;
+        playerMoveVector = PlayerController.instance.GetMoveVector();
 
     }
 
@@ -52,7 +61,7 @@ public class CameraManager : MonoBehaviour
     {
         
 
-        playerMoveVector = PlayerController.instance.GetMoveVector();
+        
 
         //changes the Camera lock and against the status | used to be in PlayerController
         if (CameraLockSetting == CameraLockStatus)
@@ -167,6 +176,31 @@ public class CameraManager : MonoBehaviour
         MainCam.transform.position = Vector3.MoveTowards(MainCam.transform.position, targetPosition, step);
 
  
+    }
+
+    public void InitiateCameraShake(float duration = 0.15f, float strength = 1f)
+    {
+        cameraShakeStrength = strength;
+        cameraShakeDuration = duration;
+        StartCoroutine(CameraShake());
+    }
+
+    IEnumerator CameraShake()
+    {
+        Vector2 startPosition = transform.position;
+        float elapsedTime = 0f;
+
+        while (elapsedTime < cameraShakeDuration)
+        {
+            elapsedTime += Time.deltaTime;
+
+            Vector2 endPosition = startPosition + Random.insideUnitCircle * cameraShakeStrength;
+
+            transform.position = new Vector3(endPosition.x, endPosition.y, transform.position.z);
+
+            yield return null;
+        }
+
     }
 
     public bool GetLockSetting()

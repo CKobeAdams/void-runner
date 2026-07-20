@@ -86,6 +86,7 @@ public class UIManager : MonoBehaviour
 
     public void AdjustThreads(int addingThreads)
     {
+        //Debug.Log("Adding Threads");
         threadCounter += addingThreads;
 
         string text = "Threads: " + threadCounter;

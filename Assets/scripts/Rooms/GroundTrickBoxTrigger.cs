@@ -34,7 +34,7 @@ public class GroundTrickBoxTrigger : MonoBehaviour
             if (this.GetComponent<BoxCollider2D>().IsTouchingLayers(LayerMask.GetMask("Player")))
             {
                 active = true;
-                Debug.Log("Trick Box is Active");
+                
                 PlayerController.instance.SetIsTrickable(active, piecewiseTrick);
 
             }

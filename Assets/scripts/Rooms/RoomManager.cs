@@ -118,7 +118,7 @@ public class RoomManager : MonoBehaviour
         else
         {
             //This should be set to 0.1 when not testing
-            if (roomChooser < 1f)
+            if (roomChooser < 0.1f)
             {
                 //UnityEngine.Random Special rooms
                 newRoom = Instantiate(GenerateSpecialRoom());
@@ -158,7 +158,7 @@ public class RoomManager : MonoBehaviour
         
         //adds the starting room to a new room
         roomChooser = UnityEngine.Random.value;
-        if(roomChooser<1f)
+        if(roomChooser<0.2f)
         {
             
             roomChooser = UnityEngine.Random.value;
@@ -230,9 +230,9 @@ public class RoomManager : MonoBehaviour
     private GameObject GenerateSpecialRoom()
     {
         
-        //return specialRooms[(int)Mathf.Floor(UnityEngine.Random.Range(0,specialRooms.Count))];
+        return specialRooms[(int)Mathf.Floor(UnityEngine.Random.Range(0,specialRooms.Count))];
         //Line below should be commented and the line above should be uncommented after testing
-        return specialRooms[2];
+        //return specialRooms[2];
 
         
     }
@@ -242,8 +242,8 @@ public class RoomManager : MonoBehaviour
     private GameObject GenerateNormalRoom()
     {
         
-        //return normalRooms[(int)Mathf.Floor(UnityEngine.Random.Range(0, normalRooms.Count))];
-        return normalRooms[0];
+        return normalRooms[(int)Mathf.Floor(UnityEngine.Random.Range(0, normalRooms.Count))];
+        //return normalRooms[0];
     }
    
     
@@ -256,7 +256,7 @@ public class RoomManager : MonoBehaviour
         (Vector3 location, Func<Vector3, Vector3> piecewise) dictionaryCite;
         try
         {
-            Debug.Log(index);
+            
             dictionaryCite = TrickDictionary.instance.CiteValue(index);
             
         }
