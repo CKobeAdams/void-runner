@@ -22,9 +22,9 @@ public class PlayerController : MonoBehaviour
 
     [SerializeField]
     private float minimunCameraHeight = 0f, movementVelocity = 0, maxMovementSpeed = 20f, moveDirection, prevMoveDirection,
-        jumpVelocity = 6f, jumpCancelAcel = 5f, flipOutSpeed = 260f, ragdollTimer = 0, moveAccel = 10f, decceleration = -0.01f,
-        startUpSpeed = 2.5f, startUpAcceleration = 100f, turningAcceleration = 15f, crouchingDecceleration = 0, invincibleTimer = 2.5f,
-        invincibleCounter = 0f, airMoveAcceleration = 5f, airMoveVelocity = 0f, airMoveDifferentialCap = 2f, wallSlidingMultiplier = 0.85f, coyoteTimingCounter,
+        jumpVelocity = 6f, jumpCancelAcel = 5f, flipOutSpeed = 260f, ragdollTimer = 0, moveAccel = 30f, decceleration = -0.01f,
+        startUpSpeed = 10f, startUpAcceleration = 200f, turningAcceleration = 30f, crouchingDecceleration = 0, invincibleTimer = 2.5f,
+        invincibleCounter = 0f, airMoveAcceleration = 10f, airMoveVelocity = 0f, airMoveDifferentialCap = 2f, wallSlidingMultiplier = 0.85f, coyoteTimingCounter,
         crawlingSpeed, storedTrickVelocity, tempSpeedBoost = 0, startingFlipRotation, previousRotation, rotationCounter = 0;
 
     private bool isMoving, isGrounded, gravityAffected, jumpCancelled, isCrouching, isDead = false, cameraLockStatus = true,
@@ -514,7 +514,7 @@ public class PlayerController : MonoBehaviour
                     break;
             }
 
-
+            Debug.Log(runState);
             
 
             

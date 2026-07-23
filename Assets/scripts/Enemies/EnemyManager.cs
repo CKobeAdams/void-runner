@@ -6,6 +6,8 @@ public class EnemyManager : MonoBehaviour
 {
     public static EnemyManager instance { get; private set; }
 
+
+
     private enum DamageSources
     {
         player,
@@ -14,6 +16,9 @@ public class EnemyManager : MonoBehaviour
     
     [SerializeField]
     public List<EnemyParent> enemyList;
+
+    [SerializeField]
+    private GameObject threadText;
 
 
     // Start is called before the first frame update
@@ -52,6 +57,8 @@ public class EnemyManager : MonoBehaviour
                     enem.TakeDamage(damage, true);
                     ItemManager.instance.InvokeEvent_PlayerKillsEnemy();
                     CameraManager.instance.InitiateCameraShake();
+                    GameObject newText = Instantiate(threadText, enem.transform.position, Quaternion.identity);
+                    newText.GetComponent<ThreadFlasher>().ChangeText(enem.GetThreadValue());
 
                 }
                 else
@@ -72,6 +79,7 @@ public class EnemyManager : MonoBehaviour
 
     public void RemoveEnemy(EnemyParent enem)
     {
+        
         enemyList.Remove(enem);
         Destroy(enem.gameObject);
     }

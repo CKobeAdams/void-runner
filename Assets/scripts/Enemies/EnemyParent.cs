@@ -95,4 +95,9 @@ public class EnemyParent : MonoBehaviour
     {
         return isDead;
     }
+
+    public int GetThreadValue()
+    {
+        return threadValue;
+    }
 }

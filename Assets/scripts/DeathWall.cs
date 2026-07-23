@@ -17,8 +17,9 @@ public class DeathWall : MonoBehaviour
     private bool playerKilled = false, onScreen;
     private Rigidbody2D rigidBody;
     private const int sourceCode = 1, averageRoomLength = 60;
-    private int roomCap;
+    private int roomCap, levelCount, shopCount =0;
     private float desiredLevelTime = 240f, headStartTimer = 2f, headStartCounter = 0; //this is in seconds
+    private float baseSpeed = 5f, speedLevelMultplier = 0.5f, speedCap = 100f, shopMultiplier = 3;
     
     
 
@@ -35,7 +36,10 @@ public class DeathWall : MonoBehaviour
         roomCap = RoomManager.instance.GetRoomCountCap();
         wallSpeed = (float)roomCap * (float)averageRoomLength / desiredLevelTime;
         headStartCounter = 0;
+        levelCount = RoomManager.instance.GetLevelCounter();
+        shopCount = ((int)levelCount - 1) / 3;
 
+            wallSpeed = baseSpeed + levelCount * speedLevelMultplier + (Mathf.Pow(1.25f, shopMultiplier * shopCount - shopMultiplier));
     }
 
     // Update is called once per frame
