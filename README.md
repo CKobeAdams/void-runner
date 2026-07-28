@@ -1,6 +1,9 @@
 # void-runner
 Free running platformer
 
+Run, Jump and Flip your way through an forgotten fold of reality where everything is doomed to be erased.
+Running is your only option so keep moving forward!
+
 To download and play the latest version of the game:
 1. Find releases
 2. navigate to the latest release
