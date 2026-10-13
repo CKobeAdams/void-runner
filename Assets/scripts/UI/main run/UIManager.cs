@@ -28,6 +28,7 @@ public class UIManager : MonoBehaviour
     private bool timerPaused;
     private Vector2 renderingDisplaySize;
     private int minutes, seconds, milliseconds;
+    private const int scoreForCLearingRoom = 100;
 
 
     // Later set up the UI to 
@@ -35,12 +36,10 @@ public class UIManager : MonoBehaviour
     void Start()
     {
         stopwatchCounter = 0f;
-        scoreCounter = runDataValues.score;
         roomCounter = 0;
-        threadCounter = runDataValues.threadCount;    
         timerPaused = false;
-        AdjustScore(0);
-        AdjustThreads(0);
+        AdjustScore(runDataValues.score);
+        AdjustThreads(runDataValues.threadCount);
         SetUIPositions();
     }
 
@@ -112,6 +111,9 @@ public class UIManager : MonoBehaviour
 
         roomCounterObject.text = text;
 
+        AdjustScore(scoreForCLearingRoom);
+
+
         
     }
 
@@ -119,11 +121,11 @@ public class UIManager : MonoBehaviour
     {
         //roomsCleared, score, timeMinutes, timeSeconds, timeMillis;
         runDataValues.roomsCleared += roomCounter;
-        runDataValues.score += (int)scoreCounter;
+        runDataValues.score = (int)scoreCounter;
         runDataValues.runTimeMinutes = minutes;
         runDataValues.runTimeSeconds = seconds;
         runDataValues.runTimeMillis = milliseconds;
-        runDataValues.threadCount += threadCounter;
+        runDataValues.threadCount = threadCounter;
         runDataValues.totalTime = stopwatchCounter;
 
         runDataValues.playerHealth = PlayerController.instance.GetCurrentHealth();
