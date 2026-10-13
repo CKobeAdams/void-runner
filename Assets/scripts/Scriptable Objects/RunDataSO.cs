@@ -40,6 +40,12 @@ public class RunDataSO : ScriptableObject
         _totalTime = 0;
         playerHealth = 3;
         playerMaxHealth = 3;
+
+        foreach(ItemParent item in inventory)
+        {
+            item.quantity = 0;
+        }
+
         inventory.Clear();
     }
 
