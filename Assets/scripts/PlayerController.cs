@@ -123,9 +123,10 @@ public class PlayerController : MonoBehaviour
             CoyoteTimeCheck();
         }
 
-        if (!isStumbled&&!isLockedForEndPortal) //Change this to check for a stumbling or if the player is tricking
+        if (!isLockedForEndPortal) //Change this to check for a stumbling or if the player is tricking
         {
             //THIS IS WHERE WE ACTUALLY MOVE THE CHARACTER
+            //as of v0.1.0 airmovement still happens
             ManageMovementInput();
 
 
@@ -514,7 +515,7 @@ public class PlayerController : MonoBehaviour
                     break;
             }
 
-            Debug.Log(runState);
+            //Debug.Log(runState);
             
 
             
@@ -695,22 +696,51 @@ public class PlayerController : MonoBehaviour
 
     public void StumbleCheck()
     {
+
+        float weakStumbleMultiplier = 0.75f, hardStumbleMultiplier = 0.5f;
+
         if(stumbleBox.GetComponent<CapsuleCollider2D>().IsTouchingLayers(LayerMask.GetMask("Ground"))&&!isWalled && !isCrouching && !isGrounded)
         {
-
-                if(!isStumbled)
-                {
-                    unstumbleCount = 0;
-                }
+            //This is where an event trigger would go for stumble items
+            if(!isStumbled)
+            {
+                unstumbleCount = 3;
                 isStumbled = true;
-                
+
+                //Hard stumble
+                if (movementVelocity > 20f)
+                {
+                    movementVelocity *= hardStumbleMultiplier;
+                    Debug.Log("HardStumble");
+                }
+                //weak stumble
+                else
+                {
+                    movementVelocity *= weakStumbleMultiplier;
+                    Debug.Log("SoftStumble");
+                }
+
+                CrouchCancelled();
+
+                Debug.Log(runState);
+                this.transform.rotation = Quaternion.identity;
+                isStumbled = false;
+
+                resetTwinWallCheckers();
+            }
+            
 
             
+            
+
+
+
         }
         else
         {
             isStumbled = false;
         }
+        
     }
 
 
@@ -1122,9 +1152,14 @@ public class PlayerController : MonoBehaviour
 
         else if (moveVector.x == moveDirection && movementVelocity != 0)
         {
-            runState = runningState.accelerating;
+            /*runState = runningState.accelerating;
             AnimatorManager.instance.ResetAnimatorTriggers();
-            AnimatorManager.instance.AcceleratingTurnOn();
+            AnimatorManager.instance.AcceleratingTurnOn();*/
+
+            runState = runningState.startUp;
+            AnimatorManager.instance.ResetAnimatorTriggers();
+            AnimatorManager.instance.StartUpTurnOn();
+
             //Debug.Log("WE acceling");
             return;
         }
